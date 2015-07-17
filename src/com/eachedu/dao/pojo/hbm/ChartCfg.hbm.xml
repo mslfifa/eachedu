@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.eachedu.dao.pojo.ChartCfg" table="chart_cfg">
+		<id name="ccId" column="cc_id">
+			<generator class="native"/>
+		</id>
+		<property name="ltcId" column="ltc_id"/>
+		<property name="indexId" column="index_id"/>
+		<property name="chartDomId" column="chart_dom_id"/>
+		<property name="aggregationOpType" column="aggregation_op_type"/>
+		<property name="dimensionId" column="dimension_id"/>
+		<property name="seriesId" column="series_id"/>
+		<property name="chartType" column="chart_type"/>
+		<property name="chartRenderSeq" column="chart_render_seq"/>
+		<property name="chartHeight" column="chart_height"/>
+		<property name="chartWidth" column="chart_width"/>
+		<property name="chartTitle" column="chart_title"/>
+	</class>
+</hibernate-mapping>

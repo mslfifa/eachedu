@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.eachedu.dao.pojo.LayoutTemplateCfg" table="layout_template_cfg">
+		<id name="ltcId" column="ltc_id">
+			<generator class="native"/>
+		</id>
+		<property name="riId" column="ri_id"/>
+		<property name="layoutTitle" column="layout_title"/>
+		<property name="layoutRenderSort" column="layout_render_sort"/>
+		<property name="layoutRenderType" column="layout_render_type"/>
+		<property name="layoutHeight" column="layout_height"/>
+		<property name="layoutWidth" column="layout_width"/>
+		<property name="createTime" column="create_time"/>
+	</class>
+</hibernate-mapping>

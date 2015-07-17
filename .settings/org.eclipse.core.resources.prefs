@@ -1,0 +1,15 @@
+eclipse.preferences.version=1
+encoding//WebRoot/common/navigation_bar.jsp=UTF-8
+encoding//WebRoot/css/admin.css=UTF-8
+encoding//WebRoot/css/pintuer.css=UTF-8
+encoding//WebRoot/css/style.css=UTF-8
+encoding//WebRoot/index.jsp=UTF-8
+encoding//WebRoot/jsp/report/report_cfg.jsp=UTF-8
+encoding//WebRoot/login.jsp=UTF-8
+encoding//src/com/eachedu/dao/BaseDao.java=UTF-8
+encoding//src/com/eachedu/dao/impl/BaseDaoImpl.java=UTF-8
+encoding//src/com/eachedu/web/JSONUtils.java=UTF-8
+encoding//src/com/eachedu/web/LoginInterceptor.java=GBK
+encoding//src/com/eachedu/web/PagerInterceptor.java=UTF-8
+encoding//src/com/eachedu/web/actions/BaseAction.java=UTF-8
+encoding/<project>=UTF-8

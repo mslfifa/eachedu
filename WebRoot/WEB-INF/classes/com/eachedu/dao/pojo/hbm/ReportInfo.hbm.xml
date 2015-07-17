@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.eachedu.dao.pojo.ReportInfo" table="report_info">
+		<id name="riId" column="ri_id">
+			<generator class="native"/>
+		</id>
+		<property name="userid" column="f_userid"/>	
+		<property name="reportName" column="report_name"/>		
+		<property name="reportVersion" column="report_version"/>
+		<property name="reportDataPeriod" column="report_data_period"/>		
+		<property name="createTime" column="create_time"/>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.eachedu.dao.pojo.SummaryCfg" table="summary_cfg">
+		<id name="scId" column="sc_id">
+			<generator class="native"/>
+		</id>
+		<property name="ccId" column="cc_id"/>
+		<property name="summaryTemplateDesc" column="summary_template_desc"/>		
+		<property name="summaryType" column="summary_type"/>
+		<property name="numericed" column="is_numericed"/>
+		<property name="percented" column="is_percented"/>
+		<property name="topVal" column="top_val"/>
+		<property name="placeholder" column="placeholder"/>
+	</class>
+</hibernate-mapping>
