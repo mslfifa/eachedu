@@ -2,117 +2,97 @@ package com.eachedu.dao;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
-import com.eachedu.SystemContext;
+import com.eachedu.exception.DaoException;
 import com.eachedu.web.vo.PagerVO;
 
-@SuppressWarnings("unchecked")
-public interface BaseDao {
+public interface BaseDao<T ,PK extends Serializable> {
 	
 	/**
-	 * ����ʵ�����
+	 * 保存实体
 	 * @param entity
+	 * @throws DaoException TODO
 	 */
-	public void save(Object entity);
+	public void save(T entity) throws DaoException;
 	
 	/**
-	 * ɾ��ĳ��ʵ�����
-	 * @param entity ������ĳ��ʵ�����
+	 * 删除实体
+	 * @param entity
+	 * @throws DaoException TODO
 	 */
-	public void del(Object entity);
+	public void del(T entity) throws DaoException;
 	
 	/**
-	 * ����ʵ�����
-	 * @param entity ������ĳ��ʵ�����
+	 * 更新实体
+	 * @param entity
+	 * @throws DaoException TODO
 	 */
-	public void update(Object entity);
+	public void update(T entity) throws DaoException;
 	
 	/**
-	 * ���ID��ѯʵ�����
-	 * @param <T> ĳ��ʵ���������
-	 * @param entityClass ʵ������Class
-	 * @param id ʵ������ID
-	 * @return ��Ӧ��ʵ�����
-	 */
-	public <T> T findById(Class<T> entityClass,Serializable id);
-	
-	/**
-	 * ��ѯĳ�����͵����е�ʵ����󣨲����κ�������
-	 * @param <T>
-	 * @param entityClass
+	 * 通过ID获得实体
+	 * @param id
 	 * @return
+	 * @throws DaoException TODO
 	 */
-	public <T> List<T> findAll(Class<T> entityClass);
+	public T get(PK id) throws DaoException;
 	
 	/**
-	 * ��ʵ����󵱳ɲ�ѯ���������ʵ������а�����ԣ��Զ����SQL����ѯ��Ӧ��ʵ�����
-	 * @param entity �������Ĳ��������ĳ��ʵ�����
+	 * 返回表中全部实体
 	 * @return
+	 * @throws DaoException TODO
 	 */
-	public List find(Object entity);
+	public List<T> findAll() throws DaoException;
+	
 	
 	/**
-	 * ��ҳ��ѯ����ѯ��䲻���κ�?����
-	 * ����SystemContext��ȡ��offset��pagesize����������з�ҳ��ѯ
-	 * @param query ��ѯ��HQL���
+	 * HQL分页查询
+	 * @param hql
+	 * @param offset 开始页数
+	 * @param pagesize 页大小
+	 * @param paras 参数数组
 	 * @return
-	 * @see SystemContext
-	 * @see PagerVO
+	 * @throws DaoException TODO
 	 */
-	public PagerVO findPaginated(String query);
+	public PagerVO findByHqlPage(String hql,int offset,int pagesize,Object... paras) throws DaoException;
+	
 	
 	/**
-	 * ��ҳ��ѯ����ѯ���ֻ��һ��?����
-	 * ����SystemContext��ȡ��offset��pagesize����������з�ҳ��ѯ
-	 * @param query HQL��ѯ���
-	 * @param param HQL��ѯ����������滻?�Ĳ���ֵ
+	 * 根据MAP参数查询SQL分页
+	 * @param sql
+	 * @param offset
+	 * @param pagesize
+	 * @param paras
 	 * @return
+	 * @throws DaoException TODO
 	 */
-	public PagerVO findPaginated(String query,Object param);
+	public PagerVO findBySqlPage(String sql,int offset,int pagesize,Object... paras) throws DaoException;
+		
+	/**
+	 * 根据MAP参数查询SQL，结果返回List<Map<String,Object>>
+	 * @param sql
+	 * @param paras
+	 * @return
+	 * @throws DaoException TODO
+	 */
+	public List<Map<String,Object>> findBySQL(String sql, Object... paras) throws DaoException;
 	
 	/**
-	 * ��ҳ��ѯ����ѯ�������ɸ�?����
-	 * ����SystemContext��ȡ��offset��pagesize����������з�ҳ��ѯ
-	 * @param query HQL��ѯ���
-	 * @param params HQL��ѯ��������ɸ�?�������Ӧ��ֵ
+	 * 根据MAP参数查询HQL，结果返回List
+	 * @param hql
+	 * @param paras
 	 * @return
+	 * @throws DaoException TODO
 	 */
-	public PagerVO findPaginated(String query,Object[] params);
+	public List findByHql(String hql,Object... paras) throws DaoException;
 	
 	/**
-	 * ���HQL�����з�ҳ��ѯ����ѯ����в���?����
-	 * @param query HQL��ѯ���
-	 * @param offset �ӵڼ��п�ʼ��ѯ
-	 * @param pagesize ��෵�ض��������
+	 * 根据Map参数执行DML的SQL
+	 * @param sql
+	 * @param paras
 	 * @return
+	 * @throws DaoException TODO
 	 */
-	public PagerVO findPaginated(String query,int offset,int pagesize);
-	
-	/**
-	 * ���HQL�����з�ҳ��ѯ����ѯ�����ֻ��һ��?����
-	 * @param query HQL��ѯ���
-	 * @param param HQL��ѯ����������滻?�Ĳ���ֵ
-	 * @param offset �ӵڼ��п�ʼ��ѯ
-	 * @param pagesize ��෵�ض��������
-	 * @return
-	 */
-	public PagerVO findPaginated(String query,Object param,int offset,int pagesize);
-	
-	/**
-	 * ���HQL�����з�ҳ��ѯ����ѯ����а����ɸ�?����
-	 * @param query HQL��ѯ���
-	 * @param params HQL��ѯ����������滻?�Ĳ���ֵ
-	 * @param offset �ӵڼ��п�ʼ��ѯ
-	 * @param pagesize ��෵�ض��������
-	 * @return
-	 */
-	public PagerVO findPaginated(String query,Object[] params,int offset,int pagesize);
-	
-	
-	public List findBySQL(String sql, Object... para);
-	
-	
-	public List findByHql(String hql,Object... para);
-	
-	public int executeSql(String sql,Object... para);
+	public int executeSql(String sql,Object... paras) throws DaoException;
 }

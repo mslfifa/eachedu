@@ -38,7 +38,7 @@
 		</property>
 		<property name="mappingDirectoryLocations">
 			<list>
-				<value>classpath*:/cn/com/bonc/analyplat/dao/pojo/hbm/</value>
+				<value>classpath*:/com/eachedu/dao/pojo/hbm/</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

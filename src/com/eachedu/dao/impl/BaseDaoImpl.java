@@ -1,6 +1,7 @@
 package com.eachedu.dao.impl;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -9,164 +10,188 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Example;
 import org.hibernate.transform.Transformers;
 
-import com.eachedu.SystemContext;
 import com.eachedu.dao.BaseDao;
+import com.eachedu.exception.DaoException;
 import com.eachedu.web.vo.PagerVO;
 
-@SuppressWarnings("unchecked")
-public class BaseDaoImpl implements BaseDao {
+
+public abstract class  BaseDaoImpl<T ,PK extends Serializable> implements BaseDao<T ,PK> {
 
 	@Resource
 	private SessionFactory sessionFactory;
-
-	@Override
-	public void del(Object entity) {
-		getSession().delete(entity);
-	}
-
-	@Override
-	public List find(Object entity) {
-		return getSession().createCriteria(entity.getClass()).add(
-				Example.create(entity)).list();
-	}
-
-	@Override
-	public <T> List<T> findAll(Class<T> entityClass) {
-		return getSession().createCriteria(entityClass).list();
-	}
-
-	@Override
-	public <T> T findById(Class<T> entityClass, Serializable id) {
-		return (T) getSession().load(entityClass, id);
-	}
-
-	@Override
-	public PagerVO findPaginated(String query) {
-		return findPaginated(query, null);
-	}
-
-	@Override
-	public PagerVO findPaginated(String query, Object param) {
-		return findPaginated(query, new Object[]{param});
-	}
-
-	@Override
-	public PagerVO findPaginated(String query, Object[] params) {
-		return findPaginated(query, params, SystemContext.getOffset(), SystemContext.getPagesize());
-	}
-
-	@Override
-	public PagerVO findPaginated(String query, int offset, int pagesize) {
-		return findPaginated(query, null,offset,pagesize);
-	}
-
-	@Override
-	public PagerVO findPaginated(String query, Object param, int offset,
-			int pagesize) {
-		return findPaginated(query, new Object[]{param}, offset, pagesize);
-	}
-
-	@Override
-	public PagerVO findPaginated(String queryHql, Object[] params, int offset,
-			int pagesize) {
-		// 首先查询总记录数
-		String countHql = getCountHql(queryHql);
-		Query query = getSession().createQuery(countHql);
-		if (params != null) {
-			for (int i = 0; i < params.length; i++) {
-				query.setParameter(i, params[i]);
-			}
-		}
-		int total = ((Long) query.uniqueResult()).intValue();
-
-		// 查询当前页的数据
-		query = getSession().createQuery(queryHql);
-		if (params != null) {
-			for (int i = 0; i < params.length; i++) {
-				query.setParameter(i, params[i]);
-			}
-		}
-		query.setFirstResult(offset);
-		query.setMaxResults(pagesize);
-		List datas = query.list();
-
-		PagerVO pv = new PagerVO();
-		pv.setDatas(datas);
-		pv.setTotal(total);
-
-		return pv;
-	}
-
-	@Override
-	public void save(Object entity) {
-		getSession().save(entity);
-	}
-
-	@Override
-	public void update(Object entity) {
-		getSession().update(entity);
-	}
-
-	/**
-	 * select a from Article a where a.title like ? --> select count(*) from
-	 * Article a where a.title like ?
-	 * 
-	 * @param queryHql
-	 * @return
-	 */
-	protected String getCountHql(String queryHql) {
-		int index = queryHql.toLowerCase().indexOf("from");
-		if (index == -1) {
-			throw new RuntimeException("非法的查询语句【" + queryHql + "】");
-		}
-		return "select count(*) " + queryHql.substring(index);
-	}
-
-	protected Session getSession() {
+	
+	protected Class<T> entityClass;
+	
+	protected Session getSession(){
 		return sessionFactory.getCurrentSession();
 	}
-
-	@Override
-	public List findBySQL(String sql, Object... para) {
-		List list = null;
-		SQLQuery query = this.getSession().createSQLQuery(sql);
-		if(para!=null && para.length>0){
-			for (int i = 0; i < para.length; i++) {
-				query.setParameter(i, para[i]);
-			}
-		}
-		list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-		return list;
+	
+	public BaseDaoImpl() {
+		entityClass = (Class<T>) ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	}
 
 	@Override
-	public List findByHql(String hql, Object... para) {
-		if(hql==null || "".equals(hql)){
-			return null;
+	public void save(T entity) throws DaoException {
+		
+		try {
+			getSession().save(entity);
+		} catch (Exception e) {
+			throw new DaoException(e.getMessage(),e.getCause());
 		}
 		
-		Query query = this.getSession().createQuery(hql);
-		if(para!=null && para.length>0){
-			for (int i = 0; i < para.length; i++) {
-				query.setParameter(i, para[i]);
-			}
-		}
-		return query.list();
 	}
 
 	@Override
-	public int executeSql(String sql, Object... para) {
-		SQLQuery query = getSession().createSQLQuery(sql);
-		for (int i = 0; i < para.length; i++) {
-			query.setParameter(i, para[i]);
+	public void del(T entity) throws DaoException {
+		try {
+			getSession().delete(entity);
+		} catch (Exception e) {
+			throw new DaoException(e.getMessage(),e.getCause());
 		}
 		
-		return query.executeUpdate();
 	}
 
+	@Override
+	public void update(T entity) throws DaoException {
+		try {
+			getSession().update(entity);
+		} catch (Exception e) {
+			throw new DaoException(e.getMessage(),e.getCause());
+		}
+		
+	}
+
+	
+
+	@Override
+	public List findAll() throws DaoException {
+		try {
+			return getSession().createCriteria(entityClass).list();
+		} catch (Exception e) {
+			throw new DaoException(e.getMessage(),e.getCause());
+		}
+		
+	}
+
+	@Override
+	public PagerVO findByHqlPage(String hql, int offset, int pagesize, Object... paras) throws DaoException {
+		try {
+			PagerVO page = new PagerVO();
+			
+			String countHql = "select count(1) as total from (  "+hql+"  )  ";
+			Query countQuery = getSession().createQuery(countHql);
+			Query query = getSession().createQuery(hql);
+			if(paras!=null && paras.length>0){
+				for (int i = 0; i < paras.length; i++) {
+					countQuery.setParameter(i, paras[i]);
+					query.setParameter(i, paras[i]);
+				}
+			}
+			int total = ((Long)countQuery.uniqueResult()).intValue();
+			
+			List datas = query.list();
+			
+			page.setTotal(total);
+			page.setDatas(datas);
+			return page;
+		} catch (Exception e) {
+			throw new DaoException(e.getMessage(),e.getCause());
+		}
+		
+		
+	}
+
+	@Override
+	public PagerVO findBySqlPage(String sql, int offset, int pagesize, Object... paras) throws DaoException {
+		try {
+			PagerVO page = new PagerVO();
+			
+			String countSql = "select count(1) as total from ( "+sql+" )";
+			SQLQuery countQuery = getSession().createSQLQuery(sql);
+			SQLQuery query = getSession().createSQLQuery(sql);
+			if(paras!=null && paras.length>0){
+				for (int i = 0; i < paras.length; i++) {
+					countQuery.setParameter(i, paras[i]);
+					query.setParameter(i, paras[i]);
+				}
+			}
+			
+			List counts = countQuery.addEntity(Long.class).list();
+			int total = ((Long)counts.get(0)).intValue();
+			page.setTotal(total);
+			List datas = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			page.setDatas(datas);
+			return page;
+		} catch (Exception e) {
+			throw new DaoException(e.getMessage(),e.getCause());
+		}
+		
+	}
+
+	@Override
+	public List findBySQL(String sql, Object... paras) throws DaoException {
+		
+		try {
+			SQLQuery query = getSession().createSQLQuery(sql);
+			if(paras!=null && paras.length>0){
+				for (int i = 0; i < paras.length; i++) {
+					query.setParameter(i, paras[i]);
+				}
+			}
+			List datas = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return datas;
+		} catch (Exception e) {
+			throw new DaoException(e.getMessage(),e.getCause());
+		}
+		
+		
+	}
+
+	@Override
+	public List findByHql(String hql, Object... paras) throws DaoException {
+		try {
+			Query query = getSession().createQuery(hql);
+			if(paras!=null && paras.length>0){
+				for (int i = 0; i < paras.length; i++) {
+					query.setParameter(i, paras[i]);
+				}
+			}
+			return query.list();
+		} catch (Exception e) {
+			throw new DaoException(e.getMessage(),e.getCause());
+		}
+	}
+
+	@Override
+	public int executeSql(String sql, Object... paras) throws DaoException {
+		
+		try {
+			SQLQuery executeQuery = getSession().createSQLQuery(sql);
+			if(paras!=null && paras.length>0){
+				for (int i = 0; i < paras.length; i++) {
+					executeQuery.setParameter(i, paras[i]);
+				}
+			}
+			
+			int reusltNum = executeQuery.executeUpdate();
+			return reusltNum;
+		} catch (Exception e) {
+			throw new DaoException(e.getMessage(),e.getCause());
+		}
+		
+		
+	}
+
+	@Override
+	public T get(PK id) throws DaoException {
+		try {
+			return (T) getSession().get(entityClass, id);
+		} catch (Exception e) {
+			throw new DaoException(e.getMessage(),e.getCause());
+		}
+	}
 	
 	
 }

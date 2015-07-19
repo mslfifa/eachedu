@@ -1,4 +1,4 @@
-package cn.com.bonc.test.service.base;
+package com.eachedu.test.service.base;
 
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
