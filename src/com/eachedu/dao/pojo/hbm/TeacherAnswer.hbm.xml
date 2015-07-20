@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.eachedu.dao.pojo.TeacherAnswer" table="teacher_answer">
+		<id name="ta_id" column="ta_id">
+			<generator class="native"/>
+		</id>
+		<property name="taiId" column="tai_id"/>
+		<property name="orderId" column="order_id"/>
+		<property name="answerContent" column="answer_content"/>
+		<property name="picUrl" column="pic_url"/>
+		<property name="answerTime" column="answer_time"/>
+	</class>
+</hibernate-mapping>

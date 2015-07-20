@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.eachedu.dao.pojo.ResourceInfo" table="resource_info">
+		<id name="riId" column="ri_id">
+			<generator class="native"/>
+		</id>
+		<property name="resourceRealName" column="resource_real_name"/>
+		<property name="resourceType" column="resource_type"/>
+		<property name="resouceOriginName" column="resouce_origin_name"/>
+		<property name="resourceSize" column="resource_size"/>
+		<property name="physicsPath" column="physics_path"/>
+		<property name="createTime" column="create_time"/>
+		<property name="creatorId" column="creator_id"/>
+	</class>
+</hibernate-mapping>
