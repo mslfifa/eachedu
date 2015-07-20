@@ -1,10 +1,9 @@
 package com.eachedu.web;
 
 import org.apache.struts2.ServletActionContext;
-import org.drools.process.command.GetSessionClockCommand;
 
 import com.eachedu.utils.ConstUtils;
-import com.eachedu.web.vo.LoginInfoVO;
+import com.eachedu.web.vo.UserVO;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
@@ -18,9 +17,9 @@ public class LoginInterceptor extends AbstractInterceptor {
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 		
-		LoginInfoVO currentUser = (LoginInfoVO)ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.USER_LOGIN);
+		UserVO currentUser = (UserVO)ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.USER_LOGIN);
 		if(currentUser == null){
-			ServletActionContext.getRequest().getSession().setAttribute(ConstUtils.ERROR_MSG, "��ȡ�������ĵ�¼��Ϣ�������µ�¼��лл��");
+			ServletActionContext.getRequest().getSession().setAttribute(ConstUtils.ERROR_MSG, "�����µ�¼ϵͳ");
 			return "needLogin";
 		}
 		

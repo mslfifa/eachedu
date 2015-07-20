@@ -3,16 +3,11 @@
 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="com.eachedu.dao.pojo.AccountPrivilegeAssign" table="operator_info">
-		<id name="aml_id" column="aml_id">
+	<class name="com.eachedu.dao.pojo.AccountPrivilegeAssign" table="account_privilege_assign">
+		<id name="apaId" column="apa_id">
 			<generator class="native"/>
 		</id>
-		<property name="accountId" column="account_id"/>
-		<property name="accountName" column="account_name"/>
-		<property name="accountType" column="account_type"/>
-		<property name="processResult" column="process_result"/>
-		<property name="opRemark" column="op_remark"/>
-		<property name="createTime" column="create_time"/>
-		<property name="creatorId" column="creator_id"/>
+		<property name="oadId" column="oad_id"/>
+		<property name="pgiId" column="pgi_id"/>
 	</class>
 </hibernate-mapping>

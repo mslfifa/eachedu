@@ -3,7 +3,7 @@
 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="com.eachedu.dao.pojo.StudentInfo" table="student_info">
+	<class name="com.eachedu.dao.pojo.TagInfo" table="tag_info">
 		<id name="tiId" column="ti_id">
 			<generator class="native"/>
 		</id>

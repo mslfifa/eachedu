@@ -1,16 +1,16 @@
 package com.eachedu.dao.pojo;
 
 public class AccountPrivilegeAssign {
-	private Long apsId;
+	private Long apaId;
 	private Long oadId;
 	private Long pgiId;
-
-	public Long getApsId() {
-		return apsId;
+	
+	public Long getApaId() {
+		return apaId;
 	}
 
-	public void setApsId(Long apsId) {
-		this.apsId = apsId;
+	public void setApaId(Long apaId) {
+		this.apaId = apaId;
 	}
 
 	public Long getOadId() {

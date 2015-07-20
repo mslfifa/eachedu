@@ -16,7 +16,13 @@ import com.eachedu.dao.BaseDao;
 import com.eachedu.exception.DaoException;
 import com.eachedu.web.vo.PagerVO;
 
-
+/**
+ * 基本DAO实现，子类指定泛型的类型
+ * @author Administrator
+ *
+ * @param <T>
+ * @param <PK>
+ */
 public abstract class  BaseDaoImpl<T ,PK extends Serializable> implements BaseDao<T ,PK> {
 
 	@Resource
@@ -29,6 +35,7 @@ public abstract class  BaseDaoImpl<T ,PK extends Serializable> implements BaseDa
 	}
 	
 	public BaseDaoImpl() {
+		//通过反射获得空当每一个类泛型参数的类型
 		entityClass = (Class<T>) ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	}
 
@@ -140,6 +147,7 @@ public abstract class  BaseDaoImpl<T ,PK extends Serializable> implements BaseDa
 					query.setParameter(i, paras[i]);
 				}
 			}
+			// 查询结果是一个List<Map<String,Object>>
 			List datas = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 			return datas;
 		} catch (Exception e) {

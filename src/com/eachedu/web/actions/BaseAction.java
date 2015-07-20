@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts2.ServletActionContext;
 
 import com.eachedu.utils.ConstUtils;
-import com.eachedu.web.vo.LoginInfoVO;
+import com.eachedu.web.vo.UserVO;
 import com.sdicons.json.mapper.JSONMapper;
 import com.sun.image.codec.jpeg.ImageFormatException;
 import com.sun.image.codec.jpeg.JPEGCodec;
@@ -40,8 +40,8 @@ public abstract class BaseAction {
 	 * 从HTTP SESSION中取出已登录的User对象信息
 	 * @return
 	 */
-	protected LoginInfoVO currentUser(){
-		return (LoginInfoVO)ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.USER_LOGIN);
+	protected UserVO currentUser(){
+		return (UserVO)ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.USER_LOGIN);
 	}
 	
 	public void setAttribute(String key, Object value){
