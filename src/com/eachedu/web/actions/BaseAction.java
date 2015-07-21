@@ -68,6 +68,17 @@ public abstract class BaseAction {
 			HttpServletResponse response = ServletActionContext.getResponse();
 			
 			response.setContentType("image/jpeg");
+			
+
+			try {
+				checkCodeWidth = Integer.parseInt(request.getParameter("width"));
+				checkCodeHeight = Integer.parseInt(request.getParameter("height"));
+			} catch (Exception e) {
+				//如果没传参或传错恢复默认值
+				checkCodeWidth=80; 
+				checkCodeHeight=40;
+			}
+			
 
 			// 创建一张图片
 			BufferedImage image = new BufferedImage(checkCodeWidth, checkCodeHeight,
