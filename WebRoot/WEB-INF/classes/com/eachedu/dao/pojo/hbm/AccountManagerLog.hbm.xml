@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.eachedu.dao.pojo.AccountManagerLog" table="account_manager_log">
+		<id name="amlId" column="aml_id">
+			<generator class="native"/>
+		</id>
+		<property name="accountId" column="account_id"/>
+		<property name="accountName" column="account_name"/>
+		<property name="accountType" column="account_type"/>
+		<property name="processResult" column="process_result"/>
+		<property name="opRemark" column="op_remark"/>
+		<property name="createTime" column="create_time"/>
+		<property name="creatorId" column="creator_id"/>
+	</class>
+</hibernate-mapping>

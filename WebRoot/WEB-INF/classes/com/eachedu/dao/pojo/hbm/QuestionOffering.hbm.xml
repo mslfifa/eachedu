@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.eachedu.dao.pojo.QuestionOffering" table="question_offering">
+		<id name="orderId" column="order_id">
+			<generator class="native"/>
+		</id>
+		<property name="orderNo" column="order_no"/>
+		<property name="gciId" column="gci_id"/>
+		<property name="siId" column="si_id"/>
+		<property name="questionDesc" column="question_desc"/>
+		<property name="picPath" column="pic_path"/>
+		<property name="prise" column="prise"/>
+		<property name="bonus" column="bonus"/>
+		<property name="askTime" column="ask_time"/>
+		<property name="status" column="status"/>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.eachedu.dao.pojo.CoursewareDown" table="courseware_down">
+		<id name="cdId" column="cd_id">
+			<generator class="native"/>
+		</id>
+		<property name="taId" column="ta_id"/>
+		<property name="accountType" column="account_type"/>
+		<property name="complainContext" column="complain_context"/>
+		<property name="accountId" column="account_id"/>
+		<property name="ciId" column="ci_id"/>
+		<property name="downTime" column="down_time"/>
+		<property name="solveContent" column="solve_content"/>
+		<property name="score" column="score"/>
+		<property name="evaluationContent" column="evaluation_content"/>
+	</class>
+</hibernate-mapping>
