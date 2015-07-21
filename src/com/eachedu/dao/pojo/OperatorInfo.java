@@ -6,7 +6,7 @@ public class OperatorInfo {
 	  private Long oiId;
 	  private String account;
 	  private String name;
-	  private String passWord;
+	  private String password;
 	  private String mobile;
 	  private String email;
 	  private String qq;
@@ -29,11 +29,12 @@ public class OperatorInfo {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getPassWord() {
-		return passWord;
+	
+	public String getPassword() {
+		return password;
 	}
-	public void setPassWord(String passWord) {
-		this.passWord = passWord;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	public String getMobile() {
 		return mobile;

@@ -22,14 +22,14 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 	}
 
 	@Override
-	public List<TeacherInfo> findTeacherFromLogin(String userName, String password) throws ServiceException {
+	public List<TeacherInfo> findTeacherFromLogin(String username, String password) throws ServiceException {
 		try {
 			StringBuffer hql = new StringBuffer(100);
 			List param = new ArrayList();
 			hql.append("from TeacherInfo where 1=1 ");
-			if(StringUtils.isNotEmpty(userName)){
+			if(StringUtils.isNotEmpty(username)){
 				hql.append(" and account = ? ");
-				param.add(userName);
+				param.add(username);
 			}
 			
 			if (StringUtils.isNotEmpty(password)) {

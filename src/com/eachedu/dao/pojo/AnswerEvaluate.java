@@ -2,7 +2,7 @@ package com.eachedu.dao.pojo;
 
 public class AnswerEvaluate {
 	private Long aeId;
-	private Long taId;
+	private Long orderId;
 	//打分
 	private Integer score;
 	//评语
@@ -13,11 +13,12 @@ public class AnswerEvaluate {
 	public void setAeId(Long aeId) {
 		this.aeId = aeId;
 	}
-	public Long getTaId() {
-		return taId;
+	
+	public Long getOrderId() {
+		return orderId;
 	}
-	public void setTaId(Long taId) {
-		this.taId = taId;
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
 	}
 	public Integer getScore() {
 		return score;

@@ -4,11 +4,11 @@
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	<class name="com.eachedu.dao.pojo.StudentInfo" table="student_info">
-		<id name="si_id" column="si_id">
+		<id name="siId" column="si_id">
 			<generator class="native"/>
 		</id>
 		<property name="account" column="account"/>
-		<property name="passWord" column="pass_word"/>
+		<property name="password" column="password"/>
 		<property name="status" column="status"/>
 		<property name="nickname" column="nickname"/>
 		<property name="name" column="name"/>

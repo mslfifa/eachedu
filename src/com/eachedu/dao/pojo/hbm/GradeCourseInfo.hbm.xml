@@ -10,6 +10,6 @@
 		<property name="grade" column="grade"/>
 		<property name="course" column="course"/>
 		<property name="createTime" column="create_time"/>
-		<property name="creatorId" column="creator_id"/>
+		<property name="createId" column="create_id"/>
 	</class>
 </hibernate-mapping>

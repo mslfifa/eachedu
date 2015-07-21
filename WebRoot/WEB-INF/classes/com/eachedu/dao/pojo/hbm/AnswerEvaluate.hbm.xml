@@ -7,7 +7,7 @@
 		<id name="aeId" column="ae_id">
 			<generator class="native"/>
 		</id>
-		<property name="taId" column="ta_id"/>
+		<property name="orderId" column="order_id"/>
 		<property name="score" column="score"/>
 		<property name="remark" column="remark"/>
 	</class>

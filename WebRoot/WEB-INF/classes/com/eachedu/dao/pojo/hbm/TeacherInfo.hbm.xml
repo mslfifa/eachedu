@@ -4,27 +4,27 @@
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	<class name="com.eachedu.dao.pojo.TeacherInfo" table="teacher_info">
-		<id name="ti_id" column="ti_id">
+		<id name="tiId" column="ti_id">
 			<generator class="native"/>
 		</id>
 		<property name="account" column="account"/>
-		<property name="pass_word" column="pass_word"/>
+		<property name="password" column="password"/>
 		<property name="name" column="name"/>
 		<property name="sex" column="sex"/>
-		<property name="identification_card" column="identification_card"/>
+		<property name="identificationCard" column="identification_card"/>
 		<property name="school" column="school"/>
-		<property name="authentication_type" column="authentication_type"/>
+		<property name="authenticationType" column="authentication_type"/>
 		<property name="weixin" column="weixin"/>
 		<property name="qq" column="qq"/>
 		<property name="weibo" column="weibo"/>
 		<property name="mobile" column="mobile"/>
 		<property name="email" column="email"/>
-		<property name="tag_1" column="tag_1"/>
-		<property name="tag_2" column="tag_2"/>
-		<property name="tag_3" column="tag_3"/>
-		<property name="tag_4" column="tag_4"/>
-		<property name="tag_5" column="tag_5"/>
-		<property name="tag_6" column="tag_6"/>
-		<property name="create_time" column="create_time"/>
+		<property name="tag1" column="tag_1"/>
+		<property name="tag2" column="tag_2"/>
+		<property name="tag3" column="tag_3"/>
+		<property name="tag4" column="tag_4"/>
+		<property name="tag5" column="tag_5"/>
+		<property name="tag6" column="tag_6"/>
+		<property name="createTime" column="create_time"/>
 	</class>
 </hibernate-mapping>

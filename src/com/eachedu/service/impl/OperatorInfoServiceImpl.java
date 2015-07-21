@@ -23,14 +23,14 @@ public class OperatorInfoServiceImpl extends BaseServiceImpl<OperatorInfo, Long>
 	}
 
 	@Override
-	public List<OperatorInfo> findOperatorFromLogin(String userName, String password) throws ServiceException {
+	public List<OperatorInfo> findOperatorFromLogin(String username, String password) throws ServiceException {
 		try {
 			StringBuffer hql = new StringBuffer(100);
 			List param = new ArrayList();
 			hql.append("from OperatorInfo where 1=1 ");
-			if(StringUtils.isNotEmpty(userName)){
+			if(StringUtils.isNotEmpty(username)){
 				hql.append(" and account = ? ");
-				param.add(userName);
+				param.add(username);
 			}
 			
 			if (StringUtils.isNotEmpty(password)) {

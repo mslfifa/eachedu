@@ -5,7 +5,7 @@ import java.util.Date;
 public class TeacherInfo {
 	  private Long tiId;
 	  private String account;
-	  private String passWord;
+	  private String password;
 	  private String name;
 	  private String sex;
 	  private String identificationCard;
@@ -35,11 +35,12 @@ public class TeacherInfo {
 	public void setAccount(String account) {
 		this.account = account;
 	}
-	public String getPassWord() {
-		return passWord;
+	
+	public String getPassword() {
+		return password;
 	}
-	public void setPassWord(String passWord) {
-		this.passWord = passWord;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	public String getName() {
 		return name;

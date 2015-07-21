@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class ComplainSolve {
 	  private Long csId;
-	  private Long taId;
+	  private Long orderId;
 	  private String complainType;
 	  private String complainContext;
 	  private String complanStatus;
@@ -19,11 +19,12 @@ public class ComplainSolve {
 	public void setCsId(Long csId) {
 		this.csId = csId;
 	}
-	public Long getTaId() {
-		return taId;
+	
+	public Long getOrderId() {
+		return orderId;
 	}
-	public void setTaId(Long taId) {
-		this.taId = taId;
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
 	}
 	public String getComplainType() {
 		return complainType;

@@ -5,63 +5,102 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html lang="zh-cn">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<html>
+  <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="renderer" content="webkit">
-    <title>分析工具平台-登录</title>
-    <link rel="stylesheet" href="css/pintuer.css">
-    <link rel="stylesheet" href="css/admin.css">
-    <script src="js/jquery.js"></script>
-    <script src="js/pintuer.js"></script>
-    <script src="js/respond.js"></script>
-    <script src="js/admin.js"></script>
-    <link type="image/x-icon" href="http://www.pintuer.com/favicon.ico" rel="shortcut icon" />
-    <link href="http://www.pintuer.com/favicon.ico" rel="bookmark icon" />
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="keywords" content="个个答登录">
+    <meta http-equiv="description" content="个个答登录页面">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  	
+    <title>登录</title>
+    
+    <link href="<%=path%>/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<%=path%>/css/bootstrapValidator.css" rel="stylesheet"/>
+	<link href="<%=path%>/css/style.css" rel="stylesheet">
+	<script src="<%=path%>/js/jquery-1.11.3.min.js" type="text/javascript"></script>
+	<script src="<%=path%>/js/bootstrapValidator.js" type="text/javascript"></script>
+	<script src="<%=path%>/js/bootstrap.js" type="text/javascript"></script>
+	
+  </head>
+  
+  <body>
+  	   <!-- header start -->
+	 <div class="navbar login-navbar" role="navigation">
+	  		<div class="container">
+			    <div class="navbar-header">
+				      <a class="navbar-brand" href="javascript:void(0);">
+	  						<img src="images/logo.png" class="img-circle img-responsive" style="display:inline-block;width:40px;height:40px;margin-right:20px;"/>
+	  						<span>个个答运营管理平台</span>
+				      </a>
+			    </div>
+			</div>
+	  </div>
+	  <!-- header end -->
+	  
+	  <!-- login start -->
+      <div class="login-container">
+      	<div class="container">
+        	<form class="login-form" id="loginForm" action="<%=path%>/loginAct!login.action" method="post">
+        		<input type="hidden" name="accountType" value="operator_type">
+			  <div class="form-group">
+			  	<label class="control-label"><strong>登录</strong></label>
+			  	<p class="text-warning">登录超时，请重新登录</p>
+			  </div>
+			  <div class="form-group">
+				    <label for="mail" class="control-label hidden" >账号</label>
+				    <input type="text" class="form-control" id="email" name="email" placeholder="账号" data-bv-notempty="true" data-bv-notempty-message="用户名不能为空">
+			  </div>
+			  <div class="form-group">
+				    <label for="password" class=" control-label hidden">密码</label>
+				    <div class="">
+				      <input type="password" class="form-control" id="password" name="password" placeholder="密码" data-bv-notempty="true" data-bv-notempty-message="密码不能为空">
+				    </div>
+			  </div>
+			  <div class="form-group">
+			      <div class="checkbox">
+			        <label class="remindMe">
+			          <input type="checkbox"/> 记住我
+			        </label>
+			      </div>
+			  </div>
+			  <!-- <div class="form-group">
+		        <label for="vercode" class="col-sm-2 control-label hidden">验证码</label>
+		        <div class="col-sm-6">
+		          <input type="text" class="form-control" id="vercode" check-type="number" range="2.2,5">
+		          <button class="btn btn-link" type="button" data-toggle="tooltip" title="验证码会以邮件的方式发送到你的上面填写的邮箱内" data-placement="right" id="getvercode" >获取验证码</button>
+		        </div>
+		      </div>   -->
+			  <div class="form-group">
+				  <button type="submit" class="btn btn-login" id="login">登录</button><!-- 在validator.js 中做了校验和跳转 -->
+			  </div>
+		   </form>
+		  </div>
+      </div>
+      <!-- login end -->
+      
+      <!-- footer start -->
+	 <div class="footer">
+      	<div class="container">
+	      <ul class="nav">
+	        <li>
+	           <span class="copy">Copyright &copy;2015 个个答运营管理系统</span>
+	           <ul class="foot-help">
+				  <li class="">意见反馈</li>
+				  <li class="">|</li>
+				  <li class="">使用帮助</li>
+				  <li class="">|</li>
+				  <li class="">联系管理员</li>
+				</ul>
+	        </li>
+	      </ul>
+	      </div>
+	  </div>
+	  <!-- footer end -->
 
-<body>
-<div class="container">
-    <div class="line">
-        <div class="xs6 xm4 xs3-move xm4-move">
-            <br /><br />
-            <div class="media media-y">
-                <a href="http://www.pintuer.com" target="_blank"><img src="images/logo.png" class="radius" alt="后台管理系统" /></a>
-            </div>
-            <br /><br />
-            <form action="<%=path%>/login!login.action" method="post">
-            <div class="panel">
-                <div class="panel-head"><strong>登录拼图后台管理系统</strong></div>
-                <div class="panel-body" style="padding:30px;">
-                    <div class="form-group">
-                        <div class="field field-icon-right">
-                            <input type="text" class="input" name="userid" value="suliangliang" placeholder="登录账号" data-validate="required:请填写账号,length#>=2:账号长度不符合要求" />
-                            <span class="icon icon-user"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="field field-icon-right">
-                            <input type="password" class="input" name="password" value="111111" placeholder="登录密码" data-validate="required:请填写密码,length#>=6:密码长度不符合要求" />
-                            <span class="icon icon-key"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="field">
-                            <input type="text" class="input" name="passcode" value="111111" placeholder="填写右侧的验证码" data-validate="required:请填写右侧的验证码" />
-                            <img src="images/passcode.jpg" width="80" height="32" class="passcode" />
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-foot text-center"><button class="button button-block bg-main text-big">立即登录后台</button></div>
-            </div>
-            </form>
-            <div class="text-right text-small text-gray padding-top">基于<a class="text-gray" target="_blank" href="http://www.pintuer.com">拼图前端框架</a>构建</div>
-        </div>
-    </div>
-</div>
-
-<div class="hidden"><script src="http://s4.cnzz.com/stat.php?id=5952475&web_id=5952475" language="JavaScript"></script></div>
-</body>
+    <script src="js/jquery-1.11.3.min.js" type="text/javascript"></script>
+    <script src="js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="js/bootstrapValidator.js" type="text/javascript"></script>
+    <script src="js/validation.js" type="text/javascript"></script>
+  </body>
 </html>

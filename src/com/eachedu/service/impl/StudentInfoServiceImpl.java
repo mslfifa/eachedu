@@ -21,14 +21,14 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 	}
 
 	@Override
-	public List<StudentInfo> findStudentFromLogin(String userName, String password) throws ServiceException {
+	public List<StudentInfo> findStudentFromLogin(String username, String password) throws ServiceException {
 		try {
 			StringBuffer hql = new StringBuffer(100);
 			List param = new ArrayList();
 			hql.append("from StudentInfo where 1=1 ");
-			if(StringUtils.isNotEmpty(userName)){
+			if(StringUtils.isNotEmpty(username)){
 				hql.append(" and account = ? ");
-				param.add(userName);
+				param.add(username);
 			}
 			
 			if (StringUtils.isNotEmpty(password)) {

@@ -7,7 +7,7 @@
 		<id name="csId" column="cs_id">
 			<generator class="native"/>
 		</id>
-		<property name="taId" column="ta_id"/>
+		<property name="orderId" column="order_id"/>
 		<property name="complainType" column="complain_type"/>
 		<property name="complainContext" column="complain_context"/>
 		<property name="complanStatus" column="complan_status"/>

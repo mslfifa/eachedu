@@ -6,9 +6,9 @@
 <struts>
 	<include file="common.xml"></include>
 	<!-- 后台 -->
-	<package name="bonc" namespace="/" extends="common">
+	<package name="eachedu" namespace="/" extends="common">
 		
-		<action name="login" class="loginAction">
+		<action name="loginAct" class="loginAction">
 			<interceptor-ref name="bonc-basic-stack"/>
 			<result name="success" type="redirect">/index.jsp</result>
 			<result name="fail">/common/error.jsp</result>

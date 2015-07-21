@@ -4,7 +4,7 @@
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	<class name="com.eachedu.dao.pojo.TeacherAudit" table="teacher_audit">
-		<id name="ta_id" column="ta_id">
+		<id name="taId" column="ta_id">
 			<generator class="native"/>
 		</id>
 		<property name="passed" column="is_passed"/>

@@ -5,7 +5,7 @@ import java.util.Date;
 public class StudentInfo {
 	private Long siId;
 	private String account;
-	private String passWord;
+	private String password;
 	private String status;
 	private String nickname;
 	private String name;
@@ -31,11 +31,12 @@ public class StudentInfo {
 	public void setAccount(String account) {
 		this.account = account;
 	}
-	public String getPassWord() {
-		return passWord;
+	
+	public String getPassword() {
+		return password;
 	}
-	public void setPassWord(String passWord) {
-		this.passWord = passWord;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	public String getStatus() {
 		return status;

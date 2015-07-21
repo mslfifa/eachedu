@@ -9,7 +9,7 @@
 		</id>
 		<property name="account" column="account"/>
 		<property name="name" column="name"/>
-		<property name="passWord" column="pass_word"/>
+		<property name="password" column="password"/>
 		<property name="mobile" column="mobile"/>
 		<property name="email" column="email"/>
 		<property name="qq" column="qq"/>

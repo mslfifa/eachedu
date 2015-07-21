@@ -6,5 +6,5 @@ import com.eachedu.dao.pojo.TeacherInfo;
 import com.eachedu.exception.ServiceException;
 
 public interface TeacherInfoService extends BaseService<TeacherInfo, Long> {
-	List<TeacherInfo> findTeacherFromLogin(String userName,String password) throws ServiceException;
+	List<TeacherInfo> findTeacherFromLogin(String username,String password) throws ServiceException;
 }
