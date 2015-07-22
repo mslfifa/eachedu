@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.eachedu.dao.BaseDao;
 import com.eachedu.dao.pojo.TeacherInfo;
+import com.eachedu.exception.DaoException;
 import com.eachedu.exception.ServiceException;
 import com.eachedu.service.TeacherInfoService;
 @Service("teacherInfoService")
@@ -38,9 +39,23 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 			}
 			return dao.findByHql(hql.toString(), param.toArray(new Object[0]));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException(e.getMessage(),e.getCause());
 		}
+	}
+
+	@Override
+	public TeacherInfo findByMobile(String mobile, String password) throws ServiceException {
+		try {
+			String hql = "from TeacherInfo where mobile=? and password = ? ";
+			List list = dao.findByHql(hql, mobile,password);
+			if(list!=null && !password.isEmpty()){
+				return (TeacherInfo) list.get(0);
+			}else{
+				throw new Exception("没有找到手机号["+mobile+"]的老师");
+			}
+		} catch (Exception e) {
+			throw new ServiceException(e.getMessage(),e.getCause());
+		} 
 	}
 
 

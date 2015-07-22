@@ -7,10 +7,15 @@ public class TeacherInfo {
 	  private String account;
 	  private String password;
 	  private String name;
+	  private String nickname;
 	  private String sex;
 	  private String identificationCard;
 	  private String school;
 	  private String authenticationType;
+	  //头像资源ID
+	  private String headShortId;
+	  //证书资源ID
+	  private String certificateId;
 	  private String weixin;
 	  private String qq;
 	  private String weibo;
@@ -143,6 +148,24 @@ public class TeacherInfo {
 	}
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+	public String getHeadShortId() {
+		return headShortId;
+	}
+	public void setHeadShortId(String headShortId) {
+		this.headShortId = headShortId;
+	}
+	public String getCertificateId() {
+		return certificateId;
+	}
+	public void setCertificateId(String certificateId) {
+		this.certificateId = certificateId;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	  
 	  

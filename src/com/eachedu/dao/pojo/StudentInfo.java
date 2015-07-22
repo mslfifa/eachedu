@@ -10,6 +10,8 @@ public class StudentInfo {
 	private String nickname;
 	private String name;
 	private String sex;
+	//头像资源ID
+	private String headShortId;
 	private String grade;
 	private String mobile;
 	private String email;
@@ -115,6 +117,12 @@ public class StudentInfo {
 	}
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+	public String getHeadShortId() {
+		return headShortId;
+	}
+	public void setHeadShortId(String headShortId) {
+		this.headShortId = headShortId;
 	}
 	
 }

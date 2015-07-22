@@ -7,12 +7,18 @@ import com.eachedu.web.vo.UserVO;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
+/**
+ * webÒ³ÃæµÇÂ¼ÐÅÏ¢À¹½ØÆ÷
+ * @author Administrator
+ *
+ */
 public class LoginInterceptor extends AbstractInterceptor {
+
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 259487334501050582L;
+	private static final long serialVersionUID = 7944533607899180050L;
 
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {

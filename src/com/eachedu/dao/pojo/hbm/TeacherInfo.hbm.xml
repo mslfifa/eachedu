@@ -14,6 +14,8 @@
 		<property name="identificationCard" column="identification_card"/>
 		<property name="school" column="school"/>
 		<property name="authenticationType" column="authentication_type"/>
+		<property name="headShortId" column="head_short_id"/>
+		<property name="certificateId" column="certificate_id"/>
 		<property name="weixin" column="weixin"/>
 		<property name="qq" column="qq"/>
 		<property name="weibo" column="weibo"/>

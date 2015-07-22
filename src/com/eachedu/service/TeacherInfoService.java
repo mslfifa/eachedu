@@ -7,4 +7,6 @@ import com.eachedu.exception.ServiceException;
 
 public interface TeacherInfoService extends BaseService<TeacherInfo, Long> {
 	List<TeacherInfo> findTeacherFromLogin(String username,String password) throws ServiceException;
+
+	TeacherInfo findByMobile(String mobile, String password)throws ServiceException;
 }

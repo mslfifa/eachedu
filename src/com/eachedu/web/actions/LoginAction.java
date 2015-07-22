@@ -63,11 +63,12 @@ public class LoginAction extends BaseAction{
 		
 		try {
 			
-			UserVO user = new UserVO();
+			UserVO user = null;
 			//student_type:学生  teacher_type:老师  operator_type:运营人员
 			if(AccountType.student_type.name().equals(accountType)){
 				List<StudentInfo> students = studentInfoService.findStudentFromLogin(username, password);
 				StudentInfo student = students.get(0);
+				user=new UserVO();
 				user.setId(student.getSiId());
 				user.setAccount(student.getAccount());
 				user.setName(student.getName());
@@ -78,6 +79,7 @@ public class LoginAction extends BaseAction{
 			}else if(AccountType.teacher_type.name().equals(accountType)){
 				List<TeacherInfo> teachers = teacherInfoService.findTeacherFromLogin(username, password);
 				TeacherInfo teacher = teachers.get(0);
+				user=new UserVO();
 				user.setId(teacher.getTiId());
 				user.setAccount(teacher.getAccount());
 				user.setName(teacher.getName());
@@ -88,6 +90,7 @@ public class LoginAction extends BaseAction{
 			}else if(AccountType.operator_type.name().equals(accountType)){
 				List<OperatorInfo> operators = operatorInfoService.findOperatorFromLogin(username, password);
 				OperatorInfo operator = operators.get(0);
+				user=new UserVO();
 				user.setId(operator.getOiId());
 				user.setAccount(operator.getAccount());
 				user.setName(operator.getName());
@@ -103,7 +106,8 @@ public class LoginAction extends BaseAction{
 			return "success";
 		} catch (Exception e) {
 			log.error(e.getMessage());
-			throw new ActionException("没有找到用户信息，请确认账号与密码!", e.getCause());
+			setAttribute("loginErr", "登录失败!，请重新检查登录信息!");
+			return "needLogin";
 		}
 		
 	}

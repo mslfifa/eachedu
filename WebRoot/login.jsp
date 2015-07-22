@@ -64,6 +64,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			        </label>
 			      </div>
 			  </div>
+			  <div>
+			    <font color="red"><strong><c:if test="${not empty loginErr}">${loginErr }</c:if></strong></font>
+			  </div>
 			  <!-- <div class="form-group">
 		        <label for="vercode" class="col-sm-2 control-label hidden">验证码</label>
 		        <div class="col-sm-6">
