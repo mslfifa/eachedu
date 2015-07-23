@@ -432,13 +432,5 @@ public class LoginAppAction extends BaseAction {
 		this.ajaxWriteOutJSON(result);
 	}
 	
-	
-	public static void main(String[] args) throws IOException {
-		File f = new File("d:/a/b/c/123.txt");
-		
-		if(!f.getParentFile().exists()){
-			System.out.println(f.getParentFile().mkdirs());
-			System.out.println(f.createNewFile());
-		}
-	}
+
 }
