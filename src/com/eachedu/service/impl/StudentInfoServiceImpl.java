@@ -64,7 +64,11 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 		try {
 			String hql = "from StudentInfo where mobile = ? ";
 			List list = dao.findByHql(hql, mobile);
-			StudentInfo s = (StudentInfo) list.get(0);
+			StudentInfo s = null;
+			if(list!=null && !list.isEmpty()){
+				s = (StudentInfo) list.get(0);
+			}
+			
 			return s!=null;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

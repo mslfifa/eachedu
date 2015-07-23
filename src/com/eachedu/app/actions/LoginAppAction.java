@@ -2,6 +2,7 @@ package com.eachedu.app.actions;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -163,7 +164,7 @@ public class LoginAppAction extends BaseAction {
 				user = new UserVO();
 				user.setId(s.getSiId());
 				user.setAccount(s.getAccount());
-				user.setAccountType(AccountType.STUDENT_TYPE.name());
+				user.setAccountType(accountType);
 				user.setEmail(s.getEmail());
 				user.setMobile(s.getMobile());
 				user.setName(s.getName());
@@ -172,7 +173,7 @@ public class LoginAppAction extends BaseAction {
 				result.put("status", true);
 				result.put("msg", "查询成功");
 				result.put("id", s.getSiId());
-				result.put("accountType", AccountType.STUDENT_TYPE.name());
+				result.put("accountType", accountType);
 				result.put("nickname", s.getNickname());
 				result.put("headShortId", s.getHeadShortId());
 				result.put("mobile", s.getMobile());
@@ -184,7 +185,7 @@ public class LoginAppAction extends BaseAction {
 				user = new UserVO();
 				user.setId(t.getTiId());
 				user.setAccount(t.getAccount());
-				user.setAccountType(AccountType.TEACHER_TYPE.name());
+				user.setAccountType(accountType);
 				user.setEmail(t.getEmail());
 				user.setMobile(t.getMobile());
 				user.setName(t.getName());
@@ -193,7 +194,7 @@ public class LoginAppAction extends BaseAction {
 				result.put("status", true);
 				result.put("msg", "查询成功");
 				result.put("id", t.getTiId());
-				result.put("accountType", AccountType.TEACHER_TYPE.name());
+				result.put("accountType", accountType);
 				result.put("nickname", t.getNickname());
 				result.put("headShortId", t.getHeadShortId());
 				result.put("mobile", t.getMobile());
@@ -219,19 +220,31 @@ public class LoginAppAction extends BaseAction {
 		Map<String,Object> result = new HashMap<String,Object>();
 		
 		try {
-			boolean existFlag = studentInfoService.findExistByMobile(mobile);
-			if(existFlag){
-				result.put("status",true);
-				result.put("msg","生成验证码成功!");
-				String randomStr = new Random().nextInt(10000)+"0000";
-				String tmpVerifyCode = (randomStr).substring(0, 4);
-				result.put("verifyCode", tmpVerifyCode);
-				ServletActionContext.getRequest().getSession().setAttribute(ConstUtils.LOGIN_VERIFY_CODE, tmpVerifyCode);
-			}else{
-				result.put("status",false);
-				result.put("msg","生成验证码失败,未能找学生号码["+mobile+"]!");
+			
+			if(StringUtils.isNotEmpty(mobile)){
+				boolean existFlag=true;
+				
+				if(AccountType.STUDENT_TYPE.name().equals(accountType)){
+					existFlag = studentInfoService.findExistByMobile(mobile);
+				}else if(AccountType.TEACHER_TYPE.name().equals(accountType)){
+					existFlag = teacherInfoService.findExistByMobile(mobile);
+				}else{
+					throw new Exception("你所传的accountType["+accountType+"]不在系统识别范围内，请与管理员联系!");
+				}
+				
+				if(!existFlag){
+					throw new Exception("号码["+mobile+"]不是有效用户");
+				}
 			}
-		} catch (ServiceException e) {
+			
+			result.put("status",true);
+			result.put("msg","生成验证码成功!");
+			String randomStr = new Random().nextInt(10000)+"0000";
+			String tmpVerifyCode = (randomStr).substring(0, 4);
+			result.put("verifyCode", tmpVerifyCode);
+			ServletActionContext.getRequest().getSession().setAttribute(ConstUtils.LOGIN_VERIFY_CODE, tmpVerifyCode);
+			
+		} catch (Exception e) {
 			log.error(e.getMessage());
 			result.put("status",false);
 			result.put("msg","生成验证码失败["+e.getMessage()+"]!");
@@ -260,19 +273,30 @@ public class LoginAppAction extends BaseAction {
 					result.put("sex", sLogin.getSex());
 					result.put("accountType", accountType);
 					result.put("headShortId", sLogin.getHeadShortId());
-					result.put("resourceType", ResourceType.HEAD_SHORT_TYPE.name());
 					this.ajaxWriteOutJSON(result);
 					return;
 				}
 			}else if (AccountType.TEACHER_TYPE.name().equals(accountType)) {
 				TeacherInfo tLogin = teacherInfoService.findBySns(qq,weixin,weibo);
+				if(tLogin!=null){
+					result.put("status", true);
+					result.put("msg", "登录成功!");
+					result.put("id", tLogin.getTiId());
+					result.put("nickname", tLogin.getNickname());
+					result.put("sex", tLogin.getSex());
+					result.put("accountType", accountType);
+					result.put("headShortId", tLogin.getHeadShortId());
+					this.ajaxWriteOutJSON(result);
+					return;
+				}
+				
 			}else{
 				throw new Exception("accountType["+accountType+"]不在值域范围内，请与管理员联系!");
 			}
 			
 			
 			ResourceInfo r = new ResourceInfo();
-			r.setResouceOriginName(headShortFileName+"."+headShortContentType);
+			r.setResouceOriginName(headShortFileName);
 			
 			
 			//上传根目录
@@ -292,7 +316,8 @@ public class LoginAppAction extends BaseAction {
 			
 			String uuidStr = UUID.randomUUID().toString();
 			//物理文件名
-			String realFileName = uuidStr+"."+headShortContentType;
+			String realFileName = uuidStr+headShortFileName.substring(headShortFileName.indexOf("."), headShortFileName.length());
+			log.debug("$$$$$ realFileName:"+realFileName);
 			//物理文件绝对路径
 			String descPath = uploadDir+"/"+relativeDir+"/"+realFileName;
 			r.setRelativePath(relativeDir+"/"+realFileName);
@@ -300,7 +325,7 @@ public class LoginAppAction extends BaseAction {
 			File destFile = new File(descPath);
 			File dir = destFile.getParentFile();
 			if(!dir.exists()){
-				dir.createNewFile();
+				dir.mkdirs();
 			}
 			if(!destFile.exists()){
 				destFile.createNewFile();
@@ -348,7 +373,6 @@ public class LoginAppAction extends BaseAction {
 			result.put("nickname", nickname);
 			result.put("sex", sex);
 			result.put("accountType", accountType);
-			result.put("resourceType", ResourceType.HEAD_SHORT_TYPE.name());
 			result.put("status", true);
 			result.put("msg", "注册成功!");
 			
@@ -367,7 +391,11 @@ public class LoginAppAction extends BaseAction {
 		log.debug("@@@@@@ mobile:"+mobile+"|verifyCode:"+verifyCode+"|password:"+password);
 		Map<String, Object> result = new HashMap<String,Object>();
 		try {
-			result = new HashMap<String,Object>();
+			
+			if(StringUtils.isEmpty(mobile)){
+				throw new Exception("手机号不能为空!");
+			}
+			
 			//取出上次生成的验证码
 			String oldVerifyCode = (String) ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.LOGIN_VERIFY_CODE);
 			Long pojoId = null;
@@ -404,4 +432,13 @@ public class LoginAppAction extends BaseAction {
 		this.ajaxWriteOutJSON(result);
 	}
 	
+	
+	public static void main(String[] args) throws IOException {
+		File f = new File("d:/a/b/c/123.txt");
+		
+		if(!f.getParentFile().exists()){
+			System.out.println(f.getParentFile().mkdirs());
+			System.out.println(f.createNewFile());
+		}
+	}
 }

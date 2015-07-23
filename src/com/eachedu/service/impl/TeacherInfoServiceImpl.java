@@ -90,5 +90,31 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 		
 	}
 
+	@Override
+	public boolean findExistByMobile(String mobile) throws ServiceException {
+		try {
+			boolean flag = false;
+			if(StringUtils.isEmpty(mobile)){
+				throw new Exception("mobile不能为空!");
+			}
+			String hql = "from TeacherInfo where mobile = ? ";
+			List list = dao.findByHql(hql, mobile);
+			TeacherInfo t = null;
+			if(list!=null && !list.isEmpty()){
+				t=(TeacherInfo) list.get(0);
+			}
+			
+			return t!=null;
+		}catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(e.getMessage(),e.getCause());
+		}
+	}
+
+	@Override
+	public void findTeacherPage(Integer appPageNo, Integer appPageSize) throws ServiceException {
+		String hql = "select t from TeacherInfo t, order by ";
+	}
+
 
 }

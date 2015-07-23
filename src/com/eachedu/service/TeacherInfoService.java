@@ -11,4 +11,8 @@ public interface TeacherInfoService extends BaseService<TeacherInfo, Long> {
 	TeacherInfo findByMobile(String mobile, String password)throws ServiceException;
 
 	TeacherInfo findBySns(String qq, String weixin, String weibo)throws ServiceException;
+
+	boolean findExistByMobile(String mobile)throws ServiceException;
+
+	void findTeacherPage(Integer appPageNo, Integer appPageSize)throws ServiceException;
 }
