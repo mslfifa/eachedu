@@ -35,14 +35,18 @@ public class LoginAppInterceptor extends AbstractInterceptor {
 			Map<String,Object> result = new HashMap<String,Object>();
 			result.put("status", false);
 			result.put("msg", "APPÃ»ÓÐµÇÂ¼");
-			HttpServletResponse resposne = ServletActionContext.getResponse();
-			resposne.setCharacterEncoding("text/json;charset=utf-8");
-			//ÉèÖÃjson¸ñÊ½
-			resposne.setContentType("application/json");
-			//ÏìÓ¦jsonÁ÷
+			HttpServletResponse response = ServletActionContext.getResponse();
+			response.setCharacterEncoding("UTF-8");
+			//ï¿½ï¿½ï¿½ï¿½jsonï¿½ï¿½Ê½
+			response.setContentType("application/json;charset=itf-8");
+			response.setHeader("Pragma", "no-cache"); 
+			response.addHeader( "Cache-Control", "no-cache" );
+			response.setDateHeader("Expires", 0);
+			//ï¿½ï¿½Ó¦jsonï¿½ï¿½
 			ServletActionContext.getResponse().getWriter().println(JSONMapper.toJSON(result).render(false));
 		}
-		return null;
+		//è·³è½¬ä¸‹ä¸€ä¸ªæ‹¦æˆªå™¨
+		return invocation.invoke();
 	}
 
 }
