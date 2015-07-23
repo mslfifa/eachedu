@@ -70,12 +70,11 @@
 		<interceptors>
 			<interceptor name="loginAppInterceptor" class="com.eachedu.web.LoginAppInterceptor"></interceptor>
 			<interceptor-stack name="app-basic-stack">
-				<interceptor-ref name="loginAppInterceptor"></interceptor-ref>
 				<interceptor-ref name="bonc-basic-stack"></interceptor-ref>
 			</interceptor-stack>
 		</interceptors>
-		<action name="loginApp" class="loginAction">
-			<interceptor-ref name="app-basic-stack"></interceptor-ref>
+		<action name="loginApp" class="loginAppAction">
+			<interceptor-ref name="bonc-basic-stack"></interceptor-ref>
 		</action>
 
 	</package>

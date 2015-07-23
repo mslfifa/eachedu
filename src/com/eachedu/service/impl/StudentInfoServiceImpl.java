@@ -59,4 +59,17 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 		}
 	}
 
+	@Override
+	public boolean findExistByMobile(String mobile) throws ServiceException {
+		try {
+			String hql = "from StudentInfo where mobile = ? ";
+			List list = dao.findByHql(hql, mobile);
+			StudentInfo s = (StudentInfo) list.get(0);
+			return s!=null;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(e.getMessage(),e.getCause());
+		}
+	}
+
 }
