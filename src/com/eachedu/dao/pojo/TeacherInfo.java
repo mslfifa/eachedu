@@ -13,7 +13,7 @@ public class TeacherInfo {
 	  private String school;
 	  private String authenticationType;
 	  //头像资源ID
-	  private String headShortId;
+	  private Long headShortId;
 	  //证书资源ID
 	  private String certificateId;
 	  private String weixin;
@@ -149,10 +149,11 @@ public class TeacherInfo {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-	public String getHeadShortId() {
+	
+	public Long getHeadShortId() {
 		return headShortId;
 	}
-	public void setHeadShortId(String headShortId) {
+	public void setHeadShortId(Long headShortId) {
 		this.headShortId = headShortId;
 	}
 	public String getCertificateId() {

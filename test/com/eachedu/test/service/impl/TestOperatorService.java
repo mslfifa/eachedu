@@ -21,7 +21,7 @@ public class TestOperatorService extends SpringJunitBase {
 		OperatorInfo pojo = new OperatorInfo();
 		pojo.setAccount("chenyun");
 		pojo.setName("陈云");
-		pojo.setPassWord("123456");
+		pojo.setPassword("123456");
 		pojo.setEmail("chenyun@163.com");
 		pojo.setQq("34564567");
 		pojo.setMobile("13958470976");

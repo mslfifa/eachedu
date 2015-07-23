@@ -30,39 +30,6 @@
 			<result name="needLogin">/login.jsp</result>
 		</action>
 		
-		<action name="report" class="reportAction">
-			<!-- <interceptor-ref name="bonc-basic-stack"/> -->
-			<interceptor-ref name="web-bus-stack"/>
-			<result name="report_list_page" >/jsp/report/report_list.jsp</result>
-			<result name="report_cfg_page" >/jsp/report/report_cfg.jsp</result>
-			<result name="report_export_page" >/jsp/report/report_output.jsp</result>
-			<result name="modify_report_page" >/jsp/report/report_edit.jsp</result>
-			<result name="report_output_page" >/jsp/report/report_output.jsp</result>
-			<result name="report_reconfig" >/jsp/report/report_cfg_edit.jsp</result>
-		</action>
-		
-		<action name="dataSource" class="dataSourceCfgAct">
-			<!-- <interceptor-ref name="bonc-basic-stack"/> -->
-			<interceptor-ref name="web-bus-stack"/>
-			<result name="list_dsc_page" >/jsp/data_source/data_source_list.jsp</result>
-			<result name="data_sorce_edit_page" >/jsp/data_source/data_source_edit.jsp</result>
-		</action>
-		
-		<action name="dimensionIndexInfo" class="dimensionIndexInfoAction">
-			<!-- <interceptor-ref name="bonc-basic-stack"/> -->
-			<interceptor-ref name="web-bus-stack"/>
-			<result name="list_dii_page" >/jsp/dimension_index/dimension_index_list.jsp</result>
-			<result name="edit_dii_page" >/jsp/dimension_index/dimension_index_edit.jsp</result>
-		</action>
-		
-		<action name="layout" class="layoutAction">
-			<interceptor-ref name="bonc-basic-stack"/>
-		</action>
-		
-		<action name="chart" class="chartCfgAction">
-			<interceptor-ref name="bonc-basic-stack"/>
-		</action>
-		
 	</package>
 	
 	<!-- app action包 -->

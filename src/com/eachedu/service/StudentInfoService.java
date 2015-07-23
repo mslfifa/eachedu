@@ -11,4 +11,6 @@ public interface StudentInfoService extends BaseService<StudentInfo, Long> {
 	StudentInfo findByMobile(String mobile, String password) throws ServiceException;
 
 	boolean findExistByMobile(String mobile)throws ServiceException;
+
+	StudentInfo findBySns(String qq, String weixin, String weibo)throws ServiceException;
 }

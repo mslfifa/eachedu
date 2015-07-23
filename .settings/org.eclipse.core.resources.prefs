@@ -6,6 +6,7 @@ encoding//WebRoot/login.jsp=UTF-8
 encoding//src/com/eachedu/dao/BaseDao.java=UTF-8
 encoding//src/com/eachedu/dao/impl/BaseDaoImpl.java=UTF-8
 encoding//src/com/eachedu/web/JSONUtils.java=UTF-8
+encoding//src/com/eachedu/web/LoginAppInterceptor.java=UTF-8
 encoding//src/com/eachedu/web/LoginInterceptor.java=GBK
 encoding//src/com/eachedu/web/PagerInterceptor.java=UTF-8
 encoding//src/com/eachedu/web/actions/BaseAction.java=UTF-8

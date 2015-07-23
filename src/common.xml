@@ -6,6 +6,7 @@
 <struts>
 	<constant name="struts.configuration.xml.reload" value="true"></constant>
 	<constant name="struts.ognl.allowStaticMethodAccess" value="true"></constant>
+	<constant name="struts.multipart.maxSize" value="300000000">constant</constant>
 	<package name="common" extends="struts-default" abstract="true">
 		<interceptors>
 			<interceptor name="pagerInterceptor" class="com.eachedu.web.PagerInterceptor"></interceptor>
@@ -58,4 +59,5 @@
 			<exception-mapping result="error" exception="java.lang.Exception"/>
 		</global-exception-mappings>
 	</package>
+	
 </struts>

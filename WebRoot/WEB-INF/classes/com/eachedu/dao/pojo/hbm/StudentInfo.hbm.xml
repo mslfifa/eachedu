@@ -12,6 +12,7 @@
 		<property name="status" column="status"/>
 		<property name="nickname" column="nickname"/>
 		<property name="name" column="name"/>
+		<property name="headShortId" column="head_short_id"/>
 		<property name="sex" column="sex"/>
 		<property name="grade" column="grade"/>
 		<property name="mobile" column="mobile"/>

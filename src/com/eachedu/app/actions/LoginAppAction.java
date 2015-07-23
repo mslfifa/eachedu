@@ -2,8 +2,7 @@ package com.eachedu.app.actions;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -12,19 +11,24 @@ import java.util.UUID;
 import javax.annotation.Resource;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.eachedu.dao.pojo.ResourceInfo;
 import com.eachedu.dao.pojo.StudentInfo;
 import com.eachedu.dao.pojo.TeacherInfo;
 import com.eachedu.dict.AccountType;
+import com.eachedu.dict.ResourceType;
 import com.eachedu.exception.ServiceException;
+import com.eachedu.service.ResourceInfoSerivce;
 import com.eachedu.service.StudentInfoService;
 import com.eachedu.service.TeacherInfoService;
 import com.eachedu.utils.ConstUtils;
+import com.eachedu.utils.PropUtils;
 import com.eachedu.web.actions.BaseAction;
 import com.eachedu.web.vo.UserVO;
 @Controller("loginAppAction")
@@ -36,12 +40,19 @@ public class LoginAppAction extends BaseAction {
 	private String mobile;
 	private String password;
 	private String accountType;
+	private String qq;
+	private String weixin;
+	private String weibo;
 	private String nickname;
 	private String sex;
 	private File headShort;
+	//头像文件名
 	private String headShortFileName;
+	//头像文件类型
 	private String headShortContentType;
 	private String headShortCaption;
+	//验证码，后台生成
+	private String verifyCode;
 	
 	public String getMobile() {
 		return mobile;
@@ -102,6 +113,32 @@ public class LoginAppAction extends BaseAction {
 		this.sex = sex;
 	}
 
+	public String getVerifyCode() {
+		return verifyCode;
+	}
+	public void setVerifyCode(String verifyCode) {
+		this.verifyCode = verifyCode;
+	}
+
+	public String getQq() {
+		return qq;
+	}
+	public void setQq(String qq) {
+		this.qq = qq;
+	}
+	public String getWeixin() {
+		return weixin;
+	}
+	public void setWeixin(String weixin) {
+		this.weixin = weixin;
+	}
+	public String getWeibo() {
+		return weibo;
+	}
+	public void setWeibo(String weibo) {
+		this.weibo = weibo;
+	}
+
 
 
 
@@ -109,6 +146,8 @@ public class LoginAppAction extends BaseAction {
 	private StudentInfoService studentInfoService;
 	@Resource(name="teacherInfoService")
 	private TeacherInfoService teacherInfoService;
+	@Resource(name="resourceInfoService")
+	private ResourceInfoSerivce resourceInfoSerivce;
 	
 	/**
 	 * 学生 / 老师(使用accountType来区分 ) 手机 密码登录
@@ -118,13 +157,13 @@ public class LoginAppAction extends BaseAction {
 		Map<String,Object> result = new HashMap<String,Object>();
 		UserVO user = null;
 		try {
-			if (AccountType.student_type.name().equals(accountType)) {
+			if (AccountType.STUDENT_TYPE.name().equals(accountType)) {
 				StudentInfo s = studentInfoService.findByMobile(mobile, password);
 				user = new UserVO();
 				user = new UserVO();
 				user.setId(s.getSiId());
 				user.setAccount(s.getAccount());
-				user.setAccountType(AccountType.student_type.name());
+				user.setAccountType(AccountType.STUDENT_TYPE.name());
 				user.setEmail(s.getEmail());
 				user.setMobile(s.getMobile());
 				user.setName(s.getName());
@@ -133,19 +172,19 @@ public class LoginAppAction extends BaseAction {
 				result.put("status", true);
 				result.put("msg", "查询成功");
 				result.put("id", s.getSiId());
-				result.put("accountType", AccountType.student_type.name());
+				result.put("accountType", AccountType.STUDENT_TYPE.name());
 				result.put("nickname", s.getNickname());
 				result.put("headShortId", s.getHeadShortId());
 				result.put("mobile", s.getMobile());
 				result.put("email", s.getEmail());
 				result.put("sex", s.getSex());
 				result.put("account", s.getAccount());
-			}else if (AccountType.teacher_type.name().equals(accountType)) {
+			}else if (AccountType.TEACHER_TYPE.name().equals(accountType)) {
 				TeacherInfo t = teacherInfoService.findByMobile(mobile, password);
 				user = new UserVO();
 				user.setId(t.getTiId());
 				user.setAccount(t.getAccount());
-				user.setAccountType(AccountType.teacher_type.name());
+				user.setAccountType(AccountType.TEACHER_TYPE.name());
 				user.setEmail(t.getEmail());
 				user.setMobile(t.getMobile());
 				user.setName(t.getName());
@@ -154,7 +193,7 @@ public class LoginAppAction extends BaseAction {
 				result.put("status", true);
 				result.put("msg", "查询成功");
 				result.put("id", t.getTiId());
-				result.put("accountType", AccountType.teacher_type.name());
+				result.put("accountType", AccountType.TEACHER_TYPE.name());
 				result.put("nickname", t.getNickname());
 				result.put("headShortId", t.getHeadShortId());
 				result.put("mobile", t.getMobile());
@@ -185,9 +224,9 @@ public class LoginAppAction extends BaseAction {
 				result.put("status",true);
 				result.put("msg","生成验证码成功!");
 				String randomStr = new Random().nextInt(10000)+"0000";
-				String code = (randomStr).substring(0, 4);
-				
-				result.put("code", code);
+				String tmpVerifyCode = (randomStr).substring(0, 4);
+				result.put("verifyCode", tmpVerifyCode);
+				ServletActionContext.getRequest().getSession().setAttribute(ConstUtils.LOGIN_VERIFY_CODE, tmpVerifyCode);
 			}else{
 				result.put("status",false);
 				result.put("msg","生成验证码失败,未能找学生号码["+mobile+"]!");
@@ -210,16 +249,109 @@ public class LoginAppAction extends BaseAction {
 		Map<String,Object> result = new HashMap<String,Object>();
 		
 		try {
-			String uploadDir = "/data/upload";
-			File dir = new File(uploadDir +"/headShort/student");
+			//判断第三方账号对应的用户存在否，存在就登录并返回信息。
+			if(AccountType.STUDENT_TYPE.name().equals(accountType)){
+				StudentInfo sLogin = studentInfoService.findBySns(qq,weixin,weibo);
+				if(sLogin!=null){
+					result.put("status", true);
+					result.put("msg", "登录成功!");
+					result.put("id", sLogin.getSiId());
+					result.put("nickname", sLogin.getNickname());
+					result.put("sex", sLogin.getSex());
+					result.put("accountType", accountType);
+					result.put("headShortId", sLogin.getHeadShortId());
+					result.put("resourceType", ResourceType.HEAD_SHORT_TYPE.name());
+					this.ajaxWriteOutJSON(result);
+					return;
+				}
+			}else if (AccountType.TEACHER_TYPE.name().equals(accountType)) {
+				TeacherInfo tLogin = teacherInfoService.findBySns(qq,weixin,weibo);
+			}else{
+				throw new Exception("accountType["+accountType+"]不在值域范围内，请与管理员联系!");
+			}
+			
+			
+			ResourceInfo r = new ResourceInfo();
+			r.setResouceOriginName(headShortFileName+"."+headShortContentType);
+			
+			
+			//上传根目录
+			String uploadDir = PropUtils.readProp("dir_upload_root");
+			//相对目录
+			String relativeDir = PropUtils.readProp("dir_head_short_pic");
+			
+			if(AccountType.STUDENT_TYPE.name().equals(accountType)){
+				relativeDir+="/student";
+				
+			}else if (AccountType.TEACHER_TYPE.name().equals(accountType)) {
+				relativeDir+="/teacher";
+			}else{
+				throw new Exception("accountType["+accountType+"]不在值域范围内，请与管理员联系!");
+			}
+			r.setResourceType(accountType);
+			
+			String uuidStr = UUID.randomUUID().toString();
+			//物理文件名
+			String realFileName = uuidStr+"."+headShortContentType;
+			//物理文件绝对路径
+			String descPath = uploadDir+"/"+relativeDir+"/"+realFileName;
+			r.setRelativePath(relativeDir+"/"+realFileName);
+			log.debug("##### descPath:"+descPath);
+			File destFile = new File(descPath);
+			File dir = destFile.getParentFile();
 			if(!dir.exists()){
 				dir.createNewFile();
 			}
-			String uuidStr = UUID.randomUUID().toString();
-			File destFile = new File(dir.getAbsolutePath()+"/"+uuidStr+"."+headShortContentType);
+			if(!destFile.exists()){
+				destFile.createNewFile();
+			}
+			FileInputStream fis = new FileInputStream(headShort);
+			r.setResourceSize(fis.available());
+			
 			FileUtils.copyFile(headShort, destFile);
+			log.info("@@@@ 头像文件保存成功!");
 			result.put("status",true);
 			result.put("msg","第三方登录成功!上传文件保存为:"+destFile.getAbsolutePath());
+			
+			r.setCreateTime(new Date());
+			resourceInfoSerivce.save(r);
+			result.put("headShortId", r.getRiId());
+			log.debug("@@@@ 保存资源信息成功!");
+			
+			if(AccountType.STUDENT_TYPE.name().equals(accountType)){
+				StudentInfo s = new StudentInfo();
+				s.setAccount(accountType);
+				s.setNickname(nickname);
+				s.setSex(sex);
+				s.setHeadShortId(r.getRiId());
+				s.setQq(qq);
+				s.setWeixin(weixin);
+				s.setWeibo(weibo);
+				studentInfoService.save(s);
+				result.put("id", s.getSiId());
+				log.info("#### 注册学生成功");
+			}else if (AccountType.TEACHER_TYPE.name().equals(accountType)) {
+				TeacherInfo t = new TeacherInfo();
+				t.setAccount(accountType);
+				t.setNickname(nickname);
+				t.setSex(sex);
+				t.setHeadShortId(r.getRiId());
+				t.setQq(qq);
+				t.setWeixin(weixin);
+				t.setWeibo(weibo);
+				teacherInfoService.save(t);
+				result.put("id", t.getTiId());
+				log.info("#### 注册老师成功");
+			}else{
+				throw new Exception("accountType["+accountType+"]不在值域范围内，请与管理员联系!");
+			}
+			result.put("nickname", nickname);
+			result.put("sex", sex);
+			result.put("accountType", accountType);
+			result.put("resourceType", ResourceType.HEAD_SHORT_TYPE.name());
+			result.put("status", true);
+			result.put("msg", "注册成功!");
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.error(e.getMessage());
@@ -230,4 +362,46 @@ public class LoginAppAction extends BaseAction {
 		
 		this.ajaxWriteOutJSON(result);
 	}
+	
+	public void registerByMobile(){
+		log.debug("@@@@@@ mobile:"+mobile+"|verifyCode:"+verifyCode+"|password:"+password);
+		Map<String, Object> result = new HashMap<String,Object>();
+		try {
+			result = new HashMap<String,Object>();
+			//取出上次生成的验证码
+			String oldVerifyCode = (String) ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.LOGIN_VERIFY_CODE);
+			Long pojoId = null;
+			if (StringUtils.isNotEmpty(oldVerifyCode)  && oldVerifyCode.equals(verifyCode)) {
+				if(AccountType.STUDENT_TYPE.name().equals(accountType)){
+					StudentInfo s = new StudentInfo();
+					s.setMobile(mobile);
+					s.setPassword(password);
+					studentInfoService.save(s);
+					pojoId=s.getSiId();
+				}else if(AccountType.TEACHER_TYPE.name().equals(accountType)){
+					TeacherInfo t = new TeacherInfo();
+					t.setMobile(mobile);
+					t.setPassword(password);
+					teacherInfoService.save(t);
+					pojoId=t.getTiId();
+				}else{
+					throw new Exception("你所传的accountType["+accountType+"]不在系统识别范围内，请与管理员联系!");
+				}
+			}else{
+				throw new Exception("验证码不对!");
+			}
+			
+			result.put("status", true);
+			result.put("msg", "注册成功!");
+			result.put("id", pojoId);
+			result.put("accountType", accountType);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			result.put("status", false);
+			result.put("msg", "注册出错,原因["+e.getMessage()+"]");
+		}
+		
+		this.ajaxWriteOutJSON(result);
+	}
+	
 }

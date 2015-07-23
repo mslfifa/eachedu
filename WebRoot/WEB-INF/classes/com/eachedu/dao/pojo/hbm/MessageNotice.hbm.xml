@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.eachedu.dao.pojo.MessageNotice" table="message_notice">
+		<id name="mnId" column="mn_id">
+			<generator class="native"/>
+		</id>
+		<property name="accountId" column="account_id"/>
+		<property name="accountType" column="account_type"/>
+		<property name="privilegeId" column="privilege_id"/>
+		<property name="messageType" column="message_type"/>
+		<property name="messageText" column="message_text"/>
+		<property name="sendTime" column="send_time"/>
+		<property name="status" column="status"/>
+		<property name="busId" column="bus_id"/>
+		<property name="busType" column="bus_type"/>
+	</class>
+</hibernate-mapping>

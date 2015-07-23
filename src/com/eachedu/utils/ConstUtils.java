@@ -8,4 +8,5 @@ public class ConstUtils {
 	public static final String SUMMARY_TYPE_MAX_MIN = "max_min";
 	public static final String SUMMARY_TYPE_TOP_N = "top_n";
 	public static final String SUMMARY_TYPE_CHANGE_TREND = "change_trend";
+	public static final String LOGIN_VERIFY_CODE = "login_verify_code";
 }

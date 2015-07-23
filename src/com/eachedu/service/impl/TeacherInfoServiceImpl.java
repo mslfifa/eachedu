@@ -58,5 +58,37 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 		} 
 	}
 
+	@Override
+	public TeacherInfo findBySns(String qq, String weixin, String weibo) throws ServiceException {
+		
+		try {
+			StringBuffer hql = new StringBuffer(100);
+			List param = new ArrayList();
+			hql.append("from TeacherInfo where 1=0 ");
+			if(StringUtils.isNotEmpty(qq)){
+				hql.append(" or qq = ? ");
+				param.add(qq);
+			}
+			if(StringUtils.isEmpty(weixin)){
+				hql.append(" or weixin = ? ");
+				param.add(weixin);
+			}
+			if(StringUtils.isNotEmpty(weibo)){
+				hql.append(" or weibo = ? ");
+				param.add("weibo");
+			}
+			List list = dao.findByHql(hql.toString(), param.toArray(new Object[0]));
+			
+			TeacherInfo t = null;
+			if(list!=null && !list.isEmpty()){
+				t = (TeacherInfo) list.get(0);
+			}
+			return t;
+		} catch (Exception e) {
+			throw new ServiceException(e.getMessage(),e.getCause());
+		}
+		
+	}
+
 
 }

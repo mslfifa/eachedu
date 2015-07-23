@@ -11,12 +11,13 @@ public class StudentInfo {
 	private String name;
 	private String sex;
 	//头像资源ID
-	private String headShortId;
+	private Long headShortId;
 	private String grade;
 	private String mobile;
 	private String email;
 	private String mainPage;
 	private String weibo;
+	private String weixin;
 	private String qq;
 	private String bankAccount;
 	private String alipay;
@@ -118,11 +119,16 @@ public class StudentInfo {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-	public String getHeadShortId() {
+	public Long getHeadShortId() {
 		return headShortId;
 	}
-	public void setHeadShortId(String headShortId) {
+	public void setHeadShortId(Long headShortId) {
 		this.headShortId = headShortId;
 	}
-	
+	public String getWeixin() {
+		return weixin;
+	}
+	public void setWeixin(String weixin) {
+		this.weixin = weixin;
+	}
 }

@@ -2,9 +2,9 @@ package com.eachedu.dict;
 
 public enum AccountType {
 	//学生账号
-	student_type,
+	STUDENT_TYPE,
 	//老师账号
-	teacher_type,
+	TEACHER_TYPE,
 	//运营人员账号
-	operator_type
+	OPERATOR_TYPE
 }

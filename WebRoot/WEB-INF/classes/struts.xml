@@ -7,42 +7,42 @@
 	<include file="common.xml"></include>
 	<!-- 后台 -->
 	<package name="eachedu" namespace="/" extends="common">
-		
+		<interceptors>
+			<interceptor name="loginInterceptor" class="com.eachedu.web.LoginInterceptor"></interceptor>
+			<interceptor-stack name="web-bus-stack">
+				<interceptor-ref name="loginInterceptor"></interceptor-ref>
+				<interceptor-ref name="bonc-basic-stack"/>
+			</interceptor-stack>
+		</interceptors>
+		<global-results>
+			<result name="page_error">/common/error.jsp</result>
+		</global-results>
+		<global-exception-mappings>
+			<exception-mapping result="page_error" exception="com.eachedu.exception.ActionException"></exception-mapping>
+		</global-exception-mappings>
+
 		<action name="loginAct" class="loginAction">
+			<!-- <interceptor-ref name="bonc-basic-stack"/> -->
+			<!-- 注意这里不能加登录拦截器，要不就是死循环 -->
 			<interceptor-ref name="bonc-basic-stack"/>
 			<result name="success" type="redirect">/index.jsp</result>
 			<result name="fail">/common/error.jsp</result>
+			<result name="needLogin">/login.jsp</result>
 		</action>
 		
-		<action name="report" class="reportAction">
-			<interceptor-ref name="bonc-basic-stack"/>
-			<result name="report_list_page" >/jsp/report/report_list.jsp</result>
-			<result name="report_cfg_page" >/jsp/report/report_cfg.jsp</result>
-			<result name="report_export_page" >/jsp/report/report_output.jsp</result>
-			<result name="modify_report_page" >/jsp/report/report_edit.jsp</result>
-			<result name="report_output_page" >/jsp/report/report_output.jsp</result>
-			<result name="report_reconfig" >/jsp/report/report_cfg_edit.jsp</result>
+	</package>
+	
+	<!-- app action包 -->
+	<package name="app" namespace="/app" extends="common">
+		<interceptors>
+			<interceptor name="loginAppInterceptor" class="com.eachedu.web.LoginAppInterceptor"></interceptor>
+			<interceptor-stack name="app-basic-stack">
+				<interceptor-ref name="bonc-basic-stack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<action name="loginApp" class="loginAppAction">
+			<interceptor-ref name="bonc-basic-stack"></interceptor-ref>
 		</action>
-		
-		<action name="dataSource" class="dataSourceCfgAct">
-			<interceptor-ref name="bonc-basic-stack"/>
-			<result name="list_dsc_page" >/jsp/data_source/data_source_list.jsp</result>
-			<result name="data_sorce_edit_page" >/jsp/data_source/data_source_edit.jsp</result>
-		</action>
-		
-		<action name="dimensionIndexInfo" class="dimensionIndexInfoAction">
-			<interceptor-ref name="bonc-basic-stack"/>
-			<result name="list_dii_page" >/jsp/dimension_index/dimension_index_list.jsp</result>
-			<result name="edit_dii_page" >/jsp/dimension_index/dimension_index_edit.jsp</result>
-		</action>
-		
-		<action name="layout" class="layoutAction">
-			<interceptor-ref name="bonc-basic-stack"/>
-		</action>
-		
-		<action name="chart" class="chartCfgAction">
-			<interceptor-ref name="bonc-basic-stack"/>
-		</action>
-		
+
 	</package>
 </struts>

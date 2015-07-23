@@ -65,36 +65,36 @@ public class LoginAction extends BaseAction{
 			
 			UserVO user = null;
 			//student_type:学生  teacher_type:老师  operator_type:运营人员
-			if(AccountType.student_type.name().equals(accountType)){
+			if(AccountType.STUDENT_TYPE.name().equals(accountType)){
 				List<StudentInfo> students = studentInfoService.findStudentFromLogin(username, password);
 				StudentInfo student = students.get(0);
 				user=new UserVO();
 				user.setId(student.getSiId());
 				user.setAccount(student.getAccount());
 				user.setName(student.getName());
-				user.setAccountType(AccountType.operator_type.name());
+				user.setAccountType(accountType);
 				user.setMobile(student.getEmail());
 				user.setQq(student.getQq());
 				user.setMobile(student.getMobile());
-			}else if(AccountType.teacher_type.name().equals(accountType)){
+			}else if(AccountType.TEACHER_TYPE.name().equals(accountType)){
 				List<TeacherInfo> teachers = teacherInfoService.findTeacherFromLogin(username, password);
 				TeacherInfo teacher = teachers.get(0);
 				user=new UserVO();
 				user.setId(teacher.getTiId());
 				user.setAccount(teacher.getAccount());
 				user.setName(teacher.getName());
-				user.setAccountType(AccountType.operator_type.name());
+				user.setAccountType(accountType);
 				user.setMobile(teacher.getEmail());
 				user.setQq(teacher.getQq());
 				user.setMobile(teacher.getMobile());
-			}else if(AccountType.operator_type.name().equals(accountType)){
+			}else if(AccountType.OPERATOR_TYPE.name().equals(accountType)){
 				List<OperatorInfo> operators = operatorInfoService.findOperatorFromLogin(username, password);
 				OperatorInfo operator = operators.get(0);
 				user=new UserVO();
 				user.setId(operator.getOiId());
 				user.setAccount(operator.getAccount());
 				user.setName(operator.getName());
-				user.setAccountType(AccountType.operator_type.name());
+				user.setAccountType(accountType);
 				user.setMobile(operator.getEmail());
 				user.setQq(operator.getQq());
 				user.setMobile(operator.getMobile());

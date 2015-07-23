@@ -5,13 +5,12 @@ import java.util.Date;
 public class ResourceInfo {
 	private Long riId;
 	private String resourceRealName;
-	// 资料类型 head_short_type:头像 certificate_type:证书 question_pic_type问题图片
-	// answer_pic_type:答案图片
+	// 资料类型 head_short_type:头像 certificate_type:证书 question_pic_type问题图片  answer_pic_type:答案图片
 	private String resourceType;
 	// 资料原始名字
 	private String resouceOriginName;
 	private Integer resourceSize;
-	private String physicsPath;
+	private String relativePath;
 	private Date createTime;
 	private Long creatorId;
 
@@ -55,12 +54,12 @@ public class ResourceInfo {
 		this.resourceSize = resourceSize;
 	}
 
-	public String getPhysicsPath() {
-		return physicsPath;
+	public String getRelativePath() {
+		return relativePath;
 	}
 
-	public void setPhysicsPath(String physicsPath) {
-		this.physicsPath = physicsPath;
+	public void setRelativePath(String relativePath) {
+		this.relativePath = relativePath;
 	}
 
 	public Date getCreateTime() {

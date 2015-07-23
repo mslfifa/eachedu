@@ -9,4 +9,6 @@ public interface TeacherInfoService extends BaseService<TeacherInfo, Long> {
 	List<TeacherInfo> findTeacherFromLogin(String username,String password) throws ServiceException;
 
 	TeacherInfo findByMobile(String mobile, String password)throws ServiceException;
+
+	TeacherInfo findBySns(String qq, String weixin, String weibo)throws ServiceException;
 }
