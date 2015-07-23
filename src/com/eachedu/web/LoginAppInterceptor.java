@@ -14,7 +14,7 @@ import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 import com.sdicons.json.mapper.JSONMapper;
 
 /**
- * app登录认证拦截器
+ * app锟斤拷录锟斤拷证锟斤拷锟斤拷锟斤拷
  * @author Administrator
  *
  */
@@ -30,11 +30,11 @@ public class LoginAppInterceptor extends AbstractInterceptor {
 		
 		UserVO currentUser = (UserVO)ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.USER_LOGIN);
 		
-		//如果会话内没有用户对象，就拦截，返回调用方一个json结构 {status:xxx,msg:yyy}
+		//妫�鏌PP浼氳瘽涓湁娌℃湁鐧诲綍鐢ㄦ埛淇℃伅   娌℃湁灏辫繑鍥瀓son缁撴瀯 {status:xxx,msg:yyy}
 		if(currentUser == null){
 			Map<String,Object> result = new HashMap<String,Object>();
 			result.put("status", false);
-			result.put("msg", "APP没有登录");
+			result.put("msg", "APP没锟叫碉拷录");
 			HttpServletResponse response = ServletActionContext.getResponse();
 			response.setCharacterEncoding("UTF-8");
 			//锟斤拷锟斤拷json锟斤拷式
