@@ -7,7 +7,7 @@ public class MessageNotice {
 	private Long accountId;
 	private String accountType;
 	private String privilegeId;
-	// system_message:系统消息 answering: 抢答题信息 complaining:投诉中 complained:投诉成立
+	//SYSTEM_MESSAGE:系统消息  QUESTION_MESSAGE: 抢答题信息 COMPLAIN_MESSAGE:投诉中
 	private String messageType;
 	private String messageText;
 	private Date sendTime;

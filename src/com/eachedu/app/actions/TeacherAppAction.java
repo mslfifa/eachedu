@@ -2,9 +2,13 @@ package com.eachedu.app.actions;
 
 import javax.annotation.Resource;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
 import com.eachedu.exception.ServiceException;
 import com.eachedu.service.TeacherInfoService;
-
+@Controller("teacherAppAction")
+@Scope("prototype")
 public class TeacherAppAction {
 	
 	private Integer appPageNo;

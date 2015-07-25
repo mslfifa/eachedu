@@ -13,7 +13,6 @@ public class PlatFinanceServiceImpl extends BaseServiceImpl<PlatFinance, Long>im
 	@Override
 	public void setDao(BaseDao<PlatFinance, Long> dao) {
 		this.dao=dao;
-		
 	}
 
 

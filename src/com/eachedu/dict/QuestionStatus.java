@@ -1,5 +1,9 @@
 package com.eachedu.dict;
-
+/**
+ * 问题状态
+ * @author Administrator
+ *
+ */
 public enum QuestionStatus {
 	//等待解决中
 	WATING,

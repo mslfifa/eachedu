@@ -9,6 +9,7 @@ public class CoursewareInfo {
 	private String introduce;
 	private String picPath;
 	private BigDecimal prise;
+	//USING:启用  FREEZE:停用 CANCEL:撤销
 	private String status;
 	public Long getCiId() {
 		return ciId;

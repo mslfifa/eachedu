@@ -33,12 +33,12 @@ public class LoginAppInterceptor extends AbstractInterceptor {
 		//检查APP会话中有没有登录用户信息   没有就返回json结构 {status:xxx,msg:yyy}
 		if(currentUser == null){
 			Map<String,Object> result = new HashMap<String,Object>();
-			result.put("status", false);
-			result.put("msg", "APPû�е�¼");
+			result.put("http_status", false);
+			result.put("http_msg", "APPû�е�¼");
 			HttpServletResponse response = ServletActionContext.getResponse();
 			response.setCharacterEncoding("UTF-8");
 			//����json��ʽ
-			response.setContentType("application/json;charset=itf-8");
+			response.setContentType("application/json;charset=UTF-8");
 			response.setHeader("Pragma", "no-cache"); 
 			response.addHeader( "Cache-Control", "no-cache" );
 			response.setDateHeader("Expires", 0);

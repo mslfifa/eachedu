@@ -10,7 +10,8 @@ public class PlatFinance {
 	private String accountType;
 	private Long accountId;
 	private BigDecimal amount;
-	private String status;
+	//是否退款
+	private Boolean refunded;
 	private String cashFlow;
 	private Date opTime;
 	public Long getPfId() {
@@ -49,11 +50,11 @@ public class PlatFinance {
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
-	public String getStatus() {
-		return status;
+	public Boolean getRefunded() {
+		return refunded;
 	}
-	public void setStatus(String status) {
-		this.status = status;
+	public void setRefunded(Boolean refunded) {
+		this.refunded = refunded;
 	}
 	public String getCashFlow() {
 		return cashFlow;

@@ -1,6 +1,7 @@
 package com.eachedu.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.eachedu.dao.pojo.TeacherInfo;
 import com.eachedu.exception.ServiceException;
@@ -15,4 +16,6 @@ public interface TeacherInfoService extends BaseService<TeacherInfo, Long> {
 	boolean findExistByMobile(String mobile)throws ServiceException;
 
 	void findTeacherPage(Integer appPageNo, Integer appPageSize)throws ServiceException;
+
+	List<Map<String,Object>> findTopAnswerTeachers(int topNum)throws ServiceException;
 }

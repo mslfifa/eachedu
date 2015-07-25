@@ -2,12 +2,16 @@ package com.eachedu.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.eachedu.app.actions.LoginAppAction;
 import com.eachedu.dao.BaseDao;
 import com.eachedu.dao.pojo.TeacherInfo;
 import com.eachedu.exception.DaoException;
@@ -15,6 +19,7 @@ import com.eachedu.exception.ServiceException;
 import com.eachedu.service.TeacherInfoService;
 @Service("teacherInfoService")
 public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>implements TeacherInfoService {
+	private static final Logger log = LoggerFactory.getLogger(TeacherInfoServiceImpl.class);
 	@Resource(name="teacherInfoDao")
 	@Override
 	public void setDao(BaseDao<TeacherInfo, Long> dao) {
@@ -113,7 +118,38 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 
 	@Override
 	public void findTeacherPage(Integer appPageNo, Integer appPageSize) throws ServiceException {
-		String hql = "select t from TeacherInfo t, order by ";
+		String hql = "select t from TeacherInfo t order by tiId desc ";
+	}
+
+	@Override
+	public List<Map<String,Object>> findTopAnswerTeachers(int topNum) throws ServiceException {
+		try {
+			StringBuffer sql = new StringBuffer();
+			sql .append(" SELECT                                          ")
+				.append("   ti.ti_id,  account,  PASSWORD,  STATUS,       ")
+				.append("   NAME,  nickname,  sex,  identification_card,  ")
+				.append("   school,  authentication_type,  head_short_id, ")
+				.append("   certificate_id,  weixin,  qq,  weibo,  mobile,")
+				.append("   email,  tag_id1,  tag_title1,  tag_id2,       ")
+				.append("   tag_title2,  tag_id3,  tag_title3,  tag_id4,  ")
+				.append("   tag_title4,  tag_id5,  tag_title5,  tag_id6,  ")
+				.append("   tag_title6,  create_time                      ")
+				.append(" FROM teacher_info ti JOIN                       ")
+				.append(" (                                               ")
+				.append("   SELECT                                        ")
+				.append("     ta.ti_id,COUNT(1) AS total_num              ")
+				.append("   FROM teacher_answer ta                        ")
+				.append("   GROUP BY ta.ti_id                             ")
+				.append("   ORDER BY total_num DESC                       ")
+				.append("   LIMIT 0, "+topNum+"                           ")
+				.append(" ) t_t ON t_t.ti_id=ti.ti_id                     ")
+				.append(" ORDER BY t_t.total_num DESC                     ");
+			return dao.findBySQL(sql.toString());
+		} catch (DaoException e) {
+			log.error(e.getMessage());
+			e.printStackTrace();
+			throw new ServiceException(e.getMessage(),e.getCause());
+		}
 	}
 
 

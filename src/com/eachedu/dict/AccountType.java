@@ -1,5 +1,9 @@
 package com.eachedu.dict;
-
+/**
+ * 账号类型
+ * @author Administrator
+ *
+ */
 public enum AccountType {
 	//学生账号
 	STUDENT_TYPE,

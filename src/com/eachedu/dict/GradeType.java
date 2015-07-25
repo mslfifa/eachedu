@@ -1,5 +1,9 @@
 package com.eachedu.dict;
-//年级
+/**
+ * 年级
+ * @author Administrator
+ *
+ */
 public enum GradeType {
 	//初一
 	JUNIOR_1,

@@ -36,7 +36,7 @@ import com.eachedu.web.vo.UserVO;
 @Scope("prototype")
 public class LoginAppAction extends BaseAction {
 	
-	Logger log = LoggerFactory.getLogger(LoginAppAction.class);
+	private static final Logger log = LoggerFactory.getLogger(LoginAppAction.class);
 	
 	private String mobile;
 	private String password;
@@ -170,8 +170,8 @@ public class LoginAppAction extends BaseAction {
 				user.setName(s.getName());
 				user.setQq(s.getQq());
 				
-				result.put("status", true);
-				result.put("msg", "查询成功");
+				result.put("http_status", true);
+				result.put("http_msg", "查询成功");
 				result.put("id", s.getSiId());
 				result.put("accountType", accountType);
 				result.put("nickname", s.getNickname());
@@ -191,8 +191,8 @@ public class LoginAppAction extends BaseAction {
 				user.setName(t.getName());
 				user.setQq(t.getQq());
 				
-				result.put("status", true);
-				result.put("msg", "查询成功");
+				result.put("http_status", true);
+				result.put("http_msg", "查询成功");
 				result.put("id", t.getTiId());
 				result.put("accountType", accountType);
 				result.put("nickname", t.getNickname());
@@ -208,8 +208,8 @@ public class LoginAppAction extends BaseAction {
 			ServletActionContext.getRequest().getSession().setAttribute(ConstUtils.USER_LOGIN, user);
 		} catch (Exception e) {
 			log.error(e.getMessage());
-			result.put("status", false);
-			result.put("msg", "查询失败，错误["+e.getMessage()+"]");
+			result.put("http_status", false);
+			result.put("http_msg", "查询失败，错误["+e.getMessage()+"]");
 		}
 		this.ajaxWriteOutJSON(result);
 	}
@@ -237,8 +237,8 @@ public class LoginAppAction extends BaseAction {
 				}
 			}
 			
-			result.put("status",true);
-			result.put("msg","生成验证码成功!");
+			result.put("http_status",true);
+			result.put("http_msg","生成验证码成功!");
 			String randomStr = new Random().nextInt(10000)+"0000";
 			String tmpVerifyCode = (randomStr).substring(0, 4);
 			result.put("verifyCode", tmpVerifyCode);
@@ -246,8 +246,8 @@ public class LoginAppAction extends BaseAction {
 			
 		} catch (Exception e) {
 			log.error(e.getMessage());
-			result.put("status",false);
-			result.put("msg","生成验证码失败["+e.getMessage()+"]!");
+			result.put("http_status",false);
+			result.put("http_msg","生成验证码失败["+e.getMessage()+"]!");
 		}
 		
 		this.ajaxWriteOutJSON(result);
@@ -266,8 +266,8 @@ public class LoginAppAction extends BaseAction {
 			if(AccountType.STUDENT_TYPE.name().equals(accountType)){
 				StudentInfo sLogin = studentInfoService.findBySns(qq,weixin,weibo);
 				if(sLogin!=null){
-					result.put("status", true);
-					result.put("msg", "登录成功!");
+					result.put("http_status", true);
+					result.put("http_msg", "登录成功!");
 					result.put("id", sLogin.getSiId());
 					result.put("nickname", sLogin.getNickname());
 					result.put("sex", sLogin.getSex());
@@ -279,8 +279,8 @@ public class LoginAppAction extends BaseAction {
 			}else if (AccountType.TEACHER_TYPE.name().equals(accountType)) {
 				TeacherInfo tLogin = teacherInfoService.findBySns(qq,weixin,weibo);
 				if(tLogin!=null){
-					result.put("status", true);
-					result.put("msg", "登录成功!");
+					result.put("http_status", true);
+					result.put("http_msg", "登录成功!");
 					result.put("id", tLogin.getTiId());
 					result.put("nickname", tLogin.getNickname());
 					result.put("sex", tLogin.getSex());
@@ -335,8 +335,8 @@ public class LoginAppAction extends BaseAction {
 			
 			FileUtils.copyFile(headShort, destFile);
 			log.info("@@@@ 头像文件保存成功!");
-			result.put("status",true);
-			result.put("msg","第三方登录成功!上传文件保存为:"+destFile.getAbsolutePath());
+			result.put("http_status",true);
+			result.put("http_msg","第三方登录成功!上传文件保存为:"+destFile.getAbsolutePath());
 			
 			r.setCreateTime(new Date());
 			resourceInfoSerivce.save(r);
@@ -373,15 +373,15 @@ public class LoginAppAction extends BaseAction {
 			result.put("nickname", nickname);
 			result.put("sex", sex);
 			result.put("accountType", accountType);
-			result.put("status", true);
-			result.put("msg", "注册成功!");
+			result.put("http_status", true);
+			result.put("http_msg", "注册成功!");
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.error(e.getMessage());
 			
-			result.put("status",false);
-			result.put("msg","第三方登录失败["+e.getMessage()+"]!");
+			result.put("http_status",false);
+			result.put("http_msg","第三方登录失败["+e.getMessage()+"]!");
 		}
 		
 		this.ajaxWriteOutJSON(result);
@@ -419,14 +419,14 @@ public class LoginAppAction extends BaseAction {
 				throw new Exception("验证码不对!");
 			}
 			
-			result.put("status", true);
-			result.put("msg", "注册成功!");
+			result.put("http_status", true);
+			result.put("http_msg", "注册成功!");
 			result.put("id", pojoId);
 			result.put("accountType", accountType);
 		} catch (Exception e) {
 			log.error(e.getMessage());
-			result.put("status", false);
-			result.put("msg", "注册出错,原因["+e.getMessage()+"]");
+			result.put("http_status", false);
+			result.put("http_msg", "注册出错,原因["+e.getMessage()+"]");
 		}
 		
 		this.ajaxWriteOutJSON(result);
