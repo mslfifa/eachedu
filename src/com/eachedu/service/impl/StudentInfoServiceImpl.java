@@ -1,20 +1,25 @@
 package com.eachedu.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.eachedu.dao.BaseDao;
 import com.eachedu.dao.pojo.StudentInfo;
-import com.eachedu.exception.DaoException;
 import com.eachedu.exception.ServiceException;
 import com.eachedu.service.StudentInfoService;
 @Service("studentInfoService")
 public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>implements StudentInfoService {
+	
+	private static final Logger log = LoggerFactory.getLogger(StudentInfoServiceImpl.class);
+	
 	@Resource(name="studentInfoDao")
 	@Override
 	public void setDao(BaseDao<StudentInfo, Long> dao) {
@@ -106,6 +111,27 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 			throw new ServiceException(e.getMessage(),e.getCause());
 		}
 		
+	}
+
+	@Override
+	public void updatePwd(String mobile, String password) throws ServiceException {
+		try {
+			String hql = "from StudentInfo where mobile = ? ";
+			List list = dao.findByHql(hql, mobile);
+			StudentInfo s = null;
+			if(list!=null && !list.isEmpty()){
+				s = (StudentInfo) list.get(0);
+			}else{
+				throw new Exception("找不到手机号为["+mobile+"]");
+			}
+			
+			s.setPassword(password);
+			s.setCreateTime(new Date());
+			dao.update(s);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException(e.getMessage(),e.getCause());
+		}
 	}
 
 }

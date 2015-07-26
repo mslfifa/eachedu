@@ -26,6 +26,7 @@ public class LoginInterceptor extends AbstractInterceptor {
 		UserVO currentUser = (UserVO)ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.USER_LOGIN);
 		if(currentUser == null){
 			ServletActionContext.getRequest().getSession().setAttribute(ConstUtils.ERROR_MSG, "请重新登录系统");
+			//转到登录页面
 			return "needLogin";
 		}
 		

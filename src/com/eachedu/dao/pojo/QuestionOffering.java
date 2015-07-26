@@ -13,7 +13,7 @@ public class QuestionOffering {
 	private Long siId;
 	private String communicateWay;
 	private String questionDesc;
-	private String picPath;
+	private Long picId;
 	// 价格
 	private BigDecimal prise;
 	// 追加赏金
@@ -21,7 +21,7 @@ public class QuestionOffering {
 	// 提问时间
 	private Date askTime;
 	private String status;
-
+	private String remark;
 	public Long getOrderId() {
 		return orderId;
 	}
@@ -69,13 +69,13 @@ public class QuestionOffering {
 	public void setQuestionDesc(String questionDesc) {
 		this.questionDesc = questionDesc;
 	}
-
-	public String getPicPath() {
-		return picPath;
+	
+	public Long getPicId() {
+		return picId;
 	}
 
-	public void setPicPath(String picPath) {
-		this.picPath = picPath;
+	public void setPicId(Long picId) {
+		this.picId = picId;
 	}
 
 	public BigDecimal getPrise() {
@@ -110,4 +110,12 @@ public class QuestionOffering {
 		this.status = status;
 	}
 
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	
 }

@@ -1,19 +1,23 @@
 package com.eachedu.dao.pojo;
 
-public class AnswerEvaluate {
-	private Long aeId;
+import java.util.Date;
+
+public class AnswerComment {
+	private Long acId;
 	private Long orderId;
 	//打分
 	private Integer score;
 	//评语
 	private String remark;
-	public Long getAeId() {
-		return aeId;
-	}
-	public void setAeId(Long aeId) {
-		this.aeId = aeId;
-	}
 	
+	private Date commentTime;
+	
+	public Long getAcId() {
+		return acId;
+	}
+	public void setAcId(Long acId) {
+		this.acId = acId;
+	}
 	public Long getOrderId() {
 		return orderId;
 	}
@@ -32,5 +36,12 @@ public class AnswerEvaluate {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+	public Date getCommentTime() {
+		return commentTime;
+	}
+	public void setCommentTime(Date commentTime) {
+		this.commentTime = commentTime;
+	}
+	
 	
 }

@@ -12,7 +12,7 @@
 		<property name="accountType" column="account_type"/>
 		<property name="accountId" column="account_id"/>
 		<property name="amount" column="amount"/>
-		<property name="status" column="status"/>
+		<property name="refunded" column="is_refunded"/>
 		<property name="cashFlow" column="cash_flow"/>
 		<property name="opTime" column="op_time"/>
 	</class>

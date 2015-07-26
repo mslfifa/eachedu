@@ -3,12 +3,13 @@
 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="com.eachedu.dao.pojo.AnswerEvaluate" table="answer_evaluate">
-		<id name="aeId" column="ae_id">
+	<class name="com.eachedu.dao.pojo.AnswerComment" table="answer_comment">
+		<id name="acId" column="ac_id">
 			<generator class="native"/>
 		</id>
 		<property name="orderId" column="order_id"/>
 		<property name="score" column="score"/>
 		<property name="remark" column="remark"/>
+		<property name="commentTime" column="comment_time"/>
 	</class>
 </hibernate-mapping>

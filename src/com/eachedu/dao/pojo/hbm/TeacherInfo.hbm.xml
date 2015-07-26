@@ -16,17 +16,24 @@
 		<property name="authenticationType" column="authentication_type"/>
 		<property name="headShortId" column="head_short_id"/>
 		<property name="certificateId" column="certificate_id"/>
+		<property name="introduce" column="introduce"/>
 		<property name="weixin" column="weixin"/>
 		<property name="qq" column="qq"/>
 		<property name="weibo" column="weibo"/>
 		<property name="mobile" column="mobile"/>
 		<property name="email" column="email"/>
-		<property name="tag1" column="tag_1"/>
-		<property name="tag2" column="tag_2"/>
-		<property name="tag3" column="tag_3"/>
-		<property name="tag4" column="tag_4"/>
-		<property name="tag5" column="tag_5"/>
-		<property name="tag6" column="tag_6"/>
+		<property name="tagId1" column="tag_id1"/>
+		<property name="tagId2" column="tag_id2"/>
+		<property name="tagId3" column="tag_id3"/>
+		<property name="tagId4" column="tag_id4"/>
+		<property name="tagId5" column="tag_id5"/>
+		<property name="tagId6" column="tag_id6"/>
+		<property name="tagTitle1" column="tag_title1"/>
+		<property name="tagTitle2" column="tag_title2"/>
+		<property name="tagTitle3" column="tag_title3"/>
+		<property name="tagTitle4" column="tag_title4"/>
+		<property name="tagTitle5" column="tag_title5"/>
+		<property name="tagTitle6" column="tag_title6"/>
 		<property name="createTime" column="create_time"/>
 	</class>
 </hibernate-mapping>

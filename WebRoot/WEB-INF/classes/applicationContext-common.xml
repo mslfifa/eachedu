@@ -17,15 +17,25 @@
 	<!-- 自动扫描在某个包（包括子包）下面的所有类型，寻找包含特定注解的类，并将它注册到Spring中 -->
 	<context:component-scan base-package="com.eachedu" />
 
-	<!-- 配置数据源 -->
-	<bean id="dataSource"
+	<!-- 本地数据源 -->
+	<!-- <bean id="dataSource"
 		class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://127.0.0.1:3306/eachedu?&amp;useUnicode=true&amp;characterEncoding=UTF-8" />
 		<property name="username" value="root" />
 		<property name="password" value="" />
+	</bean> -->
+	<!-- 生产数据源 -->
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://112.74.194.40:3306/eachedu?&amp;useUnicode=true&amp;characterEncoding=UTF-8" />
+		<property name="username" value="root" />
+		<property name="password" value="EEGSmart1107" />
 	</bean>
+	
 
 	<!-- 将SessionFactory交给Spring来管理 -->
 	<bean id="sessionFactory"

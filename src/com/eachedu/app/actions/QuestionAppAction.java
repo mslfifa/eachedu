@@ -15,13 +15,26 @@ import com.eachedu.exception.ServiceException;
 import com.eachedu.service.QuestionOfferingService;
 import com.eachedu.service.TeacherInfoService;
 import com.eachedu.web.actions.BaseAction;
+import com.eachedu.web.vo.PagerVO;
 @Controller("questionAppAction")
 @Scope("prototype")
 public class QuestionAppAction extends BaseAction {
 	private static final Logger log = LoggerFactory.getLogger(QuestionAppAction.class);
-			
+	
+	private Long siId;
 	private String status;
 	private int topNum=1;
+	
+	private Integer pageNo;
+	private Integer pageSize;
+	public Long getSiId() {
+		return siId;
+	}
+
+	public void setSiId(Long siId) {
+		this.siId = siId;
+	}
+
 	public String getStatus() {
 		return status;
 	}
@@ -38,11 +51,38 @@ public class QuestionAppAction extends BaseAction {
 		this.topNum = topNum;
 	}
 
+	public Integer getPageNo() {
+		return pageNo;
+	}
+
+	public void setPageNo(Integer pageNo) {
+		this.pageNo = pageNo;
+	}
+
+	public Integer getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	public String getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
+
+
 
 	@Resource(name="questionOfferingService")
 	private QuestionOfferingService questionOfferingService;
 	@Resource(name="teacherInfoService")
 	private TeacherInfoService teacherInfoService;
+
+	private String orderNo;
 	
 	
 	public void findQuestionedByStatus(){
@@ -55,6 +95,44 @@ public class QuestionAppAction extends BaseAction {
 			List<Map<String, Object>> teachers = teacherInfoService.findTopAnswerTeachers(topNum);
 			result.put("teachers", teachers);
 			
+			result.put("http_status", true);
+			result.put("http_msg", "查找成功!");
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			log.error(e.getMessage());
+			result.put("http_status", true);
+			result.put("http_msg", "查找成功!");
+		}
+		this.ajaxWriteOutJSON(result);
+	}
+	
+	public void findQuestionPageByStudent(){
+		
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		try {
+			PagerVO page = questionOfferingService.findQuestionPageByStudent(siId, pageNo, pageSize);
+			result.put("data", page.getDatas());
+			result.put("http_status", true);
+			result.put("http_msg", "查找成功!");
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			log.error(e.getMessage());
+			result.put("http_status", true);
+			result.put("http_msg", "查找成功!");
+		}
+		this.ajaxWriteOutJSON(result);
+		
+	}
+	
+	public void findQuetionByOrderNo(){
+		Map<String,Object> result = new HashMap<String,Object>();
+		try {
+			List<Map<String, Object>> list = questionOfferingService.findQuetionByOrderNo(orderNo);
+			
+			result.put("data", list);
 			result.put("http_status", true);
 			result.put("http_msg", "查找成功!");
 		} catch (ServiceException e) {

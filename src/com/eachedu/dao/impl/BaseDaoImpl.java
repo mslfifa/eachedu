@@ -2,6 +2,7 @@ package com.eachedu.dao.impl;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -115,9 +116,10 @@ public abstract class  BaseDaoImpl<T ,PK extends Serializable> implements BaseDa
 		try {
 			PagerVO page = new PagerVO();
 			
-			String countSql = "select count(1) as total from ( "+sql+" )";
-			SQLQuery countQuery = getSession().createSQLQuery(sql);
-			SQLQuery query = getSession().createSQLQuery(sql);
+			String countSql = "select count(1) as total from ( "+sql+" ) p_t ";
+			SQLQuery countQuery = getSession().createSQLQuery(countSql);
+//			countQuery.addEntity(Long.class);
+			SQLQuery query = getSession().createSQLQuery(sql+" limit "+offset+" , "+pagesize);
 			if(paras!=null && paras.length>0){
 				for (int i = 0; i < paras.length; i++) {
 					countQuery.setParameter(i, paras[i]);
@@ -125,8 +127,8 @@ public abstract class  BaseDaoImpl<T ,PK extends Serializable> implements BaseDa
 				}
 			}
 			
-			List counts = countQuery.addEntity(Long.class).list();
-			int total = ((Long)counts.get(0)).intValue();
+			List counts = countQuery.list();
+			int total = Integer.parseInt(counts.get(0).toString());
 			page.setTotal(total);
 			List datas = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 			page.setDatas(datas);

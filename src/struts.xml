@@ -51,6 +51,13 @@
 		<action name="questionApp" class="questionAppAction">
 			<interceptor-ref name="app-basic-stack"></interceptor-ref>
 		</action>
+		
+		<action name="studentApp" class="studentAppAction">
+			<interceptor-ref name="app-basic-stack"></interceptor-ref>
+		</action>
+		<action name="teacherApp" class="teacherAppAction">
+			<interceptor-ref name="app-basic-stack"></interceptor-ref>
+		</action>
 
 	</package>
 </struts>

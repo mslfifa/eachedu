@@ -36,12 +36,27 @@
 	<package name="app" namespace="/app" extends="common">
 		<interceptors>
 			<interceptor name="loginAppInterceptor" class="com.eachedu.web.LoginAppInterceptor"></interceptor>
+			<interceptor-stack name="app-login-stack">
+				<interceptor-ref name="bonc-basic-stack"></interceptor-ref>
+			</interceptor-stack>
 			<interceptor-stack name="app-basic-stack">
 				<interceptor-ref name="bonc-basic-stack"></interceptor-ref>
+				<interceptor-ref name="loginAppInterceptor"></interceptor-ref>
 			</interceptor-stack>
 		</interceptors>
 		<action name="loginApp" class="loginAppAction">
-			<interceptor-ref name="bonc-basic-stack"></interceptor-ref>
+			<interceptor-ref name="app-login-stack"></interceptor-ref>
+		</action>
+		
+		<action name="questionApp" class="questionAppAction">
+			<interceptor-ref name="app-basic-stack"></interceptor-ref>
+		</action>
+		
+		<action name="studentApp" class="studentAppAction">
+			<interceptor-ref name="app-basic-stack"></interceptor-ref>
+		</action>
+		<action name="teacherApp" class="teacherAppAction">
+			<interceptor-ref name="app-basic-stack"></interceptor-ref>
 		</action>
 
 	</package>
