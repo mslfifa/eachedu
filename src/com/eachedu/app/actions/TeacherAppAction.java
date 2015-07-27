@@ -83,21 +83,7 @@ public class TeacherAppAction extends BaseAction{
 	@Resource(name="teacherInfoService")
 	private TeacherInfoService teacherInfoService;
 	
-	public void findTeacherPage(){
-		Map<String,Object> result = new HashMap<String,Object>();
-		try {
-			PagerVO page = teacherInfoService.findTeacherPage(grade,course,appPageNo,appPageSize);
-			result.put("data", page.getDatas());
-			result.put("http_status", true);
-			result.put("http_msg", "查询分页成功!");
-		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			result.put("http_status", false);
-			result.put("http_msg", "查询分页失败!原因["+e.getMessage()+"]");
-		}
-		this.ajaxWriteOutJSON(result);
-	}
+	
 	
 	/**
 	 * 老师主页  老师被评论总数 老师信息  最近一次评论信息

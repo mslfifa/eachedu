@@ -2,11 +2,12 @@ package com.eachedu.app.actions;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.annotation.Resource;
@@ -23,13 +24,12 @@ import com.eachedu.dao.pojo.ResourceInfo;
 import com.eachedu.dao.pojo.StudentInfo;
 import com.eachedu.dao.pojo.TeacherInfo;
 import com.eachedu.dict.AccountType;
-import com.eachedu.dict.ResourceType;
-import com.eachedu.exception.ServiceException;
 import com.eachedu.service.ResourceInfoSerivce;
 import com.eachedu.service.StudentInfoService;
 import com.eachedu.service.TeacherInfoService;
 import com.eachedu.utils.ConstUtils;
 import com.eachedu.utils.PropUtils;
+import com.eachedu.utils.SmSUtils;
 import com.eachedu.web.actions.BaseAction;
 import com.eachedu.web.vo.UserVO;
 @Controller("loginAppAction")
@@ -158,6 +158,7 @@ public class LoginAppAction extends BaseAction {
 		Map<String,Object> result = new HashMap<String,Object>();
 		UserVO user = null;
 		try {
+			
 			if (AccountType.STUDENT_TYPE.name().equals(accountType)) {
 				StudentInfo s = studentInfoService.findByMobile(mobile, password);
 				user = new UserVO();
@@ -214,14 +215,36 @@ public class LoginAppAction extends BaseAction {
 		this.ajaxWriteOutJSON(result);
 	}
 	
+	/**
+	 * 检查验证码是否过期
+	 * @param verifyCode
+	 * @return
+	 */
+	private boolean checkVerifyCodeExpire(String verifyCode) {
+		Map<String,Date> expireMap = (Map<String, Date>) ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.VERIFY_CODE_EXPIRE_TIME);
+		if(expireMap!=null && !expireMap.isEmpty()){
+			Date expireTime = expireMap.get(verifyCode);
+			Date now = new Date();
+			//如果现在早于到期时间，说明验证码有效
+			if(now.before(expireTime)){
+				return true;
+			}
+		}
+		log.info("###### verifyCode验证码["+verifyCode+"]超时过期");
+		//默认失效
+		return false;
+	}
 	
-	public void getValidateCode(){
+	/**
+	 * 获取会话验证码，系统根据配置文件设置超时时间，下次使用判断验证码是否过期
+	 */
+	public void getSessionValidateCode(){
 		log.debug("@@@ mobile:"+mobile);
 		Map<String,Object> result = new HashMap<String,Object>();
 		
 		try {
 			
-			if(StringUtils.isNotEmpty(mobile)){
+			/*if(StringUtils.isNotEmpty(mobile)){
 				boolean existFlag=true;
 				
 				if(AccountType.STUDENT_TYPE.name().equals(accountType)){
@@ -235,19 +258,59 @@ public class LoginAppAction extends BaseAction {
 				if(!existFlag){
 					throw new Exception("号码["+mobile+"]不是有效用户");
 				}
-			}
+			}*/
 			
-			result.put("http_status",true);
-			result.put("http_msg","生成验证码成功!");
+			
+			
 			String randomStr = new Random().nextInt(10000)+"0000";
 			String tmpVerifyCode = (randomStr).substring(0, 4);
 			result.put("verifyCode", tmpVerifyCode);
 			ServletActionContext.getRequest().getSession().setAttribute(ConstUtils.LOGIN_VERIFY_CODE, tmpVerifyCode);
 			
+			
+			//调用短信平台接口发送模板短信   注册号码13148856443
+			HashMap<String, Object> smsResult = SmSUtils.sendSms("13148856443","1",new String[]{tmpVerifyCode,"1"});
+			
+			System.out.println("SDKTestSendTemplateSMS result=" + smsResult);
+			if(ConstUtils.SMS_SEND_SUCCESS_CODE.equals(smsResult.get("statusCode"))){
+				//正常返回输出data包体信息（map）
+				HashMap<String,Object> data = (HashMap<String, Object>) smsResult.get("data");
+				Set<String> keySet = data.keySet();
+				for(String key:keySet){
+					Object object = data.get(key);
+					log.debug("sms result:"+key +" = "+object);
+				}
+			}else{
+				//异常返回输出错误码和错误信息
+				String smsErrorMsg = "错误码=" + smsResult.get("statusCode") +" 错误信息= "+smsResult.get("statusMsg");
+				throw new Exception(smsErrorMsg);
+			}
+			
+			
+			
+			//默认超时分钟数
+			int period_minute =Integer.parseInt(PropUtils.get("verify_code_period_minute"));
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(new Date());
+			cal.add(Calendar.MINUTE, period_minute);
+			
+			Map<String,Date> expireMap = (Map<String, Date>) ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.VERIFY_CODE_EXPIRE_TIME);
+			if(expireMap==null){
+				expireMap = new HashMap<String,Date>();
+				ServletActionContext.getRequest().getSession().setAttribute(ConstUtils.VERIFY_CODE_EXPIRE_TIME,expireMap);
+			}
+			
+			//每个验证码有一个超时时间
+			expireMap.put(""+tmpVerifyCode, cal.getTime());
+			log.info("@@@@@@ 会话设置验证码:"+tmpVerifyCode+"|超时时间:"+cal.getTime().toLocaleString());
+			
+			result.put("http_status",true);
+			result.put("http_msg","生成验证码成功!");
+			
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			result.put("http_status",false);
-			result.put("http_msg","生成验证码失败["+e.getMessage()+"]!");
+			result.put("http_msg","生成验证码失败,原因["+e.getMessage()+"]!");
 		}
 		
 		this.ajaxWriteOutJSON(result);
@@ -300,9 +363,9 @@ public class LoginAppAction extends BaseAction {
 			
 			
 			//上传根目录
-			String uploadDir = PropUtils.readProp("dir_upload_root");
+			String uploadDir = PropUtils.get("dir_upload_root");
 			//相对目录
-			String relativeDir = PropUtils.readProp("dir_head_short_pic");
+			String relativeDir = PropUtils.get("dir_head_short_pic");
 			
 			if(AccountType.STUDENT_TYPE.name().equals(accountType)){
 				relativeDir+="/student";
@@ -396,8 +459,18 @@ public class LoginAppAction extends BaseAction {
 				throw new Exception("手机号不能为空!");
 			}
 			
+			//验证码是否超时
+			if(checkVerifyCodeExpire(verifyCode)==false){
+				throw new Exception("验证码["+verifyCode+"]已经超时，请重新申请!");
+			}
+			
+			
 			//取出上次生成的验证码
 			String oldVerifyCode = (String) ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.LOGIN_VERIFY_CODE);
+			
+			
+			
+			
 			Long pojoId = null;
 			if (StringUtils.isNotEmpty(oldVerifyCode)  && oldVerifyCode.equals(verifyCode)) {
 				if(AccountType.STUDENT_TYPE.name().equals(accountType)){
@@ -432,5 +505,32 @@ public class LoginAppAction extends BaseAction {
 		this.ajaxWriteOutJSON(result);
 	}
 	
+	
+	public void resetPwd(){
+		Map<String,Object> result = new HashMap<String,Object>();
+		try {
+			String oldVerifyCode =  (String) ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.LOGIN_VERIFY_CODE);
+			if(StringUtils.isEmpty(oldVerifyCode)){
+				throw new Exception("您还没有获取验证码");
+			}
+			if(StringUtils.isEmpty(verifyCode)){
+				throw new Exception("您没有输入验证码");
+			}
+			if(!verifyCode.equals(oldVerifyCode)){
+				throw new Exception("您输入验证码的不正确");
+			}
+			studentInfoService.updatePwd(mobile,password);
+			
+			result.put("http_status", true);
+			result.put("http_msg", "修改成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			result.put("http_status", false);
+			result.put("http_msg", "修改失败,原因["+e.getMessage()+"]");
+			
+		} 
+		this.ajaxWriteOutJSON(result);
+	}
 
 }

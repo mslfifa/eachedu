@@ -53,30 +53,5 @@ public class StudentAppAction extends BaseAction {
 		this.verifyCode = verifyCode;
 	}
 
-	public void resetPwd(){
-		Map<String,Object> result = new HashMap<String,Object>();
-		try {
-			String oldVerifyCode =  (String) ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.LOGIN_VERIFY_CODE);
-			if(StringUtils.isEmpty(oldVerifyCode)){
-				throw new Exception("您还没有获取验证码");
-			}
-			if(StringUtils.isEmpty(verifyCode)){
-				throw new Exception("您没有输入验证码");
-			}
-			if(!verifyCode.equals(oldVerifyCode)){
-				throw new Exception("您输入验证码的不正确");
-			}
-			studentInfoService.updatePwd(mobile,password);
-			
-			result.put("http_status", true);
-			result.put("http_msg", "修改成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			result.put("http_status", false);
-			result.put("http_msg", "修改失败,原因["+e.getMessage()+"]");
-			
-		} 
-		this.ajaxWriteOutJSON(result);
-	}
+	
 }

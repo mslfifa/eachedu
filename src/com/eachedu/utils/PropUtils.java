@@ -24,7 +24,7 @@ public class PropUtils {
 	
 	
 	
-	public static String readProp(String key){
+	public static String get(String key){
 		return prop.getProperty(key, "");
 	}
 	
