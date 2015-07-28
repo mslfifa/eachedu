@@ -13,6 +13,8 @@ public class ResourceInfo {
 	private String relativePath;
 	private Date createTime;
 	private Long creatorId;
+	//远程资源URL 比如存放第三方登录返回的头像URL
+	private String remoteUrl;
 
 	public Long getRiId() {
 		return riId;
@@ -78,4 +80,12 @@ public class ResourceInfo {
 		this.creatorId = creatorId;
 	}
 
+	public String getRemoteUrl() {
+		return remoteUrl;
+	}
+
+	public void setRemoteUrl(String remoteUrl) {
+		this.remoteUrl = remoteUrl;
+	}
+	
 }

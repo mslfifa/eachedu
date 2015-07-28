@@ -24,6 +24,7 @@ import com.eachedu.dao.pojo.ResourceInfo;
 import com.eachedu.dao.pojo.StudentInfo;
 import com.eachedu.dao.pojo.TeacherInfo;
 import com.eachedu.dict.AccountType;
+import com.eachedu.dict.ResourceType;
 import com.eachedu.service.ResourceInfoSerivce;
 import com.eachedu.service.StudentInfoService;
 import com.eachedu.service.TeacherInfoService;
@@ -46,12 +47,13 @@ public class LoginAppAction extends BaseAction {
 	private String weibo;
 	private String nickname;
 	private String sex;
-	private File headShort;
+	private String remoteUrl;
+	/*private File headShort;
 	//头像文件名
 	private String headShortFileName;
 	//头像文件类型
 	private String headShortContentType;
-	private String headShortCaption;
+	private String headShortCaption;*/
 	//验证码，后台生成
 	private String verifyCode;
 	
@@ -75,7 +77,7 @@ public class LoginAppAction extends BaseAction {
 	public void setAccountType(String accountType) {
 		this.accountType = accountType;
 	}
-	public File getHeadShort() {
+	/*public File getHeadShort() {
 		return headShort;
 	}
 	public void setHeadShort(File headShort) {
@@ -99,7 +101,7 @@ public class LoginAppAction extends BaseAction {
 	}
 	public void setHeadShortCaption(String headShortCaption) {
 		this.headShortCaption = headShortCaption;
-	}
+	}*/
 
 	public String getNickname() {
 		return nickname;
@@ -139,7 +141,12 @@ public class LoginAppAction extends BaseAction {
 	public void setWeibo(String weibo) {
 		this.weibo = weibo;
 	}
-
+	public String getRemoteUrl() {
+		return remoteUrl;
+	}
+	public void setRemoteUrl(String remoteUrl) {
+		this.remoteUrl = remoteUrl;
+	}
 
 
 
@@ -357,53 +364,21 @@ public class LoginAppAction extends BaseAction {
 				throw new Exception("accountType["+accountType+"]不在值域范围内，请与管理员联系!");
 			}
 			
+			//如果没有注册用户就新注册用户
 			
-			ResourceInfo r = new ResourceInfo();
-			r.setResouceOriginName(headShortFileName);
-			
-			
-			//上传根目录
-			String uploadDir = PropUtils.get("dir_upload_root");
-			//相对目录
-			String relativeDir = PropUtils.get("dir_head_short_pic");
-			
-			if(AccountType.STUDENT_TYPE.name().equals(accountType)){
-				relativeDir+="/student";
+			ResourceInfo r = null;
+			if(StringUtils.isNotEmpty(remoteUrl)){
+				r = new ResourceInfo();
+				r.setRemoteUrl(remoteUrl);
+				r.setResourceType(ResourceType.HEAD_SHORT_TYPE.name());
 				
-			}else if (AccountType.TEACHER_TYPE.name().equals(accountType)) {
-				relativeDir+="/teacher";
-			}else{
-				throw new Exception("accountType["+accountType+"]不在值域范围内，请与管理员联系!");
+				r.setCreateTime(new Date());
+				resourceInfoSerivce.save(r);
+				log.debug("@@@save ResourceInfo success riId:"+r.getRiId());
 			}
-			r.setResourceType(accountType);
 			
-			String uuidStr = UUID.randomUUID().toString();
-			//物理文件名
-			String realFileName = uuidStr+headShortFileName.substring(headShortFileName.indexOf("."), headShortFileName.length());
-			log.debug("$$$$$ realFileName:"+realFileName);
-			//物理文件绝对路径
-			String descPath = uploadDir+"/"+relativeDir+"/"+realFileName;
-			r.setRelativePath(relativeDir+"/"+realFileName);
-			log.debug("##### descPath:"+descPath);
-			File destFile = new File(descPath);
-			File dir = destFile.getParentFile();
-			if(!dir.exists()){
-				dir.mkdirs();
-			}
-			if(!destFile.exists()){
-				destFile.createNewFile();
-			}
-			FileInputStream fis = new FileInputStream(headShort);
-			r.setResourceSize(fis.available());
-			
-			FileUtils.copyFile(headShort, destFile);
-			log.info("@@@@ 头像文件保存成功!");
-			result.put("http_status",true);
-			result.put("http_msg","第三方登录成功!上传文件保存为:"+destFile.getAbsolutePath());
-			
-			r.setCreateTime(new Date());
-			resourceInfoSerivce.save(r);
 			result.put("headShortId", r.getRiId());
+			
 			log.debug("@@@@ 保存资源信息成功!");
 			
 			if(AccountType.STUDENT_TYPE.name().equals(accountType)){
@@ -411,7 +386,7 @@ public class LoginAppAction extends BaseAction {
 				s.setAccount(accountType);
 				s.setNickname(nickname);
 				s.setSex(sex);
-				s.setHeadShortId(r.getRiId());
+				s.setHeadShortId(r==null?null:r.getRiId());
 				s.setQq(qq);
 				s.setWeixin(weixin);
 				s.setWeibo(weibo);
@@ -423,7 +398,7 @@ public class LoginAppAction extends BaseAction {
 				t.setAccount(accountType);
 				t.setNickname(nickname);
 				t.setSex(sex);
-				t.setHeadShortId(r.getRiId());
+				t.setHeadShortId(r==null?null:r.getRiId());
 				t.setQq(qq);
 				t.setWeixin(weixin);
 				t.setWeibo(weibo);

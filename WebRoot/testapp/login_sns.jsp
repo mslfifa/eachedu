@@ -20,7 +20,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<input type="text" name="qq" value="4173849554">qq<br/>
 		<input type="text" name="weibo" value="">weibo<br/>
 		<input type="text" name="weixin" value="">weixin<br/>
-		<input type="file" name="headShort"><br/>
+		<input type="text" name="remoteUrl"><br/>
 		<input type="submit" value="提交">
   </form>
  </body>

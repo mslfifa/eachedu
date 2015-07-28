@@ -84,22 +84,22 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 	@Override
 	public StudentInfo findBySns(String qq, String weixin, String weibo) throws ServiceException {
 		try {
-			StringBuffer hql = new StringBuffer(100);
+			StringBuffer sql = new StringBuffer(100);
 			List param = new ArrayList();
-			hql.append("from StudentInfo where 1=0 ");
+			sql.append("from StudentInfo where 1=0 ");
 			if(StringUtils.isNotEmpty(qq)){
-				hql.append(" or qq = ? ");
+				sql.append(" or qq = ? ");
 				param.add(qq);
 			}
 			if(StringUtils.isEmpty(weixin)){
-				hql.append(" or weixin = ? ");
+				sql.append(" or weixin = ? ");
 				param.add(weixin);
 			}
 			if (StringUtils.isNotEmpty(weibo)) {
-				hql.append(" or weibo = ? ");
+				sql.append(" or weibo = ? ");
 				param.add(weibo);
 			}
-			List list = dao.findByHql(hql.toString(), param.toArray(new Object[0]));
+			List list = dao.findByHql(sql.toString(), param.toArray(new Object[0]));
 			
 			StudentInfo s = null;
 			if(list!=null && !list.isEmpty()){

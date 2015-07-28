@@ -12,6 +12,7 @@
 		<property name="resouceOriginName" column="resouce_origin_name"/>
 		<property name="resourceSize" column="resource_size"/>
 		<property name="relativePath" column="relative_path"/>
+		<property name="remoteUrl" column="remote_url"/>
 		<property name="createTime" column="create_time"/>
 		<property name="creatorId" column="creator_id"/>
 	</class>
