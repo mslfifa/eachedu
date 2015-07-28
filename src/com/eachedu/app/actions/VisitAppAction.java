@@ -1,6 +1,7 @@
 package com.eachedu.app.actions;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -10,7 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.eachedu.dict.QuestionStatus;
 import com.eachedu.exception.ServiceException;
+import com.eachedu.service.QuestionOfferingService;
 import com.eachedu.service.TeacherInfoService;
 import com.eachedu.web.actions.BaseAction;
 import com.eachedu.web.vo.PagerVO;
@@ -82,6 +85,13 @@ public class VisitAppAction extends BaseAction {
 	@Resource(name="teacherInfoService")
 	private TeacherInfoService teacherInfoService;
 	
+	@Resource(name="questionOfferingService")
+	private QuestionOfferingService questionOfferingService;
+	
+	
+	/**
+	 * 查询老师主页
+	 */
 	public void findTeacherPage(){
 		Map<String,Object> result = new HashMap<String,Object>();
 		try {
@@ -97,5 +107,31 @@ public class VisitAppAction extends BaseAction {
 		}
 		this.ajaxWriteOutJSON(result);
 	}
+	
+	/**
+	 * 学生 我的提问 名师推荐
+	 */
+	public void findTeacherRecommend(){
+		Map<String,Object> result = new HashMap<String,Object>();
+		try {
+			Long countNum = questionOfferingService.findQuestionedByStatus(QuestionStatus.SOLVED.name());
+			log.debug("@@@@@ countNum:"+countNum);
+			result.put("countNum", countNum);
+			
+			List<Map<String, Object>> teachers = teacherInfoService.findTopAnswerTeachers(4);
+			result.put("teachers", teachers);
+			
+			result.put("http_status", true);
+			result.put("http_msg", "查找成功!");
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			log.error(e.getMessage());
+			result.put("http_status", true);
+			result.put("http_msg", "查找成功!");
+		}
+		this.ajaxWriteOutJSON(result);
+	}
+	
 	
 }

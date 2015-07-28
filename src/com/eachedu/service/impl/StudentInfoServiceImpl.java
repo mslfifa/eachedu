@@ -2,7 +2,9 @@ package com.eachedu.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -82,11 +84,18 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 	}
 
 	@Override
-	public StudentInfo findBySns(String qq, String weixin, String weibo) throws ServiceException {
+	public Map<String,Object> findBySns(String qq, String weixin, String weibo) throws ServiceException {
 		try {
-			StringBuffer sql = new StringBuffer(100);
+			StringBuffer sql = new StringBuffer(300);
 			List param = new ArrayList();
-			sql.append("from StudentInfo where 1=0 ");
+			sql .append(" SELECT                          ")
+				.append("   si_id,nickname,sex            ")
+				.append("    weibo,qq,weixin              ")
+				.append("   ,ri.remote_url                ")
+				.append(" FROM student_info si            ")
+				.append("  LEFT JOIN resource_info ri     ")
+				.append("    ON si.head_short_id=ri.ri_id ")
+				.append(" WHERE 1=2                       ");
 			if(StringUtils.isNotEmpty(qq)){
 				sql.append(" or qq = ? ");
 				param.add(qq);
@@ -99,14 +108,14 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 				sql.append(" or weibo = ? ");
 				param.add(weibo);
 			}
-			List list = dao.findByHql(sql.toString(), param.toArray(new Object[0]));
+			List list = dao.findBySQL(sql.toString(), param.toArray(new Object[0]));
 			
-			StudentInfo s = null;
 			if(list!=null && !list.isEmpty()){
-				s = (StudentInfo) list.get(0);
+				return (Map<String, Object>) list.get(0);
+			}else{
+				return null;
 			}
 			
-			return s;
 		} catch (Exception e) {
 			throw new ServiceException(e.getMessage(),e.getCause());
 		}

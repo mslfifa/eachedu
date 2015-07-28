@@ -1,18 +1,14 @@
 package com.eachedu.app.actions;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
@@ -272,6 +268,7 @@ public class LoginAppAction extends BaseAction {
 			String randomStr = new Random().nextInt(10000)+"0000";
 			String tmpVerifyCode = (randomStr).substring(0, 4);
 			result.put("verifyCode", tmpVerifyCode);
+			log.info("##### verifyCode:"+tmpVerifyCode);
 			ServletActionContext.getRequest().getSession().setAttribute(ConstUtils.LOGIN_VERIFY_CODE, tmpVerifyCode);
 			
 			
@@ -332,85 +329,88 @@ public class LoginAppAction extends BaseAction {
 		Map<String,Object> result = new HashMap<String,Object>();
 		
 		try {
+			Map<String,Object> data =null;
 			//判断第三方账号对应的用户存在否，存在就登录并返回信息。
 			if(AccountType.STUDENT_TYPE.name().equals(accountType)){
-				StudentInfo sLogin = studentInfoService.findBySns(qq,weixin,weibo);
-				if(sLogin!=null){
-					result.put("http_status", true);
-					result.put("http_msg", "登录成功!");
-					result.put("id", sLogin.getSiId());
-					result.put("nickname", sLogin.getNickname());
-					result.put("sex", sLogin.getSex());
-					result.put("accountType", accountType);
-					result.put("headShortId", sLogin.getHeadShortId());
-					this.ajaxWriteOutJSON(result);
-					return;
-				}
+				data = studentInfoService.findBySns(qq,weixin,weibo);
 			}else if (AccountType.TEACHER_TYPE.name().equals(accountType)) {
-				TeacherInfo tLogin = teacherInfoService.findBySns(qq,weixin,weibo);
-				if(tLogin!=null){
-					result.put("http_status", true);
-					result.put("http_msg", "登录成功!");
-					result.put("id", tLogin.getTiId());
-					result.put("nickname", tLogin.getNickname());
-					result.put("sex", tLogin.getSex());
-					result.put("accountType", accountType);
-					result.put("headShortId", tLogin.getHeadShortId());
-					this.ajaxWriteOutJSON(result);
-					return;
-				}
+				data = teacherInfoService.findBySns(qq,weixin,weibo);
 				
 			}else{
 				throw new Exception("accountType["+accountType+"]不在值域范围内，请与管理员联系!");
+			}
+			
+			if(data!=null){
+				result.put("data", data);
+			}else{
+				data = new HashMap<String,Object>();
 			}
 			
 			//如果没有注册用户就新注册用户
-			
-			ResourceInfo r = null;
-			if(StringUtils.isNotEmpty(remoteUrl)){
-				r = new ResourceInfo();
-				r.setRemoteUrl(remoteUrl);
-				r.setResourceType(ResourceType.HEAD_SHORT_TYPE.name());
+			if(data.isEmpty()){
 				
-				r.setCreateTime(new Date());
-				resourceInfoSerivce.save(r);
-				log.debug("@@@save ResourceInfo success riId:"+r.getRiId());
+				//称保存资源
+				ResourceInfo r = null;
+				if(StringUtils.isNotEmpty(remoteUrl)){
+					r = new ResourceInfo();
+					r.setRemoteUrl(remoteUrl);
+					r.setResourceType(ResourceType.HEAD_SHORT_TYPE.name());
+					
+					r.setCreateTime(new Date());
+					resourceInfoSerivce.save(r);
+					log.debug("@@@save ResourceInfo success riId:"+r.getRiId());
+				}
+				
+				result.put("headShortId", r.getRiId());
+				
+				log.debug("@@@@ 保存资源信息成功!");
+				
+				if(AccountType.STUDENT_TYPE.name().equals(accountType)){
+					StudentInfo s = new StudentInfo();
+					s.setNickname(nickname);
+					s.setSex(sex);
+					s.setHeadShortId(r==null?null:r.getRiId());
+					s.setQq(qq);
+					s.setWeixin(weixin);
+					s.setWeibo(weibo);
+					studentInfoService.save(s);
+					
+					data.put("id", s.getSiId());
+					data.put("nickname", s.getNickname());
+					data.put("sex", s.getSex());
+					data.put("qq", s.getQq());
+					data.put("weibo", s.getWeibo());
+					data.put("weixin", s.getWeixin());
+					data.put("remote_url", (r==null?null:r.getRemoteUrl()));
+					
+					log.info("#### 注册学生成功");
+				}else if (AccountType.TEACHER_TYPE.name().equals(accountType)) {
+					TeacherInfo t = new TeacherInfo();
+					t.setNickname(nickname);
+					t.setSex(sex);
+					t.setHeadShortId(r==null?null:r.getRiId());
+					t.setQq(qq);
+					t.setWeixin(weixin);
+					t.setWeibo(weibo);
+					teacherInfoService.save(t);
+					
+					
+					data.put("id", t.getTiId());
+					data.put("nickname", t.getNickname());
+					data.put("sex", t.getSex());
+					data.put("qq", t.getQq());
+					data.put("weibo", t.getWeibo());
+					data.put("weixin", t.getWeixin());
+					data.put("remote_url", (r==null?null:r.getRemoteUrl()));
+					
+					log.info("#### 注册老师成功");
+				}else{
+					throw new Exception("accountType["+accountType+"]不在值域范围内，请与管理员联系!");
+				}
 			}
 			
-			result.put("headShortId", r.getRiId());
 			
-			log.debug("@@@@ 保存资源信息成功!");
-			
-			if(AccountType.STUDENT_TYPE.name().equals(accountType)){
-				StudentInfo s = new StudentInfo();
-				s.setAccount(accountType);
-				s.setNickname(nickname);
-				s.setSex(sex);
-				s.setHeadShortId(r==null?null:r.getRiId());
-				s.setQq(qq);
-				s.setWeixin(weixin);
-				s.setWeibo(weibo);
-				studentInfoService.save(s);
-				result.put("id", s.getSiId());
-				log.info("#### 注册学生成功");
-			}else if (AccountType.TEACHER_TYPE.name().equals(accountType)) {
-				TeacherInfo t = new TeacherInfo();
-				t.setAccount(accountType);
-				t.setNickname(nickname);
-				t.setSex(sex);
-				t.setHeadShortId(r==null?null:r.getRiId());
-				t.setQq(qq);
-				t.setWeixin(weixin);
-				t.setWeibo(weibo);
-				teacherInfoService.save(t);
-				result.put("id", t.getTiId());
-				log.info("#### 注册老师成功");
-			}else{
-				throw new Exception("accountType["+accountType+"]不在值域范围内，请与管理员联系!");
-			}
-			result.put("nickname", nickname);
-			result.put("sex", sex);
-			result.put("accountType", accountType);
+			result.put("data", data);
 			result.put("http_status", true);
 			result.put("http_msg", "注册成功!");
 			

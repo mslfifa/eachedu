@@ -66,31 +66,39 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 	}
 
 	@Override
-	public TeacherInfo findBySns(String qq, String weixin, String weibo) throws ServiceException {
+	public Map<String, Object> findBySns(String qq, String weixin, String weibo) throws ServiceException {
 		
 		try {
-			StringBuffer hql = new StringBuffer(100);
+			StringBuffer sql = new StringBuffer(300);
 			List param = new ArrayList();
-			hql.append("from TeacherInfo where 1=0 ");
+			sql .append(" SELECT                          ")
+				.append("   ti_id,nickname,sex            ")
+				.append("   ,weibo,qq,weixin              ")
+				.append("   ,ri.remote_url                ")
+				.append(" FROM teacher_info ti            ")
+				.append("  LEFT JOIN resource_info ri     ")
+				.append("    ON ri.ri_id=ti.head_short_id ")
+				.append(" WHERE 1=2                       ");
+			
 			if(StringUtils.isNotEmpty(qq)){
-				hql.append(" or qq = ? ");
+				sql.append(" or qq = ? ");
 				param.add(qq);
 			}
 			if(StringUtils.isEmpty(weixin)){
-				hql.append(" or weixin = ? ");
+				sql.append(" or weixin = ? ");
 				param.add(weixin);
 			}
 			if(StringUtils.isNotEmpty(weibo)){
-				hql.append(" or weibo = ? ");
-				param.add("weibo");
+				sql.append(" or weibo = ? ");
+				param.add(weibo);
 			}
-			List list = dao.findByHql(hql.toString(), param.toArray(new Object[0]));
+			List list = dao.findBySQL(sql.toString(), param.toArray(new Object[0]));
 			
-			TeacherInfo t = null;
 			if(list!=null && !list.isEmpty()){
-				t = (TeacherInfo) list.get(0);
+				return (Map<String, Object>) list.get(0);
+			}else{
+				return null; 
 			}
-			return t;
 		} catch (Exception e) {
 			throw new ServiceException(e.getMessage(),e.getCause());
 		}
@@ -124,25 +132,22 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 	public List<Map<String,Object>> findTopAnswerTeachers(int topNum) throws ServiceException {
 		try {
 			StringBuffer sql = new StringBuffer(400);
-			sql .append(" SELECT                                          ")
-				.append("   ti.ti_id,  account,  password,  status,       ")
-				.append("   NAME,  nickname,  sex,  identification_card,  ")
-				.append("   school,  authentication_type,  head_short_id, ")
-				.append("   certificate_id,  weixin,  qq,  weibo,  mobile,")
-				.append("   email,  tag_id1,  tag_title1,  tag_id2,       ")
-				.append("   tag_title2,  tag_id3,  tag_title3,  tag_id4,  ")
-				.append("   tag_title4,  tag_id5,  tag_title5,  tag_id6,  ")
-				.append("   tag_title6,  create_time                      ")
-				.append(" FROM teacher_info ti JOIN                       ")
-				.append(" (                                               ")
-				.append("   SELECT                                        ")
-				.append("     ta.ti_id,COUNT(1) AS total_num              ")
-				.append("   FROM teacher_answer ta                        ")
-				.append("   GROUP BY ta.ti_id                             ")
-				.append("   ORDER BY total_num DESC                       ")
-				.append("   LIMIT 0, "+topNum+"                           ")
-				.append(" ) t_t ON t_t.ti_id=ti.ti_id                     ")
-				.append(" ORDER BY t_t.total_num DESC                     ");
+			sql .append(" SELECT                               ")          
+				.append("   ti.ti_id,name                      ")          
+				.append("   ,sex,ri.`remote_url`               ")          
+				.append(" FROM teacher_info ti                 ")          
+				.append("   LEFT JOIN resource_info ri         ")          
+				.append("     ON ti.head_short_id=ri.ri_id     ")          
+				.append("   LEFT JOIN                          ")          
+				.append("   (                                  ")          
+				.append("     SELECT                           ")          
+				.append("       ta.ti_id,COUNT(1) AS total_num ")          
+				.append("     FROM teacher_answer ta           ")          
+				.append("     GROUP BY ta.ti_id                ")          
+				.append("     ORDER BY total_num DESC          ")          
+				.append("     LIMIT 0, "+topNum+"              ")          
+				.append("   ) t_t ON t_t.ti_id=ti.ti_id        ")          
+				.append(" ORDER BY t_t.total_num DESC          ");
 			return dao.findBySQL(sql.toString());
 		} catch (DaoException e) {
 			log.error(e.getMessage());
@@ -155,33 +160,48 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 	public PagerVO findTeacherPage(String grade, String course, Integer appPageNo,
 			Integer appPageSize) throws ServiceException {
 		try {
+			//分页默认参数
+			appPageNo=appPageNo==null?1:appPageNo;
+			appPageSize=appPageSize==null?10:appPageSize;
+			
 			StringBuffer sql = new StringBuffer(400);
 			List param = new ArrayList();
-			sql .append(" SELECT ti.ti_id,account,password,status        ")            
-				.append("   ,NAME,nickname,sex,identification_card       ")            
-				.append("   ,school,authentication_type,is_certificated  ")            
-				.append("   ,head_short_id,certificate_id,weixin,qq      ")            
-				.append("   ,weibo,mobile,email,tag_title1,tag_title2    ")            
-				.append("   ,tag_title3,tag_title4,tag_title5,tag_title6 ")            
-				.append(" FROM teacher_info ti JOIN                      ")            
-				.append(" (                                              ")            
-				.append("   SELECT te.`ti_id`                            ")            
-				.append("   FROM teacher_expert te                       ")            
-				.append("     JOIN grade_course_info gci                 ")            
-				.append("       ON te.`gci_id`=gci.`gci_id`              ")            
-				.append("   WHERE 1=1                                    ");
+			
+			
+			sql .append(" SELECT ti.ti_id,authentication_type ")
+				.append("   ,school,is_certificated,name      ")
+				.append("   ,ri.remote_url,introduce          ")
+				//计算每个老师的平均评分
+				.append("   ,(SELECT ROUND(AVG(ac.score))     ")
+				.append("     FROM answer_comment ac          ")
+				.append("       JOIN teacher_answer ta        ")
+				.append("         ON ta.order_id=ac.order_id  ")
+				.append("     WHERE ta.ti_id=ti.ti_id         ")
+				.append("     GROUP BY ta.ti_id               ")
+				.append("     ) AS avg_score                  ")
+				.append(" FROM teacher_info ti JOIN           ")
+				.append(" (                                   ")
+				.append("   SELECT te.ti_id                   ")
+				.append("   FROM teacher_expert te            ")
+				.append("     JOIN grade_course_info gci      ")
+				.append("       ON te.gci_id=gci.gci_id       ")
+				.append("   WHERE 1=1                         ");
 				
 			if(StringUtils.isNotEmpty(course)){
-				sql.append("  AND gci.`course`= ? ");
+			     sql.append(" AND gci.course= ? ");
 				param.add(course);
 			}
 			if (StringUtils.isNotEmpty(grade)) {
-				sql.append("  AND gci.`grade`= ? ");
+			    sql.append(" AND gci.grade= ?  ");
 				param.add(grade);
-			}
-			sql.append("   GROUP BY te.`ti_id` ") 
-			   .append(" ) t_t ")
-			   .append(" ON ti.`ti_id`=t_t.ti_id ");
+			}	
+				
+			sql	.append("   GROUP BY te.ti_id                 ")
+				.append(" ) t_t                               ")
+				.append("     ON ti.ti_id=t_t.ti_id           ")
+				.append("   LEFT JOIN resource_info ri        ")
+				.append("     ON ti.head_short_id=ri.ri_id    ");
+				
 			
 			int offset=appPageNo==0?0:(appPageNo-1)*appPageSize;
 			return dao.findBySqlPage(sql.toString(), offset, appPageSize, param.toArray(new Object[0]));

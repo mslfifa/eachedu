@@ -85,27 +85,7 @@ public class QuestionAppAction extends BaseAction {
 	private String orderNo;
 	
 	
-	public void findQuestionedByStatus(){
-		Map<String,Object> result = new HashMap<String,Object>();
-		try {
-			Long countNum = questionOfferingService.findQuestionedByStatus(status);
-			log.debug("@@@@@ countNum:"+countNum);
-			result.put("countNum", countNum);
-			
-			List<Map<String, Object>> teachers = teacherInfoService.findTopAnswerTeachers(topNum);
-			result.put("teachers", teachers);
-			
-			result.put("http_status", true);
-			result.put("http_msg", "查找成功!");
-		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			log.error(e.getMessage());
-			result.put("http_status", true);
-			result.put("http_msg", "查找成功!");
-		}
-		this.ajaxWriteOutJSON(result);
-	}
+	
 	
 	public void findQuestionPageByStudent(){
 		

@@ -12,7 +12,7 @@ public interface TeacherInfoService extends BaseService<TeacherInfo, Long> {
 
 	TeacherInfo findByMobile(String mobile, String password)throws ServiceException;
 
-	TeacherInfo findBySns(String qq, String weixin, String weibo)throws ServiceException;
+	Map<String, Object> findBySns(String qq, String weixin, String weibo)throws ServiceException;
 
 	/**
 	 * 手机号对应的老师是否存在
