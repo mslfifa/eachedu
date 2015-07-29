@@ -15,7 +15,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <title>Document</title>
  </head>
  <body>
-  <form method="POST" action="http://192.168.199.237:8080/eachedu/app/loginApp!loginBySns.action">
+  <form method="POST" action="<%=path %>/app/loginApp!loginBySns.action">
 		<input type="hidden" name="accountType" value="STUDENT_TYPE">
 		<input type="text" name="nickname" value="">昵称<br/>
 		<select name="sex">

@@ -156,13 +156,14 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 		}
 	}
 
-	@Override
+	/*@Override
 	public PagerVO findTeacherPage(String name, String grade, String course,
 			Integer appPageNo, Integer appPageSize) throws ServiceException {
 		try {
 			//分页默认参数
 			appPageNo=appPageNo==null?1:appPageNo;
 			appPageSize=appPageSize==null?10:appPageSize;
+			int offset=appPageNo==0?0:(appPageNo-1)*appPageSize;
 			
 			StringBuffer sql = new StringBuffer(400);
 			List param = new ArrayList();
@@ -206,14 +207,14 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 				.append("     ON ti.head_short_id=ri.ri_id    ");
 				
 			
-			int offset=appPageNo==0?0:(appPageNo-1)*appPageSize;
+			
 			return dao.findBySqlPage(sql.toString(), offset, appPageSize, param.toArray(new Object[0]));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage(),e.getCause());
 		}
-	}
+	}*/
 
 	@Override
 	public Map<String, Object> findTeacherRecentComment(Long tiId) throws ServiceException {
@@ -281,8 +282,10 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 	}
 
 	@Override
-	public List<Map<String, Object>> findTeacherByKeyword(String name, String grade, String course, Integer appPageNo, Integer appPageSize) throws ServiceException {
+	public PagerVO findTeacherPage(String name, String grade, String course, Integer appPageNo, Integer appPageSize) throws ServiceException {
 		try {
+			log.debug("@@@@ para -> name:"+name+"|grade:"+grade+"|course:"+course+"|appPageNo:"+appPageNo+"|appPageSize:"+appPageSize);
+			
 			appPageNo = appPageNo==null?1:appPageNo;
 			appPageSize = appPageSize==null?10:appPageSize;
 			int pageoff = appPageNo<1?0:(appPageNo-1)*appPageSize;
@@ -300,7 +303,7 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 				.append(" FROM eachedu.teacher_info ti         ")
 				.append(" WHERE 1=1                            ");
 			if(StringUtils.isNotEmpty(name)){
-				sql.append("  AND NAME LIKE ? ");
+				sql.append("  AND name LIKE ? ");
 				param.add("%"+name+"%");
 			}
 			sql	.append("   AND EXISTS(                        ")
@@ -319,15 +322,15 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 				param.add(grade);
 			}
 			sql	.append("   ) "); 
-			sql	.append(" limit ").append(pageoff).append(" , ").append(appPageSize); 
 			
-			List<Map<String, Object>> list = dao.findBySQL(sql.toString(), param.toArray(new Object[0]));
-			log.debug("$$$$ 搜索完老师集合"+(list==null?0:list.size()));
+			PagerVO page = dao.findBySqlPage(sql.toString(),pageoff,appPageSize, param.toArray(new Object[0]));
+			List data = page.getDatas();
+			log.debug("$$$$ 搜索完老师集合"+(data==null?0:data.size()));
 			
-			if(list!=null && !list.isEmpty()){
+			if(data!=null && !data.isEmpty()){
 				
 				//为每位老师添加课程集合  年级集合  复合结构
-				for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+				for (Iterator iterator = data.iterator(); iterator.hasNext();) {
 					Map<String, Object> teacherMap = (Map<String, Object>) iterator.next();
 					
 					Long tiId = Long.parseLong(teacherMap.get("ti_id").toString());
@@ -369,7 +372,7 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 				}
 			}
 			
-			return list;
+			return page;
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

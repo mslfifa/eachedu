@@ -15,6 +15,8 @@ public class ResourceInfo {
 	private Long creatorId;
 	//远程资源URL 比如存放第三方登录返回的头像URL
 	private String remoteUrl;
+	//缩略图ID
+	private Integer legendId;
 
 	public Long getRiId() {
 		return riId;
@@ -86,6 +88,14 @@ public class ResourceInfo {
 
 	public void setRemoteUrl(String remoteUrl) {
 		this.remoteUrl = remoteUrl;
+	}
+
+	public Integer getLegendId() {
+		return legendId;
+	}
+
+	public void setLegendId(Integer legendId) {
+		this.legendId = legendId;
 	}
 	
 }

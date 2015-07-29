@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 
 import com.eachedu.dict.QuestionStatus;
 import com.eachedu.exception.ServiceException;
+import com.eachedu.service.CoursewareInfoService;
 import com.eachedu.service.QuestionOfferingService;
 import com.eachedu.service.TeacherInfoService;
 import com.eachedu.web.actions.BaseAction;
@@ -32,6 +33,8 @@ public class VisitAppAction extends BaseAction {
 	private String grade;
 	private String course;
 	private Long tiId;
+	private String orderField;
+	private String orderDirect;
 	
 	
 	public Integer getAppPageNo() {
@@ -81,6 +84,24 @@ public class VisitAppAction extends BaseAction {
 	public void setTiId(Long tiId) {
 		this.tiId = tiId;
 	}
+	
+	public String getOrderField() {
+		return orderField;
+	}
+
+	public void setOrderField(String orderField) {
+		this.orderField = orderField;
+	}
+
+	public String getOrderDirect() {
+		return orderDirect;
+	}
+
+	public void setOrderDirect(String orderDirect) {
+		this.orderDirect = orderDirect;
+	}
+
+
 
 	@Resource(name="teacherInfoService")
 	private TeacherInfoService teacherInfoService;
@@ -88,6 +109,8 @@ public class VisitAppAction extends BaseAction {
 	@Resource(name="questionOfferingService")
 	private QuestionOfferingService questionOfferingService;
 	
+	@Resource(name="coursewareInfoService")
+	private CoursewareInfoService coursewareInfoService;
 	
 	/**
 	 * 查询老师主页
@@ -113,8 +136,8 @@ public class VisitAppAction extends BaseAction {
 		Map<String,Object> result = new HashMap<String,Object>();
 		try {
 			log.debug("@@@@ param -> name:"+name +"|grade:"+grade+"|course:"+course);
-			List<Map<String, Object>> list = teacherInfoService.findTeacherByKeyword(name,grade,course, appPageNo, appPageSize);
-			result.put("data", list);
+			PagerVO page = teacherInfoService.findTeacherPage(name,grade,course, appPageNo, appPageSize);
+			result.put("data", page);
 			result.put("http_status", true);
 			result.put("http_msg", "查询分页成功!");
 		} catch (ServiceException e) {
@@ -152,6 +175,56 @@ public class VisitAppAction extends BaseAction {
 	}
 	
 	
+	/**
+	 * 老师主页  老师被评论总数 老师信息  最近一次评论信息
+	 */
+	public void findTeacherRecentComment(){
+		Map<String,Object> result = new HashMap<String,Object>();
+		try {
+			Map<String, Object> map = teacherInfoService.findTeacherRecentComment(tiId);
+			result.put("data", map);
+			result.put("http_status", true);
+			result.put("http_msg", "查询分页成功!");
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			result.put("http_status", false);
+			result.put("http_msg", "查询分页失败!原因["+e.getMessage()+"]");
+		}
+		this.ajaxWriteOutJSON(result);
+	}
 	
+	public void findTeacherComments(){
+		Map<String,Object> result = new HashMap<String,Object>();
+		try {
+			List<Map<String, Object>> list = teacherInfoService.findTeacherComments(tiId);
+			result.put("data", list);
+			result.put("http_status", true);
+			result.put("http_msg", "查询分页成功!");
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			result.put("http_status", false);
+			result.put("http_msg", "查询分页失败!原因["+e.getMessage()+"]");
+		}
+		this.ajaxWriteOutJSON(result);
+		
+	}
+	
+	public void findCoursewarePage(){
+		Map<String,Object> result = new HashMap<String,Object>();
+		try {
+			PagerVO page = coursewareInfoService.findCoursewarePage(appPageNo, appPageSize, course, grade, orderField, orderDirect);
+			result.put("data", page);
+			result.put("http_status", true);
+			result.put("http_msg", "查询分页成功!");
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			result.put("http_status", false);
+			result.put("http_msg", "查询分页失败!原因["+e.getMessage()+"]");
+		}
+		this.ajaxWriteOutJSON(result);
+	}
 	
 }

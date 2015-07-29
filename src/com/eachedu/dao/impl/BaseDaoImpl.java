@@ -115,6 +115,8 @@ public abstract class  BaseDaoImpl<T ,PK extends Serializable> implements BaseDa
 	public PagerVO findBySqlPage(String sql, int offset, int pagesize, Object... paras) throws DaoException {
 		try {
 			PagerVO page = new PagerVO();
+			page.setPageSize(pagesize);
+			page.setOffset(offset);
 			
 			String countSql = "select count(1) as total from ( "+sql+" ) p_t ";
 			SQLQuery countQuery = getSession().createSQLQuery(countSql);

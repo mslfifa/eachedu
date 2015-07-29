@@ -85,41 +85,7 @@ public class TeacherAppAction extends BaseAction{
 	
 	
 	
-	/**
-	 * 老师主页  老师被评论总数 老师信息  最近一次评论信息
-	 */
-	public void findTeacherRecentComment(){
-		Map<String,Object> result = new HashMap<String,Object>();
-		try {
-			Map<String, Object> map = teacherInfoService.findTeacherRecentComment(tiId);
-			result.put("data", map);
-			result.put("http_status", true);
-			result.put("http_msg", "查询分页成功!");
-		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			result.put("http_status", false);
-			result.put("http_msg", "查询分页失败!原因["+e.getMessage()+"]");
-		}
-		this.ajaxWriteOutJSON(result);
-	}
 	
-	public void findTeacherComments(){
-		Map<String,Object> result = new HashMap<String,Object>();
-		try {
-			List<Map<String, Object>> list = teacherInfoService.findTeacherComments(tiId);
-			result.put("data", list);
-			result.put("http_status", true);
-			result.put("http_msg", "查询分页成功!");
-		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			result.put("http_status", false);
-			result.put("http_msg", "查询分页失败!原因["+e.getMessage()+"]");
-		}
-		this.ajaxWriteOutJSON(result);
-		
-	}
 	
 	
 }

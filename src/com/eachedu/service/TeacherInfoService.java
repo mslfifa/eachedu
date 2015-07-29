@@ -31,8 +31,8 @@ public interface TeacherInfoService extends BaseService<TeacherInfo, Long> {
 	 * @param appPageSize
 	 * @return TODO
 	 * @throws ServiceException
-	 */
-	PagerVO findTeacherPage(String name, String grade, String course, Integer appPageNo, Integer appPageSize)throws ServiceException;
+	 *//*
+	PagerVO findTeacherPage(String name, String grade, String course, Integer appPageNo, Integer appPageSize)throws ServiceException;*/
 	
 	/**
 	 * 查找答题最多前几名的老师列表
@@ -69,7 +69,7 @@ public interface TeacherInfoService extends BaseService<TeacherInfo, Long> {
 	 * @return
 	 * @throws ServiceException
 	 */
-	List<Map<String,Object>> findTeacherByKeyword(String name, String grade, String course, Integer appPageNo, Integer appPageSize) throws ServiceException;
+	PagerVO findTeacherPage(String name, String grade, String course, Integer appPageNo, Integer appPageSize) throws ServiceException;
 	
 	/**
 	 * 查找老师擅长的年级课程
