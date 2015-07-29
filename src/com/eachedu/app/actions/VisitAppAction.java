@@ -93,10 +93,28 @@ public class VisitAppAction extends BaseAction {
 	 * 查询老师主页
 	 */
 	public void findTeacherPage(){
+		/*Map<String,Object> result = new HashMap<String,Object>();
+		try {
+			PagerVO page = teacherInfoService.findTeacherPage(name,grade,course,appPageNo,appPageSize);
+			result.put("data", page.getDatas());
+			result.put("http_status", true);
+			result.put("http_msg", "查询分页成功!");
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			result.put("http_status", false);
+			result.put("http_msg", "查询分页失败!原因["+e.getMessage()+"]");
+		}
+		this.ajaxWriteOutJSON(result);*/
+		
+		
+		
+		
 		Map<String,Object> result = new HashMap<String,Object>();
 		try {
-			PagerVO page = teacherInfoService.findTeacherPage(grade,course,appPageNo,appPageSize);
-			result.put("data", page.getDatas());
+			log.debug("@@@@ param -> name:"+name +"|grade:"+grade+"|course:"+course);
+			List<Map<String, Object>> list = teacherInfoService.findTeacherByKeyword(name,grade,course, appPageNo, appPageSize);
+			result.put("data", list);
 			result.put("http_status", true);
 			result.put("http_msg", "查询分页成功!");
 		} catch (ServiceException e) {
@@ -132,6 +150,8 @@ public class VisitAppAction extends BaseAction {
 		}
 		this.ajaxWriteOutJSON(result);
 	}
+	
+	
 	
 	
 }

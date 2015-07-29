@@ -157,8 +157,8 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 	}
 
 	@Override
-	public PagerVO findTeacherPage(String grade, String course, Integer appPageNo,
-			Integer appPageSize) throws ServiceException {
+	public PagerVO findTeacherPage(String name, String grade, String course,
+			Integer appPageNo, Integer appPageSize) throws ServiceException {
 		try {
 			//分页默认参数
 			appPageNo=appPageNo==null?1:appPageNo;
@@ -186,7 +186,10 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 				.append("     JOIN grade_course_info gci      ")
 				.append("       ON te.gci_id=gci.gci_id       ")
 				.append("   WHERE 1=1                         ");
-				
+			if(StringUtils.isNotEmpty(name)){
+				sql.append(" ti.name like ? ");
+				param.add("%"+name+"%");
+			}
 			if(StringUtils.isNotEmpty(course)){
 			     sql.append(" AND gci.course= ? ");
 				param.add(course);
@@ -278,8 +281,12 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 	}
 
 	@Override
-	public List<Map<String, Object>> findTeacherByKeyword(String name, String grade, String course) throws ServiceException {
+	public List<Map<String, Object>> findTeacherByKeyword(String name, String grade, String course, Integer appPageNo, Integer appPageSize) throws ServiceException {
 		try {
+			appPageNo = appPageNo==null?1:appPageNo;
+			appPageSize = appPageSize==null?10:appPageSize;
+			int pageoff = appPageNo<1?0:(appPageNo-1)*appPageSize;
+			
 			StringBuffer sql = new StringBuffer(400);
 			List param = new ArrayList();
 			
@@ -312,6 +319,7 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 				param.add(grade);
 			}
 			sql	.append("   ) "); 
+			sql	.append(" limit ").append(pageoff).append(" , ").append(appPageSize); 
 			
 			List<Map<String, Object>> list = dao.findBySQL(sql.toString(), param.toArray(new Object[0]));
 			log.debug("$$$$ 搜索完老师集合"+(list==null?0:list.size()));

@@ -64,7 +64,7 @@ public class QuestionOfferingServiceImpl extends BaseServiceImpl<QuestionOfferin
 			log.debug("@@@@ offset:"+offset+"|pagesize:"+pageSize+"|siId:"+siId);
 			StringBuffer sql = new StringBuffer();
 			sql .append(" SELECT qo.order_id,order_no,   ")
-				.append("   question_desc,pic_id,prise   ")
+				.append("   question_desc,qo.pic_id,prise   ")
 				.append("   ,ti.ti_id,ti.name,ti.school  ")
 				.append("   ,ti.head_short_id            ")
 				.append(" FROM question_offering qo      ")
@@ -75,7 +75,7 @@ public class QuestionOfferingServiceImpl extends BaseServiceImpl<QuestionOfferin
 				.append(" WHERE qo.si_id = ?             ")
 				.append(" ORDER BY qo.ask_time DESC      ");
 			
-			return dao.findBySqlPage(sql.toString(), offset, pageSize, siId);
+			return dao.findBySqlPage(sql.toString(),offset,pageSize, siId);
 		} catch (Exception e) {
 			
 			e.printStackTrace();

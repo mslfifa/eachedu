@@ -121,21 +121,5 @@ public class TeacherAppAction extends BaseAction{
 		
 	}
 	
-	public void findTeacherByKeyword(){
-		Map<String,Object> result = new HashMap<String,Object>();
-		try {
-			log.debug("@@@@ param -> name:"+name +"|grade:"+grade+"|course:"+course);
-			List<Map<String, Object>> list = teacherInfoService.findTeacherByKeyword(name,grade,course);
-			result.put("data", list);
-			result.put("http_status", true);
-			result.put("http_msg", "查询分页成功!");
-		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			result.put("http_status", false);
-			result.put("http_msg", "查询分页失败!原因["+e.getMessage()+"]");
-		}
-		this.ajaxWriteOutJSON(result);
-	}
 	
 }

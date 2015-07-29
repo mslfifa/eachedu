@@ -329,6 +329,11 @@ public class LoginAppAction extends BaseAction {
 		Map<String,Object> result = new HashMap<String,Object>();
 		
 		try {
+			
+			if(StringUtils.isEmpty(qq) && StringUtils.isEmpty(weibo) && StringUtils.isEmpty(weixin)){
+				throw new Exception("第三方账号不能全空,qq微信微博账号必选一!");
+			}
+			
 			Map<String,Object> data =null;
 			//判断第三方账号对应的用户存在否，存在就登录并返回信息。
 			if(AccountType.STUDENT_TYPE.name().equals(accountType)){
@@ -361,7 +366,6 @@ public class LoginAppAction extends BaseAction {
 					log.debug("@@@save ResourceInfo success riId:"+r.getRiId());
 				}
 				
-				result.put("headShortId", r.getRiId());
 				
 				log.debug("@@@@ 保存资源信息成功!");
 				

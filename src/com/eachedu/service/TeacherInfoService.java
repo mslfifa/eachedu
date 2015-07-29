@@ -24,6 +24,7 @@ public interface TeacherInfoService extends BaseService<TeacherInfo, Long> {
 
 	/**
 	 * 查找老师分页列表 年级与课都是可选的
+	 * @param name TODO
 	 * @param grade
 	 * @param course
 	 * @param appPageNo
@@ -31,7 +32,7 @@ public interface TeacherInfoService extends BaseService<TeacherInfo, Long> {
 	 * @return TODO
 	 * @throws ServiceException
 	 */
-	PagerVO findTeacherPage(String grade, String course, Integer appPageNo, Integer appPageSize)throws ServiceException;
+	PagerVO findTeacherPage(String name, String grade, String course, Integer appPageNo, Integer appPageSize)throws ServiceException;
 	
 	/**
 	 * 查找答题最多前几名的老师列表
@@ -63,10 +64,12 @@ public interface TeacherInfoService extends BaseService<TeacherInfo, Long> {
 	 * @param name 老师名字 模糊匹配
 	 * @param grade TODO
 	 * @param course TODO
+	 * @param appPageNo TODO
+	 * @param appPageSize TODO
 	 * @return
 	 * @throws ServiceException
 	 */
-	List<Map<String,Object>> findTeacherByKeyword(String name, String grade, String course) throws ServiceException;
+	List<Map<String,Object>> findTeacherByKeyword(String name, String grade, String course, Integer appPageNo, Integer appPageSize) throws ServiceException;
 	
 	/**
 	 * 查找老师擅长的年级课程
