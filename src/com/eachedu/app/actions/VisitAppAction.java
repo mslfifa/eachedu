@@ -32,6 +32,8 @@ public class VisitAppAction extends BaseAction {
 	private String name;
 	private String grade;
 	private String course;
+	//课件搜索关键字
+	private String courseTitle;
 	private Long tiId;
 	private String orderField;
 	private String orderDirect;
@@ -99,6 +101,14 @@ public class VisitAppAction extends BaseAction {
 
 	public void setOrderDirect(String orderDirect) {
 		this.orderDirect = orderDirect;
+	}
+
+	public String getCourseTitle() {
+		return courseTitle;
+	}
+
+	public void setCourseTitle(String courseTitle) {
+		this.courseTitle = courseTitle;
 	}
 
 
@@ -214,7 +224,7 @@ public class VisitAppAction extends BaseAction {
 	public void findCoursewarePage(){
 		Map<String,Object> result = new HashMap<String,Object>();
 		try {
-			PagerVO page = coursewareInfoService.findCoursewarePage(appPageNo, appPageSize, course, grade, orderField, orderDirect);
+			PagerVO page = coursewareInfoService.findCoursewarePage(appPageNo, appPageSize, courseTitle, course, grade, orderField, orderDirect);
 			result.put("data", page);
 			result.put("http_status", true);
 			result.put("http_msg", "查询分页成功!");

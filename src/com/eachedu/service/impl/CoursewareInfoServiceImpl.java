@@ -29,7 +29,7 @@ public class CoursewareInfoServiceImpl extends BaseServiceImpl<CoursewareInfo,Lo
 	}
 
 	@Override
-	public PagerVO findCoursewarePage(Integer pageNo, Integer pageSize, String course, String grade, String orderField, String orderDirect) throws ServiceException {
+	public PagerVO findCoursewarePage(Integer pageNo, Integer pageSize, String courseTitle, String course, String grade, String orderField, String orderDirect) throws ServiceException {
 		try {
 			
 			log.debug("$$$$ pageNo:"+pageNo+"|course:"+course+"|grade:"+grade+"|orderField:"+orderField+"|orderDirect:"+orderDirect);
@@ -58,13 +58,19 @@ public class CoursewareInfoServiceImpl extends BaseServiceImpl<CoursewareInfo,Lo
 				.append("     ON ci.ci_id=t_d.ci_id          ")  
 				.append(" WHERE 1=1                          ");
 			
-			if(StringUtils.isNotEmpty(grade)){
-				sql.append(" AND gci.grade = ? ") ;
-				param.add(grade);
-			}
-			if(StringUtils.isNotEmpty(course)){
-				sql.append(" AND gci.course = ? ");
-				param.add(course);
+			
+			if(StringUtils.isNotEmpty(courseTitle)){
+				sql.append(" AND ci.course_title LIKE ? ") ;
+				param.add("%"+courseTitle+"%");
+			}else{
+				if(StringUtils.isNotEmpty(grade)){
+					sql.append(" AND gci.grade = ? ") ;
+					param.add(grade);
+				}
+				if(StringUtils.isNotEmpty(course)){
+					sql.append(" AND gci.course = ? ");
+					param.add(course);
+				}
 			}
 			
 			if("down_num".equals(orderField)){
