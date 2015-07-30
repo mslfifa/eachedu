@@ -31,6 +31,15 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 	@Override
 	public List<StudentInfo> findStudentFromLogin(String username, String password) throws ServiceException {
 		try {
+			
+			if(StringUtils.isEmpty(username)){
+				throw new Exception("用户不能为空");
+			}
+			
+			if (StringUtils.isEmpty(password)) {
+				throw new Exception("密码不能为空");
+			}
+			
 			StringBuffer hql = new StringBuffer(100);
 			List param = new ArrayList();
 			hql.append("from StudentInfo where 1=1 ");
@@ -51,12 +60,31 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 	}
 
 	@Override
-	public StudentInfo findByMobile(String mobile, String password) throws ServiceException {
+	public Map<String, Object> findByMobile(String mobile, String password) throws ServiceException {
 		try {
-			String hql ="from StudentInfo where mobile = ? and password=? ";
-			List list = dao.findByHql(hql, mobile,password);
+			
+			if(StringUtils.isEmpty(mobile)){
+				throw new Exception("手机号不能为空");
+			}
+			
+			if (StringUtils.isEmpty(password)) {
+				throw new Exception("密码不能为空");
+			}
+			
+			StringBuffer sql =new StringBuffer(300);
+			
+			sql .append(" SELECT                                ")
+				.append("   si_id,account,nickname              ")
+				.append("   ,'STUDENT_TYPE' AS account_type     ")
+				.append("   ,grade,NAME,sex,mobile              ")
+				.append("   ,qq,weixin,weibo,ri.remote_url      ")
+				.append(" FROM student_info si                  ")
+				.append("   LEFT JOIN resource_info ri          ")
+				.append("     ON si.head_short_id=ri.ri_id      ")
+				.append(" WHERE 1=1 AND mobile=? AND PASSWORD=? ");
+			List list = dao.findBySQL(sql.toString(), mobile,password);
 			if(list!=null && !list.isEmpty()){
-				return (StudentInfo) list.get(0);
+				return (Map<String, Object>) list.get(0);
 			}else{
 				throw new Exception("查不到手机号["+mobile+"]的学生账号");
 			}
@@ -69,6 +97,11 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 	@Override
 	public boolean findExistByMobile(String mobile) throws ServiceException {
 		try {
+			
+			if(StringUtils.isEmpty(mobile)){
+				throw new Exception("手机号不能为空");
+			}
+			
 			String hql = "from StudentInfo where mobile = ? ";
 			List list = dao.findByHql(hql, mobile);
 			StudentInfo s = null;
@@ -86,16 +119,23 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 	@Override
 	public Map<String,Object> findBySns(String qq, String weixin, String weibo) throws ServiceException {
 		try {
+			
+			if(StringUtils.isEmpty(qq) && StringUtils.isEmpty(weixin) && StringUtils.isEmpty(weibo)){
+				throw new Exception("第三方账号不能为空");
+			}
+			
 			StringBuffer sql = new StringBuffer(300);
+
 			List param = new ArrayList();
-			sql .append(" SELECT                          ")
-				.append("   si_id,nickname,sex            ")
-				.append("    weibo,qq,weixin              ")
-				.append("   ,ri.remote_url                ")
-				.append(" FROM student_info si            ")
-				.append("  LEFT JOIN resource_info ri     ")
-				.append("    ON si.head_short_id=ri.ri_id ")
-				.append(" WHERE 1=2                       ");
+			sql .append(" SELECT                            ")
+				.append("   si_id,account,nickname,sex      ")
+				.append("   ,'STUDENT_TYPE' AS account_type ")
+				.append("   ,weibo,qq,weixin,grade          ")
+				.append("   ,ri.remote_url,mobile           ")
+				.append(" FROM student_info si              ")
+				.append("  LEFT JOIN resource_info ri       ")
+				.append("    ON si.head_short_id=ri.ri_id   ")
+				.append(" WHERE 1=2                         ");
 			if(StringUtils.isNotEmpty(qq)){
 				sql.append(" or qq = ? ");
 				param.add(qq);
@@ -125,6 +165,15 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 	@Override
 	public void updatePwd(String mobile, String password) throws ServiceException {
 		try {
+			
+			if(StringUtils.isEmpty(mobile)){
+				throw new Exception("手机号不能为空");
+			}
+			
+			if (StringUtils.isEmpty(password)) {
+				throw new Exception("密码不能为空");
+			}
+			
 			String hql = "from StudentInfo where mobile = ? ";
 			List list = dao.findByHql(hql, mobile);
 			StudentInfo s = null;

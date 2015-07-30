@@ -163,48 +163,43 @@ public class LoginAppAction extends BaseAction {
 		try {
 			
 			if (AccountType.STUDENT_TYPE.name().equals(accountType)) {
-				StudentInfo s = studentInfoService.findByMobile(mobile, password);
+				Map<String, Object> s = studentInfoService.findByMobile(mobile, password);
 				user = new UserVO();
 				user = new UserVO();
-				user.setId(s.getSiId());
-				user.setAccount(s.getAccount());
-				user.setAccountType(accountType);
-				user.setEmail(s.getEmail());
-				user.setMobile(s.getMobile());
-				user.setName(s.getName());
-				user.setQq(s.getQq());
+				user.setId(Long.parseLong(s.get("si_id").toString()) );
+				user.setAccount((String) s.get("account"));
+				user.setAccountType((String) s.get("account_type"));
+				user.setMobile((String) s.get("mobile"));
+				user.setName((String) s.get("name"));
+				user.setQq((String) s.get("qq"));
+				user.setWeibo((String) s.get("weibo"));
+				user.setWeixin((String) s.get("weixin"));
+				user.setRemoteUrl((String) s.get("remote_url"));
+				user.setSex((String) s.get("sex"));
+				user.setNickname((String) s.get("nickname"));
 				
 				result.put("http_status", true);
 				result.put("http_msg", "查询成功");
-				result.put("id", s.getSiId());
-				result.put("accountType", accountType);
-				result.put("nickname", s.getNickname());
-				result.put("headShortId", s.getHeadShortId());
-				result.put("mobile", s.getMobile());
-				result.put("email", s.getEmail());
-				result.put("sex", s.getSex());
-				result.put("account", s.getAccount());
+				result.put("data",s);
 			}else if (AccountType.TEACHER_TYPE.name().equals(accountType)) {
-				TeacherInfo t = teacherInfoService.findByMobile(mobile, password);
+				Map<String, Object> t = teacherInfoService.findByMobile(mobile, password);
 				user = new UserVO();
-				user.setId(t.getTiId());
-				user.setAccount(t.getAccount());
-				user.setAccountType(accountType);
-				user.setEmail(t.getEmail());
-				user.setMobile(t.getMobile());
-				user.setName(t.getName());
-				user.setQq(t.getQq());
+				user.setId(Long.parseLong(t.get("ti_id").toString()));
+				user.setAccount((String) t.get("account"));
+				user.setAccountType((String) t.get("account_type"));
+				user.setMobile((String) t.get("mobile"));
+				user.setName((String) t.get("name"));
+				user.setQq((String) t.get("qq"));
+				user.setWeibo((String) t.get("weibo"));
+				user.setWeixin((String) t.get("weixin"));
+				user.setRemoteUrl((String) t.get("remote_url"));
+				user.setSex((String) t.get("sex"));
+				user.setNickname((String) t.get("nickname"));
 				
 				result.put("http_status", true);
 				result.put("http_msg", "查询成功");
-				result.put("id", t.getTiId());
-				result.put("accountType", accountType);
-				result.put("nickname", t.getNickname());
-				result.put("headShortId", t.getHeadShortId());
-				result.put("mobile", t.getMobile());
-				result.put("email", t.getEmail());
-				result.put("sex", t.getSex());
-				result.put("account", t.getAccount());
+				
+				result.put("data", t);
 			}else{
 				throw new Exception("没有传入accountType,请联系管理员.");
 			}
@@ -263,8 +258,8 @@ public class LoginAppAction extends BaseAction {
 				}
 			}*/
 			
-			String randomStr = new Random().nextInt(10000)+"0000";
-			String tmpVerifyCode = (randomStr).substring(0, 4);
+			String randomStr = new Random().nextInt(1000000)+"000000";
+			String tmpVerifyCode = (randomStr).substring(0, 6);
 			result.put("verifyCode", tmpVerifyCode);
 			log.info("##### verifyCode:"+tmpVerifyCode);
 			ServletActionContext.getRequest().getSession().setAttribute(ConstUtils.LOGIN_VERIFY_CODE, tmpVerifyCode);
@@ -487,18 +482,30 @@ public class LoginAppAction extends BaseAction {
 			if(StringUtils.isEmpty(verifyCode)){
 				throw new Exception("您没有输入验证码");
 			}
+			
+			if(StringUtils.isEmpty(accountType)){
+				throw new Exception("您没有账号类型验证码");
+			}
 			if(!verifyCode.equals(oldVerifyCode)){
 				throw new Exception("您输入验证码的不正确");
 			}
-			studentInfoService.updatePwd(mobile,password);
+			
+			if(AccountType.STUDENT_TYPE.name().equals(accountType)){
+				studentInfoService.updatePwd(mobile,password);
+			}else if (AccountType.TEACHER_TYPE.name().equals(accountType)) {
+				teacherInfoService.updatePwd(mobile,password);
+			}else{
+				throw new Exception("accountType["+accountType+"]不在合法的范围内,请联系管理员!");
+			}
+			
 			
 			result.put("http_status", true);
-			result.put("http_msg", "修改成功");
+			result.put("http_msg", "修改密码成功");
 		} catch (Exception e) {
 			e.printStackTrace();
 			
 			result.put("http_status", false);
-			result.put("http_msg", "修改失败,原因["+e.getMessage()+"]");
+			result.put("http_msg", "修改密码失败,原因["+e.getMessage()+"]");
 			
 		} 
 		this.ajaxWriteOutJSON(result);

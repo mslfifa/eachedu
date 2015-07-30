@@ -1,6 +1,7 @@
 package com.eachedu.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.eachedu.dao.BaseDao;
+import com.eachedu.dao.pojo.StudentInfo;
 import com.eachedu.dao.pojo.TeacherInfo;
 import com.eachedu.exception.DaoException;
 import com.eachedu.exception.ServiceException;
@@ -51,12 +53,23 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 	}
 
 	@Override
-	public TeacherInfo findByMobile(String mobile, String password) throws ServiceException {
+	public Map<String, Object> findByMobile(String mobile, String password) throws ServiceException {
 		try {
-			String hql = "from TeacherInfo where mobile=? and password = ? ";
-			List list = dao.findByHql(hql, mobile,password);
-			if(list!=null && !password.isEmpty()){
-				return (TeacherInfo) list.get(0);
+			StringBuffer sql = new StringBuffer(300);
+			
+			sql .append(" SELECT                                ")
+				.append("   ti_id,account,nickname              ")
+				.append("   ,'TEACHER_TYPE' AS account_type     ")
+				.append("   ,NAME,sex,mobile                    ")
+				.append("   ,qq,weixin,weibo,ri.remote_url      ")
+				.append(" FROM teacher_info ti                  ")
+				.append("   LEFT JOIN resource_info ri          ")
+				.append("     ON ti.head_short_id=ri.ri_id      ")
+				.append(" WHERE 1=1 AND mobile=? AND PASSWORD=? ");
+			
+			List list = dao.findBySQL(sql.toString(), mobile,password);
+			if(list!=null && !list.isEmpty()){
+				return (Map<String, Object>) list.get(0);
 			}else{
 				throw new Exception("没有找到手机号["+mobile+"]的老师");
 			}
@@ -134,7 +147,7 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 			StringBuffer sql = new StringBuffer(400);
 			sql .append(" SELECT                               ")          
 				.append("   ti.ti_id,name                      ")          
-				.append("   ,sex,ri.`remote_url`               ")          
+				.append("   ,sex,ri.remote_url               ")          
 				.append(" FROM teacher_info ti                 ")          
 				.append("   LEFT JOIN resource_info ri         ")          
 				.append("     ON ti.head_short_id=ri.ri_id     ")          
@@ -220,6 +233,10 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 	public Map<String, Object> findTeacherRecentComment(Long tiId) throws ServiceException {
 		
 		try {
+			
+			if(tiId==null){
+				throw new Exception("老师ID不能为空,请联系管理员!");
+			}
 			
 			Map<String,Object> result = new HashMap<String,Object>();
 			
@@ -331,12 +348,12 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 					Long tiId = Long.parseLong(teacherMap.get("ti_id").toString());
 					
 					StringBuffer courseSql = new StringBuffer(300);
-					courseSql   .append(" SELECT                         ") 
-								.append("   DISTINCT gci.course          ") 
-								.append(" FROM `teacher_expert` te       ") 
-								.append("   JOIN `grade_course_info` gci ") 
-								.append("     ON te.gci_id=gci.gci_id    ") 
-								.append(" WHERE  te.ti_id = ?            ");
+					courseSql   .append(" SELECT                       ") 
+								.append("   DISTINCT gci.course        ") 
+								.append(" FROM teacher_expert te       ") 
+								.append("   JOIN grade_course_info gci ") 
+								.append("     ON te.gci_id=gci.gci_id  ") 
+								.append(" WHERE  te.ti_id = ?          ");
 					List<Map<String, Object>> courses = dao.findBySQL(courseSql.toString(), tiId);
 					List<String> courseList = new ArrayList<String>();
 					for (Iterator courseIr = courses.iterator(); courseIr.hasNext();) {
@@ -348,12 +365,12 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 					log.debug("@@@ 添加课程集合:"+(courseList==null?0:courseList.size()));
 					
 					StringBuffer gradeSql = new StringBuffer(300);
-					gradeSql.append(" SELECT                         ")
-							.append("   DISTINCT gci.grade           ")
-							.append(" FROM `teacher_expert` te       ")
-							.append("   JOIN `grade_course_info` gci ")
-							.append("     ON te.gci_id=gci.gci_id    ")
-							.append(" WHERE  te.ti_id = ?            ");
+					gradeSql.append(" SELECT                       ")
+							.append("   DISTINCT gci.grade         ")
+							.append(" FROM teacher_expert te       ")
+							.append("   JOIN grade_course_info gci ")
+							.append("     ON te.gci_id=gci.gci_id  ")
+							.append(" WHERE  te.ti_id = ?          ");
 					List<Map<String, Object>> grades = dao.findBySQL(gradeSql.toString(), tiId);
 					List<String> gradeList = new ArrayList<String>();
 					for (Iterator gradeIr = grades.iterator(); gradeIr.hasNext();) {
@@ -421,6 +438,37 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage(),e.getCause());
 		}
+	}
+
+	@Override
+	public void updatePwd(String mobile, String password) throws ServiceException {
+		try {
+			
+			if(StringUtils.isEmpty(mobile)){
+				throw new Exception("手机号不能为空");
+			}
+			
+			if (StringUtils.isEmpty(password)) {
+				throw new Exception("密码不能为空");
+			}
+			
+			String hql = "from TeacherInfo where mobile = ? ";
+			List list = dao.findByHql(hql, mobile);
+			TeacherInfo t = null;
+			if(list!=null && !list.isEmpty()){
+				t = (TeacherInfo) list.get(0);
+			}else{
+				throw new Exception("找不到手机号为["+mobile+"]");
+			}
+			
+			t.setPassword(password);
+			t.setCreateTime(new Date());
+			dao.update(t);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException(e.getMessage(),e.getCause());
+		}
+		
 	}
 
 

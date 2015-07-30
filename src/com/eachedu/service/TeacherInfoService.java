@@ -10,7 +10,14 @@ import com.eachedu.web.vo.PagerVO;
 public interface TeacherInfoService extends BaseService<TeacherInfo, Long> {
 	List<TeacherInfo> findTeacherFromLogin(String username,String password) throws ServiceException;
 
-	TeacherInfo findByMobile(String mobile, String password)throws ServiceException;
+	/**
+	 * 手机登录
+	 * @param mobile
+	 * @param password
+	 * @return
+	 * @throws ServiceException
+	 */
+	Map<String, Object> findByMobile(String mobile, String password)throws ServiceException;
 
 	Map<String, Object> findBySns(String qq, String weixin, String weibo)throws ServiceException;
 
@@ -78,4 +85,6 @@ public interface TeacherInfoService extends BaseService<TeacherInfo, Long> {
 	 * @throws ServiceException
 	 */
 	List<Map<String,Object>> findTeacherExper(Long tiId)throws ServiceException;
+
+	void updatePwd(String mobile, String password) throws ServiceException;
 }

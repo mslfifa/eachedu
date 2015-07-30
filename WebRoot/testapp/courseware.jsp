@@ -8,15 +8,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html lang="en">
  <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta charset="UTF-8">
   <meta name="Generator" content="EditPlus®">
   <meta name="Author" content="">
   <meta name="Keywords" content="">
   <meta name="Description" content="">
-  <title>Document</title>
+  <title>学生接口17</title>
  </head>
  <body>
-  <form method="POST" action="<%=path %>/app/visitApp!findTeacherPage.action">
-		<input type="text" name="name" value="">姓名<br/>
+ <h1>学生接口17-课件列表</h1>
+  <form method="POST" action="<%=path %>/app/visitApp!findCoursewarePage.action">
+		关键字:<input type="text" name="courseTitle" value=""><br/>
 	
 		<select name="grade">
 		    <option value="">请选择</option>
@@ -39,9 +41,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<option value="GEOGRAPHY">地理</option>
 			<option value="HISTORY">历史</option>
 		</select>课程<br/>
-		<input type="text" name="appPageNo" value="1">页号<br/>
-		<input type="text" name="appPageSize" value="10">序号<br/>
+		
+		排序字段:<input type="radio" name="orderField" value="down_num">下载量&nbsp;
+		<input type="radio" name="orderField" value="prise">价格&nbsp;
+		<input type="radio" name="orderField" value="grade">年级<br/>
+		
+		排序方向:<input type="radio" name="orderDirect" value="asc">下载量&nbsp;
+		<input type="radio" name="orderDirect" value="desc">价格&nbsp;<br/>
 		<input type="submit" value="提交">
   </form>
+
  </body>
 </html>
