@@ -28,7 +28,7 @@ public interface QuestionOfferingService extends BaseService<QuestionOffering, L
 	
 	/**
 	 * 查找根据订单流水号查找问题详细
-	 * @param orderNo
+	 * @param orderNo 订单号
 	 * @return
 	 * @throws ServiceException
 	 */

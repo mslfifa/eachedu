@@ -72,9 +72,9 @@ public class CoursewareInfoServiceImpl extends BaseServiceImpl<CoursewareInfo,Lo
 			}else if ("course".equals(orderField)) {
 				sql.append(" ORDER BY gci.course ");
 			}else if ("prise".equals(orderField)) {
-				sql.append(" ORDER BY ti.prise ");
+				sql.append(" ORDER BY ci.prise ");
 			}else{
-				sql.append(" ORDER BY ti.prise ");
+				sql.append(" ORDER BY ci.prise ");
 			}
 			
 			if("asc".equals(orderDirect)){

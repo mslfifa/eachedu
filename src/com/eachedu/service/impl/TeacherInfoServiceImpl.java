@@ -248,11 +248,6 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 				result.put("comment_relate_info", null);
 			}
 			
-			//老师信息 teacher_info
-			TeacherInfo t = dao.get(tiId);
-			result.put("teacher_info", t);
-			
-			
 			//总评论数  comment_num
 			StringBuffer totalCommentSql = new StringBuffer(400);
 			totalCommentSql .append(" SELECT ta.ti_id,COUNT(1) AS comment_num ")

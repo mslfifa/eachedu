@@ -58,21 +58,29 @@ public class QuestionOfferingServiceImpl extends BaseServiceImpl<QuestionOfferin
 	public PagerVO findQuestionPageByStudent(Long siId, Integer pageNo, Integer pageSize) throws ServiceException {
 		
 		try {
+			
+			if(siId==null){
+				throw new Exception("学生ID["+siId+"]不能为空,请联系管理员!");
+			}
+			
 			int offset = (pageNo==null ||pageNo==0)?0:(pageNo-1)*pageSize;
 			pageSize = pageSize==null?20:pageSize;
 			log.debug("@@@@ offset:"+offset+"|pagesize:"+pageSize+"|siId:"+siId);
 			StringBuffer sql = new StringBuffer();
-			sql .append(" SELECT qo.order_id,order_no,   ")
-				.append("   question_desc,qo.pic_id,prise   ")
-				.append("   ,ti.ti_id,ti.name,ti.school  ")
-				.append("   ,ti.head_short_id            ")
-				.append(" FROM question_offering qo      ")
-				.append("   LEFT JOIN teacher_answer ta  ")
-				.append("     ON qo.order_id=ta.order_id ")
-				.append("   LEFT JOIN teacher_info ti    ")
-				.append("     ON ti.ti_id=ta.ti_id       ")
-				.append(" WHERE qo.si_id = ?             ")
-				.append(" ORDER BY qo.ask_time DESC      ");
+			sql .append(" SELECT qo.order_id,order_no      ")
+				.append("   ,qo.question_desc,qo.pic_id    ")
+				.append("   ,qo.prise,gci.grade,gci.course ")
+				.append("   ,ti.ti_id,ti.name,ti.school    ")
+				.append("   ,ti.head_short_id              ")
+				.append(" FROM question_offering qo        ")
+				.append("   JOIN grade_course_info gci     ")
+				.append("     ON qo.gci_id=gci.gci_id      ")
+				.append("   LEFT JOIN teacher_answer ta    ")
+				.append("     ON qo.order_id=ta.order_id   ")
+				.append("   LEFT JOIN teacher_info ti      ")
+				.append("     ON ti.ti_id=ta.ti_id         ")
+				.append(" WHERE qo.si_id=?                 ")
+				.append(" ORDER BY qo.ask_time DESC        ");
 			
 			return dao.findBySqlPage(sql.toString(),offset,pageSize, siId);
 		} catch (Exception e) {

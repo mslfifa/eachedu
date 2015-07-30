@@ -63,6 +63,10 @@
 		<action name="visitApp" class="visitAppAction">
 			<interceptor-ref name="app-login-stack"></interceptor-ref>
 		</action>
+		
+		<action name="answerCommentApp" class="answerCommentAppAction">
+			<interceptor-ref name="app-basic-stack"></interceptor-ref>
+		</action>
 
 	</package>
 </struts>

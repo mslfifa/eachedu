@@ -220,10 +220,13 @@ public abstract class BaseAction {
 	 */
 	public void ajaxWriteOutStr(String msg){
 		try {
-			ServletActionContext.getResponse().setCharacterEncoding("UTF-8");
-			ServletActionContext.getResponse().getWriter().println(
-					msg
-			);
+			HttpServletResponse response = ServletActionContext.getResponse();
+			response.setCharacterEncoding("UTF-8");
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expires", 0);
+			response.setContentType("text/plain; charset=UTF-8");
+			response.getWriter().println(msg);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -231,10 +234,13 @@ public abstract class BaseAction {
 	
 	public void ajaxWriteOutJSON(Object object){
 		try {
-			ServletActionContext.getResponse().setCharacterEncoding("UTF-8");
-			ServletActionContext.getResponse().getWriter().println(
-				JSONMapper.toJSON(object).render(false)
-			);
+			HttpServletResponse response = ServletActionContext.getResponse();
+			response.setHeader("Pragma", "No-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expires", 0);
+			response.setContentType("application/json; charset=UTF-8");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().println(JSONMapper.toJSON(object).render(false));
 			
 		} catch (Exception e) {
 			e.printStackTrace();

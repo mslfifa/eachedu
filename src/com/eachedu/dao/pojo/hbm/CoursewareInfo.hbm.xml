@@ -10,8 +10,9 @@
 		<property name="gciId" column="gci_id"/>
 		<property name="courseTitle" column="course_title"/>
 		<property name="introduce" column="introduce"/>
-		<property name="picPath" column="pic_path"/>
+		<property name="fileId" column="file_id"/>
 		<property name="prise" column="prise"/>
 		<property name="status" column="status"/>
+		<property name="legendId" column="legend_id"/>
 	</class>
 </hibernate-mapping>

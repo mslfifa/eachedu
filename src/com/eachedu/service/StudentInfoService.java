@@ -30,4 +30,6 @@ public interface StudentInfoService extends BaseService<StudentInfo, Long> {
 	 * @throws ServiceException
 	 */
 	void updatePwd(String mobile, String password)throws ServiceException;
+	
+	
 }

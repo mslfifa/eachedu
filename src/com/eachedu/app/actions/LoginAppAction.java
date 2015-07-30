@@ -263,8 +263,6 @@ public class LoginAppAction extends BaseAction {
 				}
 			}*/
 			
-			
-			
 			String randomStr = new Random().nextInt(10000)+"0000";
 			String tmpVerifyCode = (randomStr).substring(0, 4);
 			result.put("verifyCode", tmpVerifyCode);
@@ -289,8 +287,6 @@ public class LoginAppAction extends BaseAction {
 				String smsErrorMsg = "错误码=" + smsResult.get("statusCode") +" 错误信息= "+smsResult.get("statusMsg");
 				throw new Exception(smsErrorMsg);
 			}
-			
-			
 			
 			//默认超时分钟数
 			int period_minute =Integer.parseInt(PropUtils.get("verify_code_period_minute"));
@@ -443,12 +439,8 @@ public class LoginAppAction extends BaseAction {
 				throw new Exception("验证码["+verifyCode+"]已经超时，请重新申请!");
 			}
 			
-			
 			//取出上次生成的验证码
 			String oldVerifyCode = (String) ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.LOGIN_VERIFY_CODE);
-			
-			
-			
 			
 			Long pojoId = null;
 			if (StringUtils.isNotEmpty(oldVerifyCode)  && oldVerifyCode.equals(verifyCode)) {

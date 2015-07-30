@@ -79,6 +79,6 @@ public class MapPojoMapUtil {
 		
 		CoursewareInfo pojo = (CoursewareInfo) copyMapToPojo(map,CoursewareInfo.class);
 		
-		System.out.println("getCiId:"+pojo.getCiId()+"|getGciId:"+pojo.getGciId()+"|getCourseTitle:"+pojo.getCourseTitle()+"|getIntroduce:"+pojo.getIntroduce()+"|getPicPath:"+pojo.getPicPath()+"|getPrise:"+pojo.getPrise());
+		System.out.println("getCiId:"+pojo.getCiId()+"|getGciId:"+pojo.getGciId()+"|getCourseTitle:"+pojo.getCourseTitle()+"|getIntroduce:"+pojo.getIntroduce()+"|getLegendId:"+pojo.getLegendId()+"|getPrise:"+pojo.getPrise());
 	}
 }

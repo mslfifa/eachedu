@@ -14,6 +14,8 @@ public class QuestionOffering {
 	private String communicateWay;
 	private String questionDesc;
 	private Long picId;
+	//提问手机
+	private String askMobile;
 	// 价格
 	private BigDecimal prise;
 	// 追加赏金
@@ -116,6 +118,14 @@ public class QuestionOffering {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getAskMobile() {
+		return askMobile;
+	}
+
+	public void setAskMobile(String askMobile) {
+		this.askMobile = askMobile;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package com.eachedu.app.actions;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 
 import com.eachedu.exception.ServiceException;
 import com.eachedu.service.QuestionOfferingService;
+import com.eachedu.service.ResourceInfoSerivce;
 import com.eachedu.service.TeacherInfoService;
 import com.eachedu.web.actions.BaseAction;
 import com.eachedu.web.vo.PagerVO;
@@ -27,6 +29,19 @@ public class QuestionAppAction extends BaseAction {
 	
 	private Integer pageNo;
 	private Integer pageSize;
+	
+	private String orderNo;
+	
+	//问题图片文件
+	private File askPic;
+	//问题图片文件名
+	private String askPicFileName;
+	//问题图片正文类型
+	private String askPicContentType;
+	////问题图片标题
+	private String askPicCaption;
+	
+	
 	public Long getSiId() {
 		return siId;
 	}
@@ -75,17 +90,49 @@ public class QuestionAppAction extends BaseAction {
 		this.orderNo = orderNo;
 	}
 
+	public File getAskPic() {
+		return askPic;
+	}
+
+	public void setAskPic(File askPic) {
+		this.askPic = askPic;
+	}
+
+	public String getAskPicFileName() {
+		return askPicFileName;
+	}
+
+	public void setAskPicFileName(String askPicFileName) {
+		this.askPicFileName = askPicFileName;
+	}
+
+	public String getAskPicContentType() {
+		return askPicContentType;
+	}
+
+	public void setAskPicContentType(String askPicContentType) {
+		this.askPicContentType = askPicContentType;
+	}
+
+	public String getAskPicCaption() {
+		return askPicCaption;
+	}
+
+	public void setAskPicCaption(String askPicCaption) {
+		this.askPicCaption = askPicCaption;
+	}
+
 
 
 	@Resource(name="questionOfferingService")
 	private QuestionOfferingService questionOfferingService;
+	
 	@Resource(name="teacherInfoService")
 	private TeacherInfoService teacherInfoService;
+	
+	@Resource(name="resourceInfoSerivce")
+	private ResourceInfoSerivce resourceInfoSerivce;
 
-	private String orderNo;
-	
-	
-	
 	
 	public void findQuestionPageByStudent(){
 		
@@ -107,6 +154,9 @@ public class QuestionAppAction extends BaseAction {
 		
 	}
 	
+	/**
+	 * 根据订单号查询问题及回答信息
+	 */
 	public void findQuetionByOrderNo(){
 		Map<String,Object> result = new HashMap<String,Object>();
 		try {
@@ -123,6 +173,13 @@ public class QuestionAppAction extends BaseAction {
 			result.put("http_msg", "查找成功!");
 		}
 		this.ajaxWriteOutJSON(result);
+	}
+	
+	/**
+	 * 学生提问产生订单
+	 */
+	public void askOrder(){
+		
 	}
 	
 }

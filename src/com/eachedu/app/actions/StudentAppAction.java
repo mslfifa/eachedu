@@ -1,19 +1,13 @@
 package com.eachedu.app.actions;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.eachedu.service.StudentInfoService;
-import com.eachedu.utils.ConstUtils;
 import com.eachedu.web.actions.BaseAction;
 
 @Controller("studentAppAction")

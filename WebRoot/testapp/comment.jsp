@@ -8,6 +8,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html lang="en">
  <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta charset="UTF-8">
   <meta name="Generator" content="EditPlus®">
   <meta name="Author" content="">
   <meta name="Keywords" content="">
@@ -15,18 +16,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <title>Document</title>
  </head>
  <body>
-  <form method="POST" action="<%=path %>/app/loginApp!loginBySns.action">
-		<input type="hidden" name="accountType" value="STUDENT_TYPE">
-		<input type="text" name="nickname" value="">昵称<br/>
-		<select name="sex">
-		    <option value="">请选择</option>
-		    <option value="MALE">男</option>
-			<option value="FEMALE">女</option>
-		</select>性别<br/>
-		<input type="text" name="qq" value="33849554">qq<br/>
-		<input type="text" name="weibo" value="">weibo<br/>
-		<input type="text" name="weixin" value="">weixin<br/>
-		<input type="text" name="remoteUrl" value="">远程头像地址<br/>
+  <form method="POST" action="<%=path %>/app/answerCommentApp!comment.action">
+		订单ID:<input type="text" name="orderId" value="1"><br/>
+	
+		评分: 
+		<input type="radio" name="score" value="1">1分&nbsp;
+		<input type="radio" name="score" value="2">2分&nbsp;
+		<input type="radio" name="score" value="3">3分&nbsp;
+		<input type="radio" name="score" value="4">4分&nbsp;
+		<input type="radio" name="score" value="5">5分&nbsp;<br/>
+		备注:<textarea name="remark" rows="4" cols="60"></textarea><br/>
 		<input type="submit" value="提交">
   </form>
  </body>

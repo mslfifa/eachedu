@@ -10,13 +10,11 @@ public class ResourceInfo {
 	// 资料原始名字
 	private String resouceOriginName;
 	private Integer resourceSize;
-	private String relativePath;
+	private String relativeDir;
 	private Date createTime;
 	private Long creatorId;
 	//远程资源URL 比如存放第三方登录返回的头像URL
 	private String remoteUrl;
-	//缩略图ID
-	private Integer legendId;
 
 	public Long getRiId() {
 		return riId;
@@ -58,12 +56,12 @@ public class ResourceInfo {
 		this.resourceSize = resourceSize;
 	}
 
-	public String getRelativePath() {
-		return relativePath;
+	public String getRelativeDir() {
+		return relativeDir;
 	}
 
-	public void setRelativePath(String relativePath) {
-		this.relativePath = relativePath;
+	public void setRelativeDir(String relativeDir) {
+		this.relativeDir = relativeDir;
 	}
 
 	public Date getCreateTime() {
@@ -90,12 +88,4 @@ public class ResourceInfo {
 		this.remoteUrl = remoteUrl;
 	}
 
-	public Integer getLegendId() {
-		return legendId;
-	}
-
-	public void setLegendId(Integer legendId) {
-		this.legendId = legendId;
-	}
-	
 }

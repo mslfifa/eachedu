@@ -7,7 +7,10 @@ public class CoursewareInfo {
 	private Long gciId;
 	private String courseTitle;
 	private String introduce;
-	private String picPath;
+	//课件文件ID
+	private Integer fileId;
+	//缩略图ID
+	private Integer legendId;
 	private BigDecimal prise;
 	//USING:启用  FREEZE:停用 CANCEL:撤销
 	private String status;
@@ -35,11 +38,12 @@ public class CoursewareInfo {
 	public void setIntroduce(String introduce) {
 		this.introduce = introduce;
 	}
-	public String getPicPath() {
-		return picPath;
+	
+	public Integer getLegendId() {
+		return legendId;
 	}
-	public void setPicPath(String picPath) {
-		this.picPath = picPath;
+	public void setLegendId(Integer legendId) {
+		this.legendId = legendId;
 	}
 	public BigDecimal getPrise() {
 		return prise;
@@ -52,6 +56,12 @@ public class CoursewareInfo {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public Integer getFileId() {
+		return fileId;
+	}
+	public void setFileId(Integer fileId) {
+		this.fileId = fileId;
 	}	
 	
 }
