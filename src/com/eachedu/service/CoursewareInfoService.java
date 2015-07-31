@@ -19,4 +19,13 @@ public interface CoursewareInfoService extends BaseService<CoursewareInfo, Long>
 	 * @throws ServiceException
 	 */
 	public PagerVO findCoursewarePage(Integer pageNo, Integer pageSize, String courseTitle, String course, String grade, String orderField, String orderDirect) throws ServiceException;
+
+	/**
+	 * 通过年级 课程查找课件信息
+	 * @param grade 年级
+	 * @param course 课程
+	 * @return
+	 * @throws ServiceException TODO
+	 */
+	public Long findByGradeCourse(String grade, String course) throws ServiceException;
 }

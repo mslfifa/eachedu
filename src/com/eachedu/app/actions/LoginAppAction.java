@@ -21,7 +21,7 @@ import com.eachedu.dao.pojo.StudentInfo;
 import com.eachedu.dao.pojo.TeacherInfo;
 import com.eachedu.dict.AccountType;
 import com.eachedu.dict.ResourceType;
-import com.eachedu.service.ResourceInfoSerivce;
+import com.eachedu.service.ResourceInfoService;
 import com.eachedu.service.StudentInfoService;
 import com.eachedu.service.TeacherInfoService;
 import com.eachedu.utils.ConstUtils;
@@ -151,7 +151,7 @@ public class LoginAppAction extends BaseAction {
 	@Resource(name="teacherInfoService")
 	private TeacherInfoService teacherInfoService;
 	@Resource(name="resourceInfoService")
-	private ResourceInfoSerivce resourceInfoSerivce;
+	private ResourceInfoService resourceInfoService;
 	
 	/**
 	 * 学生 / 老师(使用accountType来区分 ) 手机 密码登录
@@ -353,7 +353,7 @@ public class LoginAppAction extends BaseAction {
 					r.setResourceType(ResourceType.HEAD_SHORT_TYPE.name());
 					
 					r.setCreateTime(new Date());
-					resourceInfoSerivce.save(r);
+					resourceInfoService.save(r);
 					log.debug("@@@save ResourceInfo success riId:"+r.getRiId());
 				}
 				

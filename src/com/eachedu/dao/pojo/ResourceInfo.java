@@ -11,6 +11,8 @@ public class ResourceInfo {
 	private String resouceOriginName;
 	private Integer resourceSize;
 	private String relativeDir;
+	//HTTP内容类型
+	private String contentType;
 	private Date createTime;
 	private Long creatorId;
 	//远程资源URL 比如存放第三方登录返回的头像URL
@@ -88,4 +90,12 @@ public class ResourceInfo {
 		this.remoteUrl = remoteUrl;
 	}
 
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+	
 }

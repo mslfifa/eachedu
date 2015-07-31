@@ -13,6 +13,7 @@
 		<property name="resourceSize" column="resource_size"/>
 		<property name="relativeDir" column="relative_dir"/>
 		<property name="remoteUrl" column="remote_url"/>
+		<property name="contentType" column="content_type"/>
 		<property name="createTime" column="create_time"/>
 		<property name="creatorId" column="creator_id"/>
 	</class>

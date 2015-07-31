@@ -7,10 +7,12 @@
 		<id name="taId" column="ta_id">
 			<generator class="native"/>
 		</id>
-		<property name="taiId" column="tai_id"/>
 		<property name="orderId" column="order_id"/>
 		<property name="answerContent" column="answer_content"/>
-		<property name="picUrl" column="pic_url"/>
+		<property name="picId" column="pic_id"/>
+		<property name="status" column="status"/>
+		<property name="connectType" column="connect_type"/>
+		<property name="assignTime" column="assign_time"/>
 		<property name="answerTime" column="answer_time"/>
 	</class>
 </hibernate-mapping>

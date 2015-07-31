@@ -14,10 +14,10 @@ import com.eachedu.dao.BaseDao;
 import com.eachedu.dao.pojo.ResourceInfo;
 import com.eachedu.dict.ResourceType;
 import com.eachedu.exception.ServiceException;
-import com.eachedu.service.ResourceInfoSerivce;
+import com.eachedu.service.ResourceInfoService;
 import com.eachedu.utils.PropUtils;
 @Service("resourceInfoService")
-public class ResourceInfoSerivceImpl extends BaseServiceImpl<ResourceInfo, Long>implements ResourceInfoSerivce {
+public class ResourceInfoServiceImpl extends BaseServiceImpl<ResourceInfo, Long>implements ResourceInfoService {
 	@Resource(name="resourceInfoDao")
 	@Override
 	public void setDao(BaseDao<ResourceInfo, Long> dao) {

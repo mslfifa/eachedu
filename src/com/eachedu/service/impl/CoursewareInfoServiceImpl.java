@@ -2,6 +2,7 @@ package com.eachedu.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -92,6 +93,41 @@ public class CoursewareInfoServiceImpl extends BaseServiceImpl<CoursewareInfo,Lo
 			}
 			
 			return dao.findBySqlPage(sql.toString(), offset, pageSize, param.toArray(new Object[0]));
+		} catch (Exception e) {
+			throw new ServiceException(e.getMessage(),e.getCause());
+		}
+	}
+
+	@Override
+	public Long findByGradeCourse(String grade, String course) throws ServiceException {
+		
+		try {
+			
+			log.debug("$$$$ grade:"+grade+"|course:"+course);
+			
+			Long ciId = null;
+			if(StringUtils.isEmpty(grade)){
+				throw new Exception("年级不能为空");
+			}
+			
+			if(StringUtils.isEmpty(course)){
+				throw new Exception("课程不能为空");
+			}
+			
+			StringBuffer sql = new StringBuffer(200);
+			sql .append(" SELECT gci_id          ")    
+				.append(" FROM grade_course_info ")    
+				.append(" WHERE grade = ?        ")    
+				.append("   AND course = ?       ");
+			List<Map<String, Object>> list = dao.findBySQL(sql.toString(), grade,course);
+			if(list!=null && !list.isEmpty()){
+				Map<String, Object> m = list.get(0);
+				ciId = Long.parseLong(m.get("gci_id").toString());
+			}else{
+				throw new Exception("年级["+grade+"]课程["+course+"]对应没有课件信息,请与管理员联系");
+			}
+			return ciId;
+			
 		} catch (Exception e) {
 			throw new ServiceException(e.getMessage(),e.getCause());
 		}
