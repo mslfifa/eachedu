@@ -67,6 +67,10 @@
 		<action name="answerCommentApp" class="answerCommentAppAction">
 			<interceptor-ref name="app-basic-stack"></interceptor-ref>
 		</action>
-
+	
+		<action name="pay" class="payAction">
+			<interceptor-ref name="app-basic-stack"></interceptor-ref>
+		</action>
+	
 	</package>
 </struts>

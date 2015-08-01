@@ -1,5 +1,8 @@
 package com.eachedu.pay.actions;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
 import com.eachedu.web.actions.BaseAction;
 
 /**
@@ -7,6 +10,8 @@ import com.eachedu.web.actions.BaseAction;
  * @author wzg
  *
  */
+@Controller("payAction")
+@Scope("prototype")
 public class PayAction extends BaseAction{
 
 }
