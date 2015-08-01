@@ -4735,9 +4735,9 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>bus_id</a:Code>
 <a:CreationDate>1438362367</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1438405075</a:ModificationDate>
+<a:ModificationDate>1438442103</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
-<a:Comment>根据订单类型确定关联到问题表还是课件下载表</a:Comment>
+<a:Comment>根据订单类型确定关联到问题表还是课件表</a:Comment>
 <a:DataType>integer</a:DataType>
 </o:Column>
 <o:Column Id="o255">
@@ -4818,11 +4818,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 </o:Column>
 <o:Column Id="o262">
 <a:ObjectID>7B49320C-DD9C-44F7-ADB2-56A5BA63C4FB</a:ObjectID>
-<a:Name>创建者</a:Name>
-<a:Code>create_id</a:Code>
+<a:Name>购买人</a:Name>
+<a:Code>buyer_id</a:Code>
 <a:CreationDate>1438358276</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1438358276</a:ModificationDate>
+<a:ModificationDate>1438441143</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:DataType>integer</a:DataType>
 </o:Column>
