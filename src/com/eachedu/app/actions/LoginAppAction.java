@@ -326,12 +326,15 @@ public class LoginAppAction extends BaseAction {
 			}
 			
 			Map<String,Object> data =null;
+			
+
 			//判断第三方账号对应的用户存在否，存在就登录并返回信息。
 			if(AccountType.STUDENT_TYPE.name().equals(accountType)){
 				data = studentInfoService.findBySns(qq,weixin,weibo);
+				data.put("id", data.get("si_id"));
 			}else if (AccountType.TEACHER_TYPE.name().equals(accountType)) {
 				data = teacherInfoService.findBySns(qq,weixin,weibo);
-				
+				data.put("id", data.get("ti_id"));
 			}else{
 				throw new Exception("accountType["+accountType+"]不在值域范围内，请与管理员联系!");
 			}
@@ -407,7 +410,8 @@ public class LoginAppAction extends BaseAction {
 			
 			UserVO userVO = new UserVO();
 			
-			userVO.setId((Long) data.get("id"));
+			userVO.setId(Long.parseLong(""+data.get("id")));
+			userVO.setAccountType(accountType);
 			userVO.setNickname((String) data.get("nickname"));
 			userVO.setSex((String) data.get("sex"));
 			userVO.setQq((String) data.get("qq"));
@@ -523,6 +527,24 @@ public class LoginAppAction extends BaseAction {
 			
 		} 
 		this.ajaxWriteOutJSON(result);
+	}
+	
+	public void logOut(){
+		Map<String,Object> result = new HashMap<String,Object>();
+		try {
+			ServletActionContext.getRequest().getSession().invalidate();
+			
+			result.put("http_status", true);
+			result.put("http_msg", "退出成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			result.put("http_status", false);
+			result.put("http_msg", "退出失败,原因["+e.getMessage()+"]");
+			
+		} 
+		this.ajaxWriteOutJSON(result);
+		
 	}
 
 }

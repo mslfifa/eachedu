@@ -44,7 +44,7 @@ public class CoursewareInfoServiceImpl extends BaseServiceImpl<CoursewareInfo,Lo
 			
 			sql .append(" SELECT                             ")  
 				.append("   ci.ci_id,file_id,prise           ")  
-				.append("   ,introduce,course_title          ")  
+				.append("   ,introduce,courseware_title      ")  
 				.append("   ,t_d.down_num                    ")  
 				.append(" FROM courseware_info ci            ")  
 				.append("   JOIN grade_course_info gci       ")  
@@ -61,7 +61,7 @@ public class CoursewareInfoServiceImpl extends BaseServiceImpl<CoursewareInfo,Lo
 			
 			
 			if(StringUtils.isNotEmpty(courseTitle)){
-				sql.append(" AND ci.course_title LIKE ? ") ;
+				sql.append(" AND ci.courseware_title LIKE ? ") ;
 				param.add("%"+courseTitle+"%");
 			}else{
 				if(StringUtils.isNotEmpty(grade)){

@@ -3682,10 +3682,10 @@ TableComment 0 新宋体,8,N</a:FontList>
 <o:Column Id="o176">
 <a:ObjectID>61FCF33D-1F77-45FF-874A-240C28C84AB1</a:ObjectID>
 <a:Name>课件标题</a:Name>
-<a:Code>course_title</a:Code>
+<a:Code>courseware_title</a:Code>
 <a:CreationDate>1437229110</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1437229110</a:ModificationDate>
+<a:ModificationDate>1438446928</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:DataType>varchar(256)</a:DataType>
 <a:Length>256</a:Length>

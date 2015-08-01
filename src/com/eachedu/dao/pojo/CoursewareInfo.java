@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class CoursewareInfo {
 	private Long ciId;
 	private Long gciId;
-	private String courseTitle;
+	private String coursewareTitle;
 	private String introduce;
 	//课件文件ID
 	private Integer fileId;
@@ -26,11 +26,12 @@ public class CoursewareInfo {
 	public void setGciId(Long gciId) {
 		this.gciId = gciId;
 	}
-	public String getCourseTitle() {
-		return courseTitle;
+	
+	public String getCoursewareTitle() {
+		return coursewareTitle;
 	}
-	public void setCourseTitle(String courseTitle) {
-		this.courseTitle = courseTitle;
+	public void setCoursewareTitle(String coursewareTitle) {
+		this.coursewareTitle = coursewareTitle;
 	}
 	public String getIntroduce() {
 		return introduce;

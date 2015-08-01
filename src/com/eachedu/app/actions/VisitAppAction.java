@@ -178,8 +178,8 @@ public class VisitAppAction extends BaseAction {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			log.error(e.getMessage());
-			result.put("http_status", true);
-			result.put("http_msg", "查找成功!");
+			result.put("http_status", false);
+			result.put("http_msg",  "查找失败!原因["+e.getMessage()+"]");
 		}
 		this.ajaxWriteOutJSON(result);
 	}

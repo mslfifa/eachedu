@@ -17,6 +17,7 @@ import com.eachedu.dao.BaseDao;
 import com.eachedu.dao.pojo.StudentInfo;
 import com.eachedu.exception.ServiceException;
 import com.eachedu.service.StudentInfoService;
+import com.eachedu.web.vo.PagerVO;
 @Service("studentInfoService")
 public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>implements StudentInfoService {
 	
@@ -186,6 +187,98 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 			s.setPassword(password);
 			s.setCreateTime(new Date());
 			dao.update(s);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException(e.getMessage(),e.getCause());
+		}
+	}
+
+	@Override
+	public Map<String, Object> findUserInfo(Long siId) throws ServiceException {
+		try {
+			if(siId==null){
+				throw new Exception("学生ID不能为空");
+			}
+			
+			StringBuffer userSql = new StringBuffer(300);
+			userSql .append(" SELECT si_id,nickname       ")
+					.append("   ,head_short_id            ")
+					.append("   ,sex,grade,mobile         ")
+					.append("   ,ri.ri_id,ri.remote_url   ")
+					.append(" FROM student_info si        ")
+					.append("   LEFT JOIN resource_info ri ")
+					.append("     ON si.head_short_id=ri.ri_id ")
+					.append(" WHERE si_id=?  ");
+			List users = dao.findBySQL(userSql.toString(), siId);
+			Map<String, Object> uMap = null;
+			if(users!=null && !users.isEmpty()){
+				uMap = (Map<String,Object>) users.get(0);
+			}else{
+				throw new Exception("找不到ID["+siId+"]的学生");
+			}
+			
+			
+			//查消息条数
+			StringBuffer msgSql = new StringBuffer(300);
+			msgSql .append(" SELECT                ")
+					.append("   COUNT(1) AS msg_num ")
+					.append(" FROM message_notice   ")
+					.append(" WHERE account_id = ?  ")
+					.append("   AND account_type='STUDENT_TYPE' ");
+			List<Map<String, Object>> msgs = dao.findBySQL(msgSql.toString(), siId);
+			Integer msgNum = null;
+			if(msgs!=null && !msgs.isEmpty()){
+				Map<String, Object> msgMap = msgs.get(0);
+				msgNum = Integer.parseInt(""+msgMap.get("msg_num"));
+			}
+			uMap.put("msg_num", msgNum);
+			
+			return uMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException(e.getMessage(),e.getCause());
+		}
+	}
+
+	@Override
+	public PagerVO findBuyCourseware(Long siId, Integer appPageNo, Integer appPageSize) throws ServiceException {
+		try {
+			appPageSize = appPageSize==null?10:appPageSize;
+			int appOffset = (appPageNo==null||appPageNo==0)?0:(appPageNo-1*appPageSize);
+			
+			if(siId==null){
+				throw new Exception("学生ID不能为空");
+			}
+			
+			
+			
+			StringBuffer sql = new StringBuffer();
+			sql .append(" SELECT ci_id,file_id,ci.prise          ")
+				.append("   ,courseware_title,introduce          ")
+				.append("   ,gci.grade,gci.course                ")
+				.append("   ,ri.ri_id,ri.resource_size           ")
+				.append("   ,(                                   ")
+				.append("      SELECT                            ")
+				.append("        COUNT(cd.ci_id) AS down_num     ")
+				.append("      FROM courseware_down cd           ")
+				.append("      WHERE cd.ci_id=ci.ci_id           ")
+				.append("      GROUP BY cd.ci_id                 ")
+				.append("    ) AS down_num                       ")
+				.append(" FROM courseware_info ci                ")
+				.append("   JOIN order_info oi                   ")
+				.append("     ON oi.bus_id=ci.ci_id              ")
+				.append("       AND oi.order_type='DOWNLOAD_PAY' ")
+				.append("   JOIN grade_course_info gci           ")
+				.append("     ON ci.gci_id=gci.gci_id            ")
+				.append("   JOIN resource_info ri                ")
+				.append("     ON ri.ri_id=ci.file_id             ")
+				.append(" WHERE oi.account_type='STUDENT_TYPE'   ")
+				.append("   AND oi.buyer_id = ?                  ");
+;
+			
+			PagerVO page = dao.findBySqlPage(sql.toString(), appOffset, appPageSize, siId);
+			return page;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage(),e.getCause());
