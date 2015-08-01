@@ -8,7 +8,7 @@
 			<generator class="native"/>
 		</id>
 		<property name="tiId" column="ti_id"/>
-		<property name="oiId" column="oi_id"/>
+		<property name="qiId" column="qi_id"/>
 		<property name="answerContent" column="answer_content"/>
 		<property name="picId" column="pic_id"/>
 		<property name="status" column="status"/>
