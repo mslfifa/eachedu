@@ -3836,14 +3836,15 @@ TableComment 0 新宋体,8,N</a:FontList>
 </o:Column>
 <o:Column Id="o188">
 <a:ObjectID>3186DE3D-6DC5-4AD5-BCBE-19B56F937E75</a:ObjectID>
-<a:Name>解决答复</a:Name>
+<a:Name>处理结果</a:Name>
 <a:Code>solve_result</a:Code>
 <a:CreationDate>1437229110</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1438362998</a:ModificationDate>
+<a:ModificationDate>1438404604</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
-<a:DataType>varchar(512)</a:DataType>
-<a:Length>512</a:Length>
+<a:Comment>COMPLAIN_SUCCESS : 投诉成功   COMPLAIN_FAIL : 投诉失败</a:Comment>
+<a:DataType>varchar(32)</a:DataType>
+<a:Length>32</a:Length>
 </o:Column>
 <o:Column Id="o189">
 <a:ObjectID>360EAEA2-1FEE-4CBB-94A1-86363AEA0E0B</a:ObjectID>
@@ -4734,9 +4735,10 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>bus_id</a:Code>
 <a:CreationDate>1438362367</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1438362430</a:ModificationDate>
+<a:ModificationDate>1438405075</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:Comment>根据订单类型确定关联到问题表还是课件下载表</a:Comment>
+<a:DataType>integer</a:DataType>
 </o:Column>
 <o:Column Id="o255">
 <a:ObjectID>F428E40E-CEAA-4C4B-A9B3-D4DC57DEC043</a:ObjectID>
@@ -4785,9 +4787,9 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>status</a:Code>
 <a:CreationDate>1438356597</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1438359076</a:ModificationDate>
+<a:ModificationDate>1438405081</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
-<a:Comment>TRADE_SUCCESS : 交易成功 TRADE_FAIL : 交易失败  TRADE_CLOSED : 交易关闭</a:Comment>
+<a:Comment>TRADE_APPLY:交易申请  TRADE_SUCCESS : 交易成功 TRADE_FAIL : 交易失败  TRADE_CLOSED : 交易关闭</a:Comment>
 <a:DataType>varchar(32)</a:DataType>
 <a:Length>32</a:Length>
 </o:Column>
