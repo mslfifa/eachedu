@@ -7,7 +7,8 @@
 		<id name="taId" column="ta_id">
 			<generator class="native"/>
 		</id>
-		<property name="orderId" column="order_id"/>
+		<property name="tiId" column="ti_id"/>
+		<property name="oiId" column="oi_id"/>
 		<property name="answerContent" column="answer_content"/>
 		<property name="picId" column="pic_id"/>
 		<property name="status" column="status"/>

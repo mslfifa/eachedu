@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
 import com.eachedu.dict.QuestionStatus;
 import com.eachedu.exception.ServiceException;
 import com.eachedu.service.CoursewareInfoService;
-import com.eachedu.service.QuestionOfferingService;
+import com.eachedu.service.QuestionInfoService;
 import com.eachedu.service.TeacherInfoService;
 import com.eachedu.web.actions.BaseAction;
 import com.eachedu.web.vo.PagerVO;
@@ -116,8 +116,8 @@ public class VisitAppAction extends BaseAction {
 	@Resource(name="teacherInfoService")
 	private TeacherInfoService teacherInfoService;
 	
-	@Resource(name="questionOfferingService")
-	private QuestionOfferingService questionOfferingService;
+	@Resource(name="questionInfoService")
+	private QuestionInfoService questionInfoService;
 	
 	@Resource(name="coursewareInfoService")
 	private CoursewareInfoService coursewareInfoService;
@@ -165,7 +165,7 @@ public class VisitAppAction extends BaseAction {
 	public void findTeacherRecommend(){
 		Map<String,Object> result = new HashMap<String,Object>();
 		try {
-			Long countNum = questionOfferingService.findQuestionedByStatus(QuestionStatus.SOLVED.name());
+			Long countNum = questionInfoService.findQuestionedByStatus(QuestionStatus.SOLVED.name());
 			log.debug("@@@@@ countNum:"+countNum);
 			result.put("countNum", countNum);
 			

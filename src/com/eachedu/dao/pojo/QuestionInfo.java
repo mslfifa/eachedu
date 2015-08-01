@@ -3,10 +3,9 @@ package com.eachedu.dao.pojo;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class QuestionOffering {
-	private Long orderId;
+public class QuestionInfo {
+	private Long qiId;
 	// 业务流水号
-	private String orderNo;
 	// 年级课程外键
 	private Long gciId;
 	// 学生外键
@@ -24,20 +23,15 @@ public class QuestionOffering {
 	private Date askTime;
 	private String status;
 	private String remark;
-	public Long getOrderId() {
-		return orderId;
+	
+	
+
+	public Long getQiId() {
+		return qiId;
 	}
 
-	public void setOrderId(Long orderId) {
-		this.orderId = orderId;
-	}
-
-	public String getOrderNo() {
-		return orderNo;
-	}
-
-	public void setOrderNo(String orderNo) {
-		this.orderNo = orderNo;
+	public void setQiId(Long qiId) {
+		this.qiId = qiId;
 	}
 
 	public Long getGciId() {

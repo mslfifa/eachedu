@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.eachedu.dao.pojo.OrderInfo" table="order_info">
+		<id name="orderNo" column="order_no">
+			<generator class="assigned"/>
+		</id>
+		<property name="orderType" column="order_type"/>
+		<property name="busId" column="bus_id"/>
+		<property name="orderDesc" column="order_desc"/>
+		<property name="prise" column="prise"/>
+		<property name="bonus" column="bonus"/>
+		<property name="sumMoney" column="sum_money"/>
+		<property name="status" column="status"/>
+		<property name="remark" column="remark"/>
+		<property name="accountType" column="account_type"/>
+		<property name="createId" column="create_id"/>
+		<property name="createTime" column="create_time"/>
+	</class>
+</hibernate-mapping>
+

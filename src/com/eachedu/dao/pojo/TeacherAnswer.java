@@ -4,7 +4,8 @@ import java.util.Date;
 
 public class TeacherAnswer {
 	private Long taId;
-	private Long orderId;
+	private Long tiId;
+	private Long qiId;
 	//回答文字描述
 	private String answerContent;
 	//答案图片资源ID
@@ -23,13 +24,7 @@ public class TeacherAnswer {
 	public void setTaId(Long taId) {
 		this.taId = taId;
 	}
-	
-	public Long getOrderId() {
-		return orderId;
-	}
-	public void setOrderId(Long orderId) {
-		this.orderId = orderId;
-	}
+
 	public String getAnswerContent() {
 		return answerContent;
 	}
@@ -67,5 +62,19 @@ public class TeacherAnswer {
 	public void setAssignTime(Date assignTime) {
 		this.assignTime = assignTime;
 	}
+	public Long getTiId() {
+		return tiId;
+	}
+	public void setTiId(Long tiId) {
+		this.tiId = tiId;
+	}
+	public Long getQiId() {
+		return qiId;
+	}
+	public void setQiId(Long qiId) {
+		this.qiId = qiId;
+	}
+
+	
 	
 }

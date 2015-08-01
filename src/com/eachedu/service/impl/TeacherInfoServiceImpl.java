@@ -169,65 +169,6 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 		}
 	}
 
-	/*@Override
-	public PagerVO findTeacherPage(String name, String grade, String course,
-			Integer appPageNo, Integer appPageSize) throws ServiceException {
-		try {
-			//分页默认参数
-			appPageNo=appPageNo==null?1:appPageNo;
-			appPageSize=appPageSize==null?10:appPageSize;
-			int offset=appPageNo==0?0:(appPageNo-1)*appPageSize;
-			
-			StringBuffer sql = new StringBuffer(400);
-			List param = new ArrayList();
-			
-			
-			sql .append(" SELECT ti.ti_id,authentication_type ")
-				.append("   ,school,is_certificated,name      ")
-				.append("   ,ri.remote_url,introduce          ")
-				//计算每个老师的平均评分
-				.append("   ,(SELECT ROUND(AVG(ac.score))     ")
-				.append("     FROM answer_comment ac          ")
-				.append("       JOIN teacher_answer ta        ")
-				.append("         ON ta.order_id=ac.order_id  ")
-				.append("     WHERE ta.ti_id=ti.ti_id         ")
-				.append("     GROUP BY ta.ti_id               ")
-				.append("     ) AS avg_score                  ")
-				.append(" FROM teacher_info ti JOIN           ")
-				.append(" (                                   ")
-				.append("   SELECT te.ti_id                   ")
-				.append("   FROM teacher_expert te            ")
-				.append("     JOIN grade_course_info gci      ")
-				.append("       ON te.gci_id=gci.gci_id       ")
-				.append("   WHERE 1=1                         ");
-			if(StringUtils.isNotEmpty(name)){
-				sql.append(" ti.name like ? ");
-				param.add("%"+name+"%");
-			}
-			if(StringUtils.isNotEmpty(course)){
-			     sql.append(" AND gci.course= ? ");
-				param.add(course);
-			}
-			if (StringUtils.isNotEmpty(grade)) {
-			    sql.append(" AND gci.grade= ?  ");
-				param.add(grade);
-			}	
-				
-			sql	.append("   GROUP BY te.ti_id                 ")
-				.append(" ) t_t                               ")
-				.append("     ON ti.ti_id=t_t.ti_id           ")
-				.append("   LEFT JOIN resource_info ri        ")
-				.append("     ON ti.head_short_id=ri.ri_id    ");
-				
-			
-			
-			return dao.findBySqlPage(sql.toString(), offset, appPageSize, param.toArray(new Object[0]));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new ServiceException(e.getMessage(),e.getCause());
-		}
-	}*/
 
 	@Override
 	public Map<String, Object> findTeacherRecentComment(Long tiId) throws ServiceException {
@@ -247,12 +188,12 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 							.append("    si.nickname,si.head_short_id    ")
 							.append("   ,score,ac.remark,ac.comment_time ")
 							.append(" FROM answer_comment ac             ")
-							.append("   JOIN question_offering qo        ")
-							.append("     ON ac.order_id=qo.order_id     ")
+							.append("   JOIN question_info qi        ")
+							.append("     ON ac.qi_id=qi.qi_id     ")
 							.append("   JOIN teacher_answer ta           ")
-							.append("     ON ta.order_id=ac.order_id     ")
+							.append("     ON ta.qi_id=ac.qi_id     ")
 							.append("   JOIN student_info si             ")
-							.append("     ON si.si_id=qo.si_id           ")
+							.append("     ON si.si_id=qi.si_id           ")
 							.append(" WHERE ta.ti_id=?                   ")
 							.append(" ORDER BY ac.comment_time DESC      ")
 							.append(" LIMIT 0,1                          ");
@@ -269,10 +210,10 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 			StringBuffer totalCommentSql = new StringBuffer(400);
 			totalCommentSql .append(" SELECT ta.ti_id,COUNT(1) AS comment_num ")
 							.append(" FROM answer_comment ac                  ")
-							.append("   JOIN question_offering qo             ")
-							.append("     ON ac.order_id=qo.order_id          ")
+							.append("   JOIN question_info qi             ")
+							.append("     ON ac.qi_id=qi.qi_id          ")
 							.append("   JOIN teacher_answer ta                ")
-							.append("     ON ta.order_id=ac.order_id          ")
+							.append("     ON ta.qi_id=ac.qi_id          ")
 							.append(" WHERE ta.ti_id=?                        ");
 			
 			List<Map<String, Object>> totalCommentList = dao.findBySQL(totalCommentSql.toString(), tiId);
@@ -422,12 +363,12 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 				.append("   ,ac.remark,comment_time       ")
 				.append("   ,si.nickname,si.head_short_id ")
 				.append(" FROM answer_comment ac          ")
-				.append("   JOIN question_offering qo     ")
-				.append("     ON ac.order_id=qo.order_id  ")
+				.append("   JOIN question_info qi     ")
+				.append("     ON ac.qi_id=qi.qi_id  ")
 				.append("   JOIN student_info si          ")
-				.append("     ON si.si_id=qo.si_id        ")
+				.append("     ON si.si_id=qi.si_id        ")
 				.append("   JOIN teacher_answer ta        ")
-				.append("     ON ta.order_id=qo.order_id  ")
+				.append("     ON ta.qi_id=qi.qi_id  ")
 				.append(" WHERE ta.ti_id = ?              ")
 				.append(" ORDER BY ac.comment_time DESC   ");
 

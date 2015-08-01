@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class AnswerComment {
 	private Long acId;
-	private Long orderId;
+	private Long qiId;
 	//打分
 	private Integer score;
 	//评语
@@ -18,11 +18,13 @@ public class AnswerComment {
 	public void setAcId(Long acId) {
 		this.acId = acId;
 	}
-	public Long getOrderId() {
-		return orderId;
+	
+	
+	public Long getQiId() {
+		return qiId;
 	}
-	public void setOrderId(Long orderId) {
-		this.orderId = orderId;
+	public void setQiId(Long qiId) {
+		this.qiId = qiId;
 	}
 	public Integer getScore() {
 		return score;

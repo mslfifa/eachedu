@@ -5,11 +5,11 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-import com.eachedu.dao.pojo.QuestionOffering;
+import com.eachedu.dao.pojo.QuestionInfo;
 import com.eachedu.exception.ServiceException;
 import com.eachedu.web.vo.PagerVO;
 
-public interface QuestionOfferingService extends BaseService<QuestionOffering, Long> {
+public interface QuestionInfoService extends BaseService<QuestionInfo, Long> {
 	/**
 	 * 查找指定状态的问题总数
 	 * @param status

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 
 import com.eachedu.exception.ServiceException;
 import com.eachedu.service.CoursewareInfoService;
-import com.eachedu.service.QuestionOfferingService;
+import com.eachedu.service.QuestionInfoService;
 import com.eachedu.service.ResourceInfoService;
 import com.eachedu.service.TeacherInfoService;
 import com.eachedu.utils.ConstUtils;
@@ -205,8 +205,8 @@ public class QuestionAppAction extends BaseAction {
 
 
 
-	@Resource(name="questionOfferingService")
-	private QuestionOfferingService questionOfferingService;
+	@Resource(name="questionInfoService")
+	private QuestionInfoService questionInfoService;
 	
 	@Resource(name="teacherInfoService")
 	private TeacherInfoService teacherInfoService;
@@ -222,7 +222,7 @@ public class QuestionAppAction extends BaseAction {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		try {
-			PagerVO page = questionOfferingService.findQuestionPageByStudent(siId, pageNo, pageSize);
+			PagerVO page = questionInfoService.findQuestionPageByStudent(siId, pageNo, pageSize);
 			result.put("data", page.getDatas());
 			result.put("http_status", true);
 			result.put("http_msg", "查找成功!");
@@ -243,7 +243,7 @@ public class QuestionAppAction extends BaseAction {
 	public void findQuetionByOrderNo(){
 		Map<String,Object> result = new HashMap<String,Object>();
 		try {
-			List<Map<String, Object>> list = questionOfferingService.findQuetionByOrderNo(orderNo);
+			List<Map<String, Object>> list = questionInfoService.findQuetionByOrderNo(orderNo);
 			
 			result.put("data", list);
 			result.put("http_status", true);
@@ -267,7 +267,7 @@ public class QuestionAppAction extends BaseAction {
 		try {
 			UserVO userVO =  (UserVO) ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.USER_LOGIN);
 			Long siId = userVO.getId();
-			Map data = questionOfferingService.saveAsk(siId,askMobile,grade,course,communicateWay,questionDesc,askPic,askPicFileName,askPicContentType,askPicCaption, tiId, prise, bonus);
+			Map data = questionInfoService.saveAsk(siId,askMobile,grade,course,communicateWay,questionDesc,askPic,askPicFileName,askPicContentType,askPicCaption, tiId, prise, bonus);
 			result.put("data", data);
 			result.put("http_status", true);
 			result.put("http_msg", "提问成功!");
