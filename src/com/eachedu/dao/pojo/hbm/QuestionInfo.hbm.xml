@@ -12,7 +12,7 @@
 		<property name="communicateWay" column="communicate_way"/>
 		<property name="questionDesc" column="question_desc"/>
 		<property name="picId" column="pic_id"/>
-		<property name="askMobile" column="ask_mobile"/>
+		<property name="mobile" column="mobile"/>
 		<property name="askTime" column="ask_time"/>
 		<property name="status" column="status"/>
 		<property name="remark" column="remark"/>

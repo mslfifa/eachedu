@@ -27,7 +27,7 @@ public class AnswerCommentServiceImpl extends BaseServiceImpl<AnswerComment, Lon
 	@Override
 	public Long addComment(Long qiId, Integer score, String remark) throws ServiceException {
 		try {
-			log.debug("@@@@@ para-> oiId:"+qiId+"|score:"+score+"|remark:"+remark);
+			log.debug("@@@@@ para-> qiId:"+qiId+"|score:"+score+"|remark:"+remark);
 			if(qiId==null){
 				throw new Exception("订单号不能为空");
 			}
@@ -38,7 +38,7 @@ public class AnswerCommentServiceImpl extends BaseServiceImpl<AnswerComment, Lon
 				throw new Exception("评分只能在[1-5]范围内");
 			}
 			
-			String hql = "from AnswerComment where oiId = ? ";
+			String hql = "from AnswerComment where qiId = ? ";
 			List list = dao.findByHql(hql, qiId);
 			// 如果以前评论过就出错
 			if(list!=null && !list.isEmpty()){

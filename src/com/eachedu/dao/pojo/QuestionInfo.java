@@ -14,7 +14,7 @@ public class QuestionInfo {
 	private String questionDesc;
 	private Long picId;
 	//提问手机
-	private String askMobile;
+	private String mobile;
 	// 价格
 	private BigDecimal prise;
 	// 追加赏金
@@ -114,12 +114,12 @@ public class QuestionInfo {
 		this.remark = remark;
 	}
 
-	public String getAskMobile() {
-		return askMobile;
+	public String getMobile() {
+		return mobile;
 	}
 
-	public void setAskMobile(String askMobile) {
-		this.askMobile = askMobile;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
-	
+
 }

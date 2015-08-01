@@ -34,7 +34,7 @@ public class LoginAppInterceptor extends AbstractInterceptor {
 		if(currentUser == null){
 			Map<String,Object> result = new HashMap<String,Object>();
 			result.put("http_status", false);
-			result.put("http_msg", "APP没有正常登录!");
+			result.put("http_msg", "APP没有正常登录或登录已失效,请重新登录!");
 			HttpServletResponse response = ServletActionContext.getResponse();
 			response.setCharacterEncoding("UTF-8");
 			//设置json响应头

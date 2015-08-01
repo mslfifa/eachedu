@@ -4,7 +4,7 @@
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	<class name="com.eachedu.dao.pojo.GradeCourseInfo" table="grade_course_info">
-		<id name="gci_id" column="gci_id">
+		<id name="gciId" column="gci_id">
 			<generator class="native"/>
 		</id>
 		<property name="grade" column="grade"/>

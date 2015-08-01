@@ -2,7 +2,6 @@ package com.eachedu.service;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
 
 import com.eachedu.dao.pojo.QuestionInfo;
@@ -34,13 +33,13 @@ public interface QuestionInfoService extends BaseService<QuestionInfo, Long> {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public List<Map<String,Object>> findQuetionByOrderNo(String orderNo) throws ServiceException;
+	public Map<String, Object> findQuetionByOrderNo(String orderNo) throws ServiceException;
 
 	
 	/**
 	 * 事务管理问题信息与问题图片资源的保存
 	 * @param siId 当前提问的学生ID
-	 * @param askMobile 提问手机
+	 * @param mobile 提问手机
 	 * @param grade 年级
 	 * @param course 课程
 	 * @param communicateWay 沟通方式
@@ -55,7 +54,7 @@ public interface QuestionInfoService extends BaseService<QuestionInfo, Long> {
 	 * @return TODO
 	 * @throws ServiceException TODO
 	 */
-	public Map<String, Object> saveAsk(Long siId, String askMobile, String grade, String course, String communicateWay,
+	public Map<String, Object> saveAsk(Long siId, String mobile, String grade, String course, String communicateWay,
 			String questionDesc, File askPic, String askPicFileName, String askPicContentType, String askPicCaption, Long tiId, BigDecimal prise, BigDecimal bonus) throws ServiceException;
 	
 	

@@ -39,7 +39,7 @@ public class QuestionAppAction extends BaseAction {
 	private String orderNo;
 	
 	private Long tiId;
-	private String askMobile;
+	private String mobile;
 	private String grade;
 	private String course;
 	private String questionDesc;
@@ -145,12 +145,12 @@ public class QuestionAppAction extends BaseAction {
 		this.tiId = tiId;
 	}
 
-	public String getAskMobile() {
-		return askMobile;
+	public String getMobile() {
+		return mobile;
 	}
 
-	public void setAskMobile(String askMobile) {
-		this.askMobile = askMobile;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
 	public String getGrade() {
@@ -243,9 +243,9 @@ public class QuestionAppAction extends BaseAction {
 	public void findQuetionByOrderNo(){
 		Map<String,Object> result = new HashMap<String,Object>();
 		try {
-			List<Map<String, Object>> list = questionInfoService.findQuetionByOrderNo(orderNo);
+			Map<String, Object> data = questionInfoService.findQuetionByOrderNo(orderNo);
 			
-			result.put("data", list);
+			result.put("data", data);
 			result.put("http_status", true);
 			result.put("http_msg", "查找成功!");
 		} catch (ServiceException e) {
@@ -267,7 +267,7 @@ public class QuestionAppAction extends BaseAction {
 		try {
 			UserVO userVO =  (UserVO) ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.USER_LOGIN);
 			Long siId = userVO.getId();
-			Map data = questionInfoService.saveAsk(siId,askMobile,grade,course,communicateWay,questionDesc,askPic,askPicFileName,askPicContentType,askPicCaption, tiId, prise, bonus);
+			Map data = questionInfoService.saveAsk(siId,mobile,grade,course,communicateWay,questionDesc,askPic,askPicFileName,askPicContentType,askPicCaption, tiId, prise, bonus);
 			result.put("data", data);
 			result.put("http_status", true);
 			result.put("http_msg", "提问成功!");

@@ -25,6 +25,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<input type="radio" name="communicateWay" value="<%=CommunicateWay.PIC_TEXT_TYPE.name() %>">图文方式&nbsp;
 		<input type="radio" name="communicateWay" value="<%=CommunicateWay.PHONE_TYPE.name() %>">电话方式<br/>
 		
+		手机号:<input type="text" name="mobile" value=""><br/>
+		
 		问题图片:<input type="file" name="askPic" value=""><br/>
 	
 		年级:

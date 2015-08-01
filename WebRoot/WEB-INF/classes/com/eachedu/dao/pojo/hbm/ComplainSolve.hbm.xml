@@ -7,14 +7,12 @@
 		<id name="csId" column="cs_id">
 			<generator class="native"/>
 		</id>
-		<property name="orderId" column="order_id"/>
+		<property name="qiId" column="qi_id"/>
 		<property name="complainType" column="complain_type"/>
 		<property name="complainContext" column="complain_context"/>
 		<property name="complanStatus" column="complan_status"/>
 		<property name="complanTime" column="complan_time"/>
+		<property name="solve_result" column="solve_result"/>
 		<property name="solveTime" column="solve_time"/>
-		<property name="solveContent" column="solve_content"/>
-		<property name="score" column="score"/>
-		<property name="evaluationContent" column="evaluation_content"/>
 	</class>
 </hibernate-mapping>

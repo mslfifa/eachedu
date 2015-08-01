@@ -34,6 +34,7 @@ import com.eachedu.dict.CommunicateWay;
 import com.eachedu.dict.OrderStatus;
 import com.eachedu.dict.OrderType;
 import com.eachedu.dict.QuestionStatus;
+import com.eachedu.dict.ResourceType;
 import com.eachedu.exception.ServiceException;
 import com.eachedu.service.QuestionInfoService;
 import com.eachedu.utils.GenerateStrUtils;
@@ -102,13 +103,22 @@ public class QuestionInfoServiceImpl extends BaseServiceImpl<QuestionInfo, Long>
 			pageSize = pageSize==null?20:pageSize;
 			log.debug("@@@@ offset:"+offset+"|pagesize:"+pageSize+"|siId:"+siId);
 			StringBuffer sql = new StringBuffer();
-			sql .append(" SELECT qi.qi_id,order_no      ")
+			sql .append(" SELECT qi.qi_id,order_no         ")
 				.append("   ,qi.question_desc,qi.pic_id    ")
 				.append("   ,qi.prise,gci.grade,gci.course ")
 				.append("   ,ti.ti_id,ti.name,ti.school    ")
 				.append("   ,ti.head_short_id              ")
-				.append(" FROM question_info qi        ")
+				.append(" FROM question_info qi            ")
 				.append("   JOIN grade_course_info gci     ")
+				.append("     ON qi.gci_id=gci.gci_id      ")
+				
+				.append("   JOIN(                          ")
+				.append("	  SELECT ori.*                 ")
+				.append("	  FROM order_info oi           ")
+				.append("	  WHERE oi.order_type='ASK_PAY' ")
+				.append("	) o                            ")
+				.append("	  ON o.bus_id=qi.qi_id         ")
+				.append("   JOIN                           ")
 				.append("     ON qi.gci_id=gci.gci_id      ")
 				.append("   LEFT JOIN teacher_answer ta    ")
 				.append("     ON qi.qi_id=ta.qi_id   ")
@@ -128,30 +138,99 @@ public class QuestionInfoServiceImpl extends BaseServiceImpl<QuestionInfo, Long>
 	}
 
 	@Override
-	public List<Map<String, Object>> findQuetionByOrderNo(String orderNo) throws ServiceException {
+	public Map<String, Object> findQuetionByOrderNo(String orderNo) throws ServiceException {
 		
 		try {
 			log.debug("#### orderNo:"+orderNo);
-			StringBuffer sql = new StringBuffer(400);
-			sql .append(" SELECT qi.qi_id,qi.order_no           ")
-				.append("   ,qi.question_desc,qi.prise,qi.bonus ")
-				.append("   ,qi.pic_id AS question_pic_id       ")
-				.append("   ,gci.course,gci.grade               ")
-				.append("   ,ti.ti_id,ti.name                   ")
-				.append("   ,ti.school,ti.head_short_id         ")
-				.append("   ,ta.pic_id AS answer_pic_id         ")
-				.append("   ,ta.`answer_content`                ")
-				.append(" FROM question_info qi                 ")
-				.append("   JOIN grade_course_info gci          ")
-				.append("     ON qi.gci_id=gci.gci_id           ")
-				.append("   LEFT JOIN teacher_answer ta         ")
-				.append("     ON qi.qi_id=ta.qi_id        ")
-				.append("   LEFT JOIN teacher_info ti           ")
-				.append("     ON ta.ti_id=ti.ti_id              ")
-				.append(" WHERE qi.order_no = ?                 ")
-			    .append(" ORDER BY ta.answer_time desc          ");
 			
-			return dao.findBySQL(sql.toString(), orderNo);
+			Map<String,Object> result = new HashMap<String,Object>();
+			
+			if(StringUtils.isEmpty(orderNo)){
+				throw new Exception("订单号不能为空!");
+			}
+			
+			StringBuffer sql = new StringBuffer(400);
+			sql .append(" SELECT qi.communicate_way           ")  
+				.append("   ,qi.question_desc,qi.pic_id as question_pic_id ")  
+				.append("   ,o.order_no,o.prise,o.bonus       ")  
+				.append("   ,gci.grade,gci.course             ")  
+				.append(" FROM question_info qi               ")  
+				.append("   JOIN grade_course_info gci        ")  
+				.append("     ON qi.gci_id=gci.gci_id         ")  
+				.append("   JOIN                              ")  
+				.append("     (                               ")  
+				.append("       SELECT oi.*                   ")  
+				.append("       FROM order_info oi            ")  
+				.append("       WHERE oi.order_type='ASK_PAY' ")  
+				.append("     ) o                             ")  
+				.append("     ON qi.qi_id=o.bus_id            ")  
+				.append(" WHERE o.order_no=?                  ");  
+;
+			
+			List<Map<String, Object>> list = dao.findBySQL(sql.toString(), orderNo);
+			Map<String,Object> orderMap = null;
+			if(list!=null && !list.isEmpty()){
+				orderMap = list.get(0);
+			}
+			
+			result.put("order_info", orderMap);
+			
+			StringBuffer teacherSql = new StringBuffer(500);
+			
+			teacherSql  .append(" SELECT o.order_no                   ") 
+						.append("   ,ti.ti_id,ti.name                 ") 
+						.append("   ,ti.sex,ti.school                 ") 
+						.append("   ,ri.remote_url                    ") 
+						.append("   ,ta.pic_id AS answer_pic_id       ") 
+						.append(" FROM `teacher_info` ti              ") 
+						.append("   JOIN `teacher_answer` ta          ") 
+						.append("     ON ti.ti_id=ta.ti_id            ") 
+						.append("   JOIN `question_info` qi           ") 
+						.append("     ON qi.qi_id=ta.qi_id            ") 
+						.append("   JOIN                              ") 
+						.append("    (                                ") 
+						.append("       SELECT oi.*                   ") 
+						.append("       FROM order_info oi            ") 
+						.append("       WHERE oi.order_type='ASK_PAY' ") 
+						.append("     ) o                             ") 
+						.append("     ON o.bus_id=qi.qi_id            ") 
+						.append("    LEFT JOIN `resource_info` ri     ") 
+						.append("      ON ri.ri_id=ti.head_short_id   ") 
+						.append(" WHERE o.order_no=?                  ");
+			List<Map<String, Object>> tList = dao.findBySQL(teacherSql.toString(),orderNo);
+			
+			Map<String,Object> tMap = null;
+			if(tList!=null && !tList.isEmpty()){
+				tMap = tList.get(0);
+				Long tiId = Long.parseLong(tMap.get("ti_id").toString());
+				if(tiId!=null){
+					StringBuffer scoreSql = new StringBuffer(500);
+					scoreSql.append(" SELECT ta.ti_id                ")
+							.append("   ,ROUND(AVG(score)) as avg_score ")
+							.append(" FROM answer_comment ac       ")
+							.append("   JOIN question_info qi      ")
+							.append("     ON ac.qi_id=qi.qi_id     ")
+							.append("   JOIN teacher_answer ta     ")
+							.append("     ON ta.qi_id=qi.qi_id     ")
+							.append(" WHERE ta.ti_id=?           ")
+							.append(" GROUP BY ta.ti_id            ");
+
+					List<Map<String, Object>> sList = dao.findBySQL(scoreSql.toString(), tiId);
+					if(sList!=null && !sList.isEmpty()){
+						Map<String, Object> sMap = sList.get(0);
+						//老师评分  答案评分的平均分4舍5入
+						tMap.put("score", sMap.get("avg_score")); 
+					}
+					
+				}
+				
+			}
+			
+			//老师信息
+			result.put("teacher_info", tMap);
+			
+			
+			return result;
 		} catch (Exception e) {
 			
 			e.printStackTrace();
@@ -162,12 +241,12 @@ public class QuestionInfoServiceImpl extends BaseServiceImpl<QuestionInfo, Long>
 	}
 
 	@Override
-	public Map<String, Object> saveAsk(Long siId, String askMobile, String grade, String course, String communicateWay,
+	public Map<String, Object> saveAsk(Long siId, String mobile, String grade, String course, String communicateWay,
 			String questionDesc, File askPic, String askPicFileName, String askPicContentType, String askPicCaption, Long tiId, BigDecimal prise, BigDecimal bonus) throws ServiceException {
 		try {
 			Map<String,Object> result = new HashMap<String,Object>();
 			
-			log.debug("#### para askMobile:"+askMobile+"|grade:"+grade+"|course:"+course+"|communicateWay:"+communicateWay
+			log.debug("#### para askMobile:"+mobile+"|grade:"+grade+"|course:"+course+"|communicateWay:"+communicateWay
 					+"|questionDesc:"+"|askPic:"+askPic+"|askPicFileName:"+askPicFileName+"|askPicContentType:"+askPicContentType
 					+ "|askPicCaption:"+askPicCaption+"|tiId:"+tiId);
 			if(siId==null){
@@ -208,7 +287,11 @@ public class QuestionInfoServiceImpl extends BaseServiceImpl<QuestionInfo, Long>
 			}
 			
 			String relativeDir =PropUtils.get("dir_question_pic");
-			String resourceRealName = UUID.randomUUID().toString()+askPicFileName.substring(askPicFileName.indexOf("."), askPicFileName.length());
+			String resourceRealName = UUID.randomUUID().toString();
+			if(askPicFileName.lastIndexOf(".")!=-1);{
+				resourceRealName+=askPicFileName.substring(askPicFileName.lastIndexOf("."), askPicFileName.length());
+			}
+			
 			
 			//写文件
 			String filePath = PropUtils.get("dir_upload_root")+"/"+relativeDir+"/"+resourceRealName;
@@ -227,7 +310,7 @@ public class QuestionInfoServiceImpl extends BaseServiceImpl<QuestionInfo, Long>
 			r.setResourceSize(fis.available());
 			
 			r.setRelativeDir(relativeDir);
-			
+			r.setResourceType(ResourceType.ANSWER_PIC_TYPE.name());
 			r.setContentType(askPicContentType);
 			
 			askPicFileName = StringUtils.isEmpty(askPicFileName)?askPic.getName():askPicFileName;
@@ -242,7 +325,7 @@ public class QuestionInfoServiceImpl extends BaseServiceImpl<QuestionInfo, Long>
 			
 			QuestionInfo q = new QuestionInfo();
 			q.setSiId(siId);
-			q.setAskMobile(askMobile);
+			q.setMobile(mobile);
 			q.setAskTime(new Date());
 			q.setBonus(bonus);
 			q.setCommunicateWay(communicateWay);
