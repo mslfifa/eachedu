@@ -362,7 +362,7 @@ public class QuestionInfoServiceImpl extends BaseServiceImpl<QuestionInfo, Long>
 			o.setStatus(OrderStatus.TRADE_APPLY.name());
 			o.setBusId(q.getQiId());
 			o.setAccountType(AccountType.STUDENT_TYPE.name());
-			o.setCreateId(siId);
+			o.setBuyerId(siId);
 			o.setCreateTime(new Date());
 			//新增订单对象
 			orderInfoDao.save(o );

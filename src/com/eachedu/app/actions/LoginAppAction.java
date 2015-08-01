@@ -405,6 +405,20 @@ public class LoginAppAction extends BaseAction {
 			}
 			
 			
+			UserVO userVO = new UserVO();
+			
+			userVO.setId((Long) data.get("id"));
+			userVO.setNickname((String) data.get("nickname"));
+			userVO.setSex((String) data.get("sex"));
+			userVO.setQq((String) data.get("qq"));
+			userVO.setWeibo((String) data.get("weibo"));
+			userVO.setWeixin((String) data.get("weixin"));
+			userVO.setRemoteUrl((String) data.get("remote_url"));
+			userVO.setMobile((String) data.get("mobile"));
+			//设置用户到会话中
+			ServletActionContext.getRequest().getSession().setAttribute(ConstUtils.USER_LOGIN,userVO);
+			
+			
 			result.put("data", data);
 			result.put("http_status", true);
 			result.put("http_msg", "注册成功!");

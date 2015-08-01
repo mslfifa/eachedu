@@ -19,7 +19,7 @@ public class OrderInfo {
 	private String remark;
 	//识别账号所属类型  OPER_TYPE:运营账号 STUDENT_TYPE:学生账号  TEACHER_TYPE:老师账号
 	private String accountType;
-	private Long createId;
+	private Long buyerId;
 	private Date createTime;
 	public String getOrderNo() {
 		return orderNo;
@@ -81,11 +81,12 @@ public class OrderInfo {
 	public void setAccountType(String accountType) {
 		this.accountType = accountType;
 	}
-	public Long getCreateId() {
-		return createId;
+	
+	public Long getBuyerId() {
+		return buyerId;
 	}
-	public void setCreateId(Long createId) {
-		this.createId = createId;
+	public void setBuyerId(Long buyerId) {
+		this.buyerId = buyerId;
 	}
 	public Date getCreateTime() {
 		return createTime;

@@ -68,6 +68,10 @@
 			<interceptor-ref name="app-basic-stack"></interceptor-ref>
 		</action>
 	
+		<action name="orderInfoApp" class="orderInfoAction">
+			<interceptor-ref name="app-basic-stack"></interceptor-ref>
+		</action>
+		
 		<action name="pay" class="payAction">
 			<interceptor-ref name="app-basic-stack"></interceptor-ref>
 		</action>

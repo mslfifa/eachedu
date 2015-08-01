@@ -16,7 +16,7 @@
 		<property name="status" column="status"/>
 		<property name="remark" column="remark"/>
 		<property name="accountType" column="account_type"/>
-		<property name="createId" column="create_id"/>
+		<property name="buyerId" column="buyer_id"/>
 		<property name="createTime" column="create_time"/>
 	</class>
 </hibernate-mapping>
