@@ -1,10 +1,15 @@
 package com.eachedu.dict;
 
+/**
+ * 表示投诉处理的阶段
+ * @author Administrator
+ *
+ */
 public enum ComplainStatus {
-	//起诉  
+	//学生起诉  
 	CHARGE,
-	//投诉成立
-	JUDGE_SUCCESS,
-	//投诉不成立
-	JUDGE_FAIL
+	//运营人员处理中
+	PROCESSING,
+	//运营处理结束
+	PROCESSED
 }

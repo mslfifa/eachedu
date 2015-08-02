@@ -1,27 +1,38 @@
 package com.eachedu.service.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.eachedu.dao.BaseDao;
+import com.eachedu.dao.ResourceInfoDao;
+import com.eachedu.dao.pojo.ResourceInfo;
 import com.eachedu.dao.pojo.StudentInfo;
+import com.eachedu.dict.ResourceType;
 import com.eachedu.exception.ServiceException;
 import com.eachedu.service.StudentInfoService;
+import com.eachedu.utils.PropUtils;
 import com.eachedu.web.vo.PagerVO;
 @Service("studentInfoService")
 public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>implements StudentInfoService {
 	
 	private static final Logger log = LoggerFactory.getLogger(StudentInfoServiceImpl.class);
+	
+	@Resource(name="resourceInfoDao")
+	private ResourceInfoDao resourceInfoDao;
 	
 	@Resource(name="studentInfoDao")
 	@Override
@@ -298,6 +309,113 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 			flag = (list!=null && !list.isEmpty());
 			log.debug("$$$$ exist by mobile["+mobile+"]:"+flag);
 			return flag;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException(e.getMessage(),e.getCause());
+		}
+	}
+
+	@Override
+	public boolean updateStudent(Long siId, File headShortPic, String headShortPicFileName,
+			String headShortPicContentType, String headShortPicCaption, String nickname, String sex, String grade,
+			String qq, String weixin, String weibo, Boolean qqEmpty, Boolean weixinEmpty, Boolean weiboEmpty) throws ServiceException {
+		try {
+			
+			log.debug("$$$$ para -> siId:"+siId+"|headShortPic:"+headShortPic+"|headShortPicFileName:"+headShortPicFileName+"|headShortPicContentType:"+headShortPicContentType
+					+"|headShortPicCaption:"+headShortPicCaption+"|nickname:"+nickname+"|sex:"+sex+"|grade:"+grade+"|qq:"+qq+"|weixin:"+weixin+"|qqEmpty:"+qqEmpty
+					+"|weixinEmpty:"+weixinEmpty+"|weiboEmpty:"+weiboEmpty);
+			
+			if(siId==null){
+				throw new Exception("学生ID不能为空!");
+			}
+			
+			Long newRiId = null;
+			
+			if(headShortPic!=null){
+				String relativeDir =PropUtils.get("dir_head_short_pic");
+				String resourceRealName = UUID.randomUUID().toString();
+				//如果有后缀名，追加到新文件名后
+				if(headShortPicFileName.lastIndexOf(".")!=-1);{
+					resourceRealName+=headShortPicFileName.substring(headShortPicFileName.lastIndexOf("."), headShortPicFileName.length());
+				}
+				
+				
+				//写文件
+				String filePath = PropUtils.get("dir_upload_root")+"/"+relativeDir+"/"+resourceRealName;
+				File file = new File(filePath);
+				if(!file.getParentFile().exists()){
+					boolean f = file.getParentFile().mkdirs();
+					log.debug("### 目录生成:"+f+" |path:"+file.getParentFile().getPath());
+				}
+				FileUtils.copyFile(headShortPic, file);
+				log.info("@@@@ 写文件成功");
+				
+				
+				//保存资源
+				ResourceInfo r = new ResourceInfo();
+				FileInputStream fis = new FileInputStream(headShortPic);
+				r.setResourceSize(fis.available());
+				
+				r.setRelativeDir(relativeDir);
+				r.setResourceType(ResourceType.HEAD_SHORT_TYPE.name());
+				r.setContentType(headShortPicContentType);
+				
+				headShortPicFileName = StringUtils.isEmpty(headShortPicFileName)?headShortPic.getName():headShortPicFileName;
+				r.setResouceOriginName(headShortPicFileName);
+				
+				log.debug("@@@@ resourceRealName:"+resourceRealName);
+				r.setResourceRealName(resourceRealName);
+				r.setCreateTime(new Date());
+				//保存资源信息 
+				resourceInfoDao.save(r);
+				
+				newRiId = r.getRiId();
+				log.debug("$$$$ 保存资源对象成功");
+			}
+			
+			
+			
+			
+			StudentInfo student = dao.get(siId);
+			//如果保存资源成功后
+			if(newRiId!=null){
+				student.setHeadShortId(newRiId);
+			}
+			
+			if(StringUtils.isNotEmpty(sex)){
+				student.setSex(sex);
+			}
+			
+			if(StringUtils.isNotEmpty(nickname)){
+				student.setNickname(nickname);
+			}
+			
+			if (StringUtils.isNotEmpty(grade)) {
+				student.setGrade(grade);
+			}
+			
+			
+			if(qqEmpty){
+				student.setQq(null);
+			}else if(StringUtils.isNotEmpty(qq)){
+				student.setQq(qq);
+			}
+			
+			if(weiboEmpty){
+				student.setWeibo(null);
+			}else if (StringUtils.isNotEmpty(weibo)) {
+				student.setWeibo(weibo);
+			}
+			
+			if (weixinEmpty) {
+				student.setWeixin(null);
+			}else if (StringUtils.isNotEmpty(weixin)) {
+				student.setWeixin(weixin);
+			}
+			dao.update(student);
+			log.info("#### 修改学生成功!");
+			
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage(),e.getCause());

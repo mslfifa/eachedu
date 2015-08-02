@@ -1771,9 +1771,9 @@ CARD 0 新宋体,8,N</a:FontList>
 </o:ReferenceSymbol>
 <o:ReferenceSymbol Id="o31">
 <a:CreationDate>1437399630</a:CreationDate>
-<a:ModificationDate>1437399630</a:ModificationDate>
-<a:Rect>((-2296,-27143), (3704,-5363))</a:Rect>
-<a:ListOfPoints>((263,-27143),(1197,-5363))</a:ListOfPoints>
+<a:ModificationDate>1438527095</a:ModificationDate>
+<a:Rect>((-2301,-23168), (3699,-5363))</a:Rect>
+<a:ListOfPoints>((263,-23168),(1197,-5363))</a:ListOfPoints>
 <a:ArrowStyle>1</a:ArrowStyle>
 <a:LineColor>12615680</a:LineColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -2081,8 +2081,8 @@ TableComment 0 新宋体,8,N</a:FontList>
 </o:TableSymbol>
 <o:TableSymbol Id="o32">
 <a:CreationDate>1437229110</a:CreationDate>
-<a:ModificationDate>1438224850</a:ModificationDate>
-<a:Rect>((-4224,-31482), (6694,-23108))</a:Rect>
+<a:ModificationDate>1438527095</a:ModificationDate>
+<a:Rect>((-4224,-27507), (6694,-19133))</a:Rect>
 <a:LineColor>12615680</a:LineColor>
 <a:FillColor>16570034</a:FillColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -2265,8 +2265,8 @@ TableComment 0 新宋体,8,N</a:FontList>
 </o:TableSymbol>
 <o:TableSymbol Id="o65">
 <a:CreationDate>1437498692</a:CreationDate>
-<a:ModificationDate>1437499345</a:ModificationDate>
-<a:Rect>((-42921,-15100), (-32003,-5076))</a:Rect>
+<a:ModificationDate>1438525360</a:ModificationDate>
+<a:Rect>((-45771,-10000), (-34853,24))</a:Rect>
 <a:LineColor>12615680</a:LineColor>
 <a:FillColor>16570034</a:FillColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -3682,10 +3682,10 @@ TableComment 0 新宋体,8,N</a:FontList>
 <o:Column Id="o176">
 <a:ObjectID>61FCF33D-1F77-45FF-874A-240C28C84AB1</a:ObjectID>
 <a:Name>课件标题</a:Name>
-<a:Code>course_title</a:Code>
+<a:Code>courseware_title</a:Code>
 <a:CreationDate>1437229110</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1437229110</a:ModificationDate>
+<a:ModificationDate>1438446928</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:DataType>varchar(256)</a:DataType>
 <a:Length>256</a:Length>
@@ -3782,10 +3782,10 @@ TableComment 0 新宋体,8,N</a:FontList>
 <o:Column Id="o183">
 <a:ObjectID>D60C7CBA-9909-47D6-9DA4-C06CF606035E</a:ObjectID>
 <a:Name>订单ID</a:Name>
-<a:Code>order_id</a:Code>
+<a:Code>qi_id</a:Code>
 <a:CreationDate>1437399630</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1437399630</a:ModificationDate>
+<a:ModificationDate>1438524181</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
 <a:DataType>integer</a:DataType>
 </o:Column>
@@ -3818,9 +3818,9 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>complan_status</a:Code>
 <a:CreationDate>1437229110</a:CreationDate>
 <a:Creator>Administrator</a:Creator>
-<a:ModificationDate>1437794950</a:ModificationDate>
+<a:ModificationDate>1438522131</a:ModificationDate>
 <a:Modifier>Administrator</a:Modifier>
-<a:Comment>CHARGE:起诉  JUDGE_SUCCESS:投诉成立 JUDGE_FAIL:投诉不成立</a:Comment>
+<a:Comment>CHARGE:学生起诉 PROCESSING:运营人员处理中  PROCESSED:运营处理结束</a:Comment>
 <a:DataType>varchar(32)</a:DataType>
 <a:Length>32</a:Length>
 </o:Column>

@@ -5,12 +5,15 @@ import java.util.Date;
 public class ComplainSolve {
 	private Long csId;
 	private Long qiId;
+	//投诉方式
 	private String complainType;
 	private String complainContext;
+	//投诉状态  生命周期阶段
 	private String complanStatus;
 	private Date complanTime;
 	private Date solveTime;
-	private String solve_result;
+	//投诉处理结果
+	private String solveResult;
 
 	public Long getCsId() {
 		return csId;
@@ -28,12 +31,13 @@ public class ComplainSolve {
 		this.qiId = qiId;
 	}
 
-	public String getSolve_result() {
-		return solve_result;
+	
+	public String getSolveResult() {
+		return solveResult;
 	}
 
-	public void setSolve_result(String solve_result) {
-		this.solve_result = solve_result;
+	public void setSolveResult(String solveResult) {
+		this.solveResult = solveResult;
 	}
 
 	public String getComplainType() {

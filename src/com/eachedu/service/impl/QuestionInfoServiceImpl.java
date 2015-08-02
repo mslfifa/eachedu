@@ -184,10 +184,10 @@ public class QuestionInfoServiceImpl extends BaseServiceImpl<QuestionInfo, Long>
 						.append("   ,ti.sex,ti.school                 ") 
 						.append("   ,ri.remote_url                    ") 
 						.append("   ,ta.pic_id AS answer_pic_id       ") 
-						.append(" FROM `teacher_info` ti              ") 
-						.append("   JOIN `teacher_answer` ta          ") 
+						.append(" FROM teacher_info ti                ") 
+						.append("   JOIN teacher_answer ta            ") 
 						.append("     ON ti.ti_id=ta.ti_id            ") 
-						.append("   JOIN `question_info` qi           ") 
+						.append("   JOIN question_info qi             ") 
 						.append("     ON qi.qi_id=ta.qi_id            ") 
 						.append("   JOIN                              ") 
 						.append("    (                                ") 
@@ -196,7 +196,7 @@ public class QuestionInfoServiceImpl extends BaseServiceImpl<QuestionInfo, Long>
 						.append("       WHERE oi.order_type='ASK_PAY' ") 
 						.append("     ) o                             ") 
 						.append("     ON o.bus_id=qi.qi_id            ") 
-						.append("    LEFT JOIN `resource_info` ri     ") 
+						.append("    LEFT JOIN resource_info ri       ") 
 						.append("      ON ri.ri_id=ti.head_short_id   ") 
 						.append(" WHERE o.order_no=?                  ");
 			List<Map<String, Object>> tList = dao.findBySQL(teacherSql.toString(),orderNo);

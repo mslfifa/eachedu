@@ -12,7 +12,7 @@
 		<property name="complainContext" column="complain_context"/>
 		<property name="complanStatus" column="complan_status"/>
 		<property name="complanTime" column="complan_time"/>
-		<property name="solve_result" column="solve_result"/>
+		<property name="solveResult" column="solve_result"/>
 		<property name="solveTime" column="solve_time"/>
 	</class>
 </hibernate-mapping>

@@ -6,7 +6,7 @@ public class MessageNotice {
 	private Long mnId;
 	private Long accountId;
 	private String accountType;
-	private String privilegeId;
+	private Long privilegeId;
 	//SYSTEM_MESSAGE:系统消息  QUESTION_MESSAGE: 抢答题信息 COMPLAIN_MESSAGE:投诉中
 	private String messageType;
 	private String messageText;
@@ -34,10 +34,11 @@ public class MessageNotice {
 	public void setAccountType(String accountType) {
 		this.accountType = accountType;
 	}
-	public String getPrivilegeId() {
+	
+	public Long getPrivilegeId() {
 		return privilegeId;
 	}
-	public void setPrivilegeId(String privilegeId) {
+	public void setPrivilegeId(Long privilegeId) {
 		this.privilegeId = privilegeId;
 	}
 	public String getMessageType() {
