@@ -128,11 +128,10 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 			StringBuffer sql = new StringBuffer(300);
 
 			List param = new ArrayList();
-			sql .append(" SELECT                            ")
-				.append("   si_id,account,nickname,sex      ")
+			sql .append(" SELECT si_id,account,nickname,sex ")
 				.append("   ,'STUDENT_TYPE' AS account_type ")
 				.append("   ,weibo,qq,weixin,grade          ")
-				.append("   ,ri.remote_url,mobile           ")
+				.append("   ,ri.remote_url,mobile,ri.ri_id  ")
 				.append(" FROM student_info si              ")
 				.append("  LEFT JOIN resource_info ri       ")
 				.append("    ON si.head_short_id=ri.ri_id   ")
@@ -141,7 +140,7 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 				sql.append(" or qq = ? ");
 				param.add(qq);
 			}
-			if(StringUtils.isEmpty(weixin)){
+			if(StringUtils.isNotEmpty(weixin)){
 				sql.append(" or weixin = ? ");
 				param.add(weixin);
 			}
@@ -154,7 +153,7 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 			if(list!=null && !list.isEmpty()){
 				return (Map<String, Object>) list.get(0);
 			}else{
-				return null;
+				return new HashMap<String,Object>();
 			}
 			
 		} catch (Exception e) {
@@ -279,6 +278,26 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 			PagerVO page = dao.findBySqlPage(sql.toString(), appOffset, appPageSize, siId);
 			return page;
 			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException(e.getMessage(),e.getCause());
+		}
+	}
+
+	@Override
+	public boolean findExistMobile(String mobile) throws ServiceException {
+		
+		try {
+			boolean flag = false;
+			log.debug("@@@@ mobile:"+mobile);
+			if (StringUtils.isEmpty(mobile)) {
+				throw new Exception("电话号码不能为空!");
+			}
+			String sql = "select mobile from student_info where mobile = ? ";
+			List<Map<String, Object>> list = dao.findBySQL(sql, mobile);
+			flag = (list!=null && !list.isEmpty());
+			log.debug("$$$$ exist by mobile["+mobile+"]:"+flag);
+			return flag;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage(),e.getCause());

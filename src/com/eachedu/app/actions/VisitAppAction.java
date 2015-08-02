@@ -153,6 +153,7 @@ public class VisitAppAction extends BaseAction {
 		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			result.clear();
 			result.put("http_status", false);
 			result.put("http_msg", "查询分页失败!原因["+e.getMessage()+"]");
 		}
@@ -178,6 +179,7 @@ public class VisitAppAction extends BaseAction {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			log.error(e.getMessage());
+			result.clear();
 			result.put("http_status", false);
 			result.put("http_msg",  "查找失败!原因["+e.getMessage()+"]");
 		}
@@ -198,6 +200,7 @@ public class VisitAppAction extends BaseAction {
 		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			result.clear();
 			result.put("http_status", false);
 			result.put("http_msg", "查询分页失败!原因["+e.getMessage()+"]");
 		}
@@ -214,6 +217,7 @@ public class VisitAppAction extends BaseAction {
 		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			result.clear();
 			result.put("http_status", false);
 			result.put("http_msg", "查询分页失败!原因["+e.getMessage()+"]");
 		}
@@ -231,6 +235,7 @@ public class VisitAppAction extends BaseAction {
 		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			result.clear();
 			result.put("http_status", false);
 			result.put("http_msg", "查询分页失败!原因["+e.getMessage()+"]");
 		}

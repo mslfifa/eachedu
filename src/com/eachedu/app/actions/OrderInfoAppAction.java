@@ -48,6 +48,7 @@ public class OrderInfoAppAction extends BaseAction{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			log.error(e.getMessage());
+			result.clear();
 			result.put("http_status", false);
 			result.put("http_msg", "购买失败!原因["+e.getMessage()+"]");
 		}

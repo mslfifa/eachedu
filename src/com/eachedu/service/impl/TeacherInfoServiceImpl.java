@@ -84,10 +84,9 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 		try {
 			StringBuffer sql = new StringBuffer(300);
 			List param = new ArrayList();
-			sql .append(" SELECT                          ")
-				.append("   ti_id,nickname,sex            ")
+			sql .append(" SELECT ti_id,nickname,sex       ")
 				.append("   ,weibo,qq,weixin              ")
-				.append("   ,ri.remote_url                ")
+				.append("   ,ri.remote_url,ri.ri_id       ")
 				.append(" FROM teacher_info ti            ")
 				.append("  LEFT JOIN resource_info ri     ")
 				.append("    ON ri.ri_id=ti.head_short_id ")
@@ -97,7 +96,7 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 				sql.append(" or qq = ? ");
 				param.add(qq);
 			}
-			if(StringUtils.isEmpty(weixin)){
+			if(StringUtils.isNotEmpty(weixin)){
 				sql.append(" or weixin = ? ");
 				param.add(weixin);
 			}
@@ -110,7 +109,7 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 			if(list!=null && !list.isEmpty()){
 				return (Map<String, Object>) list.get(0);
 			}else{
-				return null; 
+				return new HashMap<String,Object>(); 
 			}
 		} catch (Exception e) {
 			throw new ServiceException(e.getMessage(),e.getCause());
@@ -410,6 +409,25 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 			throw new ServiceException(e.getMessage(),e.getCause());
 		}
 		
+	}
+
+	@Override
+	public boolean findExistMobile(String mobile) throws ServiceException {
+		try {
+			boolean flag = false;
+			log.debug("@@@@ mobile:"+mobile);
+			if (StringUtils.isEmpty(mobile)) {
+				throw new Exception("电话号码不能为空!");
+			}
+			String sql = "select mobile from teacher_info where mobile = ? ";
+			List<Map<String, Object>> list = dao.findBySQL(sql, mobile);
+			flag = (list!=null && !list.isEmpty());
+			log.debug("$$$$ exist by mobile["+mobile+"]:"+flag);
+			return flag;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException(e.getMessage(),e.getCause());
+		}
 	}
 
 

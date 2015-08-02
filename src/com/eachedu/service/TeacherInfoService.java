@@ -87,4 +87,6 @@ public interface TeacherInfoService extends BaseService<TeacherInfo, Long> {
 	List<Map<String,Object>> findTeacherExper(Long tiId)throws ServiceException;
 
 	void updatePwd(String mobile, String password) throws ServiceException;
+	
+	boolean findExistMobile(String mobile) throws ServiceException;
 }

@@ -25,6 +25,7 @@ import com.eachedu.service.ResourceInfoService;
 import com.eachedu.service.StudentInfoService;
 import com.eachedu.service.TeacherInfoService;
 import com.eachedu.utils.ConstUtils;
+import com.eachedu.utils.DateUtils;
 import com.eachedu.utils.PropUtils;
 import com.eachedu.utils.SmSUtils;
 import com.eachedu.web.actions.BaseAction;
@@ -207,31 +208,14 @@ public class LoginAppAction extends BaseAction {
 			ServletActionContext.getRequest().getSession().setAttribute(ConstUtils.USER_LOGIN, user);
 		} catch (Exception e) {
 			log.error(e.getMessage());
+			result.clear();
 			result.put("http_status", false);
 			result.put("http_msg", "查询失败，错误["+e.getMessage()+"]");
 		}
 		this.ajaxWriteOutJSON(result);
 	}
 	
-	/**
-	 * 检查验证码是否过期
-	 * @param verifyCode
-	 * @return
-	 */
-	private boolean checkVerifyCodeExpire(String verifyCode) {
-		Map<String,Date> expireMap = (Map<String, Date>) ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.VERIFY_CODE_EXPIRE_TIME);
-		if(expireMap!=null && !expireMap.isEmpty()){
-			Date expireTime = expireMap.get(verifyCode);
-			Date now = new Date();
-			//如果现在早于到期时间，说明验证码有效
-			if(now.before(expireTime)){
-				return true;
-			}
-		}
-		log.info("###### verifyCode验证码["+verifyCode+"]超时过期");
-		//默认失效
-		return false;
-	}
+	
 	
 	/**
 	 * 获取会话验证码，系统根据配置文件设置超时时间，下次使用判断验证码是否过期
@@ -262,11 +246,12 @@ public class LoginAppAction extends BaseAction {
 			String tmpVerifyCode = (randomStr).substring(0, 6);
 			result.put("verifyCode", tmpVerifyCode);
 			log.info("##### verifyCode:"+tmpVerifyCode);
+			
+			//验证码设置到会话中
 			ServletActionContext.getRequest().getSession().setAttribute(ConstUtils.LOGIN_VERIFY_CODE, tmpVerifyCode);
 			
-			
 			//调用短信平台接口发送模板短信   注册号码13148856443
-			HashMap<String, Object> smsResult = SmSUtils.sendSms("13148856443","1",new String[]{tmpVerifyCode,"1"});
+			HashMap<String, Object> smsResult = SmSUtils.sendSms(mobile,"1",new String[]{tmpVerifyCode,"1"});
 			
 			System.out.println("SDKTestSendTemplateSMS result=" + smsResult);
 			if(ConstUtils.SMS_SEND_SUCCESS_CODE.equals(smsResult.get("statusCode"))){
@@ -280,7 +265,12 @@ public class LoginAppAction extends BaseAction {
 			}else{
 				//异常返回输出错误码和错误信息
 				String smsErrorMsg = "错误码=" + smsResult.get("statusCode") +" 错误信息= "+smsResult.get("statusMsg");
-				throw new Exception(smsErrorMsg);
+					
+				//如果生产环境上线时 抛异常
+				if("true".equals(PropUtils.get("is_product"))){
+					throw new Exception(smsErrorMsg);
+				}
+				
 			}
 			
 			//默认超时分钟数
@@ -296,7 +286,7 @@ public class LoginAppAction extends BaseAction {
 			}
 			
 			//每个验证码有一个超时时间
-			expireMap.put(""+tmpVerifyCode, cal.getTime());
+			expireMap.put(tmpVerifyCode, cal.getTime());
 			log.info("@@@@@@ 会话设置验证码:"+tmpVerifyCode+"|超时时间:"+cal.getTime().toLocaleString());
 			
 			result.put("http_status",true);
@@ -304,6 +294,7 @@ public class LoginAppAction extends BaseAction {
 			
 		} catch (Exception e) {
 			log.error(e.getMessage());
+			result.clear();
 			result.put("http_status",false);
 			result.put("http_msg","生成验证码失败,原因["+e.getMessage()+"]!");
 		}
@@ -320,6 +311,7 @@ public class LoginAppAction extends BaseAction {
 		Map<String,Object> result = new HashMap<String,Object>();
 		
 		try {
+			boolean isLogined=true;;
 			
 			if(StringUtils.isEmpty(qq) && StringUtils.isEmpty(weibo) && StringUtils.isEmpty(weixin)){
 				throw new Exception("第三方账号不能全空,qq微信微博账号必选一!");
@@ -331,10 +323,8 @@ public class LoginAppAction extends BaseAction {
 			//判断第三方账号对应的用户存在否，存在就登录并返回信息。
 			if(AccountType.STUDENT_TYPE.name().equals(accountType)){
 				data = studentInfoService.findBySns(qq,weixin,weibo);
-				data.put("id", data.get("si_id"));
 			}else if (AccountType.TEACHER_TYPE.name().equals(accountType)) {
 				data = teacherInfoService.findBySns(qq,weixin,weibo);
-				data.put("id", data.get("ti_id"));
 			}else{
 				throw new Exception("accountType["+accountType+"]不在值域范围内，请与管理员联系!");
 			}
@@ -401,6 +391,8 @@ public class LoginAppAction extends BaseAction {
 					data.put("weixin", t.getWeixin());
 					data.put("remote_url", (r==null?null:r.getRemoteUrl()));
 					
+					isLogined=false;
+					
 					log.info("#### 注册老师成功");
 				}else{
 					throw new Exception("accountType["+accountType+"]不在值域范围内，请与管理员联系!");
@@ -425,12 +417,17 @@ public class LoginAppAction extends BaseAction {
 			
 			result.put("data", data);
 			result.put("http_status", true);
-			result.put("http_msg", "注册成功!");
+			if(isLogined){
+				result.put("http_msg", "登录成功!");
+			}else{
+				result.put("http_msg", "注册成功!");
+			}
+			
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.error(e.getMessage());
-			
+			result.clear();
 			result.put("http_status",false);
 			result.put("http_msg","第三方登录失败["+e.getMessage()+"]!");
 		}
@@ -447,23 +444,35 @@ public class LoginAppAction extends BaseAction {
 				throw new Exception("手机号不能为空!");
 			}
 			
-			//验证码是否超时
-			if(checkVerifyCodeExpire(verifyCode)==false){
-				throw new Exception("验证码["+verifyCode+"]已经超时，请重新申请!");
-			}
+			
 			
 			//取出上次生成的验证码
 			String oldVerifyCode = (String) ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.LOGIN_VERIFY_CODE);
 			
+			
+			Map<String, Date> expireMap = (Map<String, Date>) ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.VERIFY_CODE_EXPIRE_TIME);
+			//是否超时
+			DateUtils.checkVerifyCodeExpire(oldVerifyCode, expireMap );
+			
+			
 			Long pojoId = null;
 			if (StringUtils.isNotEmpty(oldVerifyCode)  && oldVerifyCode.equals(verifyCode)) {
 				if(AccountType.STUDENT_TYPE.name().equals(accountType)){
+					if (studentInfoService.findExistMobile(mobile)) {
+						throw new Exception("手机号码["+mobile+"]已经注册过了,请更改号码或直接登录再重试");
+					}
+					
 					StudentInfo s = new StudentInfo();
 					s.setMobile(mobile);
 					s.setPassword(password);
 					studentInfoService.save(s);
 					pojoId=s.getSiId();
+					
 				}else if(AccountType.TEACHER_TYPE.name().equals(accountType)){
+					if (teacherInfoService.findExistMobile(mobile)) {
+						throw new Exception("手机号码["+mobile+"]已经注册过了,请更改号码或直接登录再重试");
+					}
+					
 					TeacherInfo t = new TeacherInfo();
 					t.setMobile(mobile);
 					t.setPassword(password);
@@ -482,6 +491,7 @@ public class LoginAppAction extends BaseAction {
 			result.put("accountType", accountType);
 		} catch (Exception e) {
 			log.error(e.getMessage());
+			result.clear();
 			result.put("http_status", false);
 			result.put("http_msg", "注册出错,原因["+e.getMessage()+"]");
 		}
@@ -494,6 +504,11 @@ public class LoginAppAction extends BaseAction {
 		Map<String,Object> result = new HashMap<String,Object>();
 		try {
 			String oldVerifyCode =  (String) ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.LOGIN_VERIFY_CODE);
+			
+			Map<String,Date> expireMap = (Map<String, Date>) ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.VERIFY_CODE_EXPIRE_TIME);
+			//验证码是否超时
+			DateUtils.checkVerifyCodeExpire(oldVerifyCode, expireMap);
+			
 			if(StringUtils.isEmpty(oldVerifyCode)){
 				throw new Exception("您还没有获取验证码");
 			}
@@ -521,7 +536,7 @@ public class LoginAppAction extends BaseAction {
 			result.put("http_msg", "修改密码成功");
 		} catch (Exception e) {
 			e.printStackTrace();
-			
+			result.clear();
 			result.put("http_status", false);
 			result.put("http_msg", "修改密码失败,原因["+e.getMessage()+"]");
 			
@@ -538,7 +553,7 @@ public class LoginAppAction extends BaseAction {
 			result.put("http_msg", "退出成功");
 		} catch (Exception e) {
 			e.printStackTrace();
-			
+			result.clear();
 			result.put("http_status", false);
 			result.put("http_msg", "退出失败,原因["+e.getMessage()+"]");
 			

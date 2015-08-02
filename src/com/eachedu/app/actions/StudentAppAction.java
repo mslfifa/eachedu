@@ -96,6 +96,7 @@ public class StudentAppAction extends BaseAction {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			log.error(e.getMessage());
+			result.clear();
 			result.put("http_status", false);
 			result.put("http_msg", "查找失败!原因["+e.getMessage()+"]");
 		}
@@ -115,6 +116,7 @@ public class StudentAppAction extends BaseAction {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			log.error(e.getMessage());
+			result.clear();
 			result.put("http_status", false);
 			result.put("http_msg", "查找失败!原因["+e.getMessage()+"]");
 		}

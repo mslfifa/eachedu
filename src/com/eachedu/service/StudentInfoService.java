@@ -51,4 +51,7 @@ public interface StudentInfoService extends BaseService<StudentInfo, Long> {
 	PagerVO findBuyCourseware(Long siId, Integer appPageNo, Integer appPageSize) throws ServiceException;
 	
 	
+	boolean findExistMobile(String mobile) throws ServiceException;
+	
+	
 }

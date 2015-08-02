@@ -4,6 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 
 public class DateUtils {
 
@@ -44,6 +47,29 @@ public class DateUtils {
 		c.setTime(date);
 		c.add(Calendar.MONTH, num);
 		return sdf.format(c.getTime());
+	}
+	
+	
+	public static void checkVerifyCodeExpire(String code,Map<String,Date>expireMap)throws Exception{
+		if(StringUtils.isEmpty(code)){
+			throw new Exception("验证码不能为空!");
+		}
+		
+		if(expireMap==null || expireMap.isEmpty()){
+			throw new Exception("过期时间集合不能为空!");
+		}
+		//没有验证码记录
+		if (!expireMap.keySet().contains(code)) {
+			throw new Exception("过期集合中没有该验证码["+code+"]记录!");
+		}
+		
+		Date d = expireMap.get(code);
+		
+		Date now = new Date();
+		if (now.after(d)) {
+			throw new Exception("验证码["+code+"]已经超时,请重新申请验证码!");
+		}
+		
 	}
 	
 	public static void main(String[] args) throws ParseException {
