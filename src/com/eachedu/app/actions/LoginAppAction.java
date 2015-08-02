@@ -400,9 +400,22 @@ public class LoginAppAction extends BaseAction {
 			}
 			
 			
+			
 			UserVO userVO = new UserVO();
 			
-			userVO.setId(Long.parseLong(""+data.get("id")));
+			
+			String idStr = "";
+			if(data.get("id")==null){
+				if(data.get("si_id")==null){
+					idStr=data.get("ti_id").toString();
+				}else{
+					idStr=data.get("si_id").toString();
+				}
+			}else{
+				idStr = data.get("id").toString();
+			}
+			
+			userVO.setId(Long.parseLong(idStr));
 			userVO.setAccountType(accountType);
 			userVO.setNickname((String) data.get("nickname"));
 			userVO.setSex((String) data.get("sex"));

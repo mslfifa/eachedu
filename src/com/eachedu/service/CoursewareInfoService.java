@@ -8,8 +8,9 @@ public interface CoursewareInfoService extends BaseService<CoursewareInfo, Long>
 	
 	/**
 	 * 
-	 * @param pageNo  页序号
-	 * @param pageSize 页大小
+	 * @param appPageNo  页序号
+	 * @param appPageSize 页大小
+	 * @param userId  当前用户ID
 	 * @param courseTitle 课件标题
 	 * @param course 课程
 	 * @param grade  年级
@@ -18,7 +19,7 @@ public interface CoursewareInfoService extends BaseService<CoursewareInfo, Long>
 	 * @return
 	 * @throws ServiceException
 	 */
-	public PagerVO findCoursewarePage(Integer pageNo, Integer pageSize, String courseTitle, String course, String grade, String orderField, String orderDirect) throws ServiceException;
+	public PagerVO findCoursewarePage(Integer appPageNo, Integer appPageSize, Long userId, String courseTitle, String course, String grade, String orderField, String orderDirect) throws ServiceException;
 
 	/**
 	 * 通过年级 课程查找课件信息

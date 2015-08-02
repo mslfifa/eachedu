@@ -91,7 +91,7 @@ public class QuestionInfoServiceImpl extends BaseServiceImpl<QuestionInfo, Long>
 	}
 
 	@Override
-	public PagerVO findQuestionPageByStudent(Long siId, Integer pageNo, Integer pageSize) throws ServiceException {
+	public PagerVO findQuestionPageByStudent(Long siId, Integer appPageNo, Integer appPageSize) throws ServiceException {
 		
 		try {
 			
@@ -99,9 +99,9 @@ public class QuestionInfoServiceImpl extends BaseServiceImpl<QuestionInfo, Long>
 				throw new Exception("学生ID["+siId+"]不能为空,请联系管理员!");
 			}
 			
-			int offset = (pageNo==null ||pageNo==0)?0:(pageNo-1)*pageSize;
-			pageSize = pageSize==null?20:pageSize;
-			log.debug("@@@@ offset:"+offset+"|pagesize:"+pageSize+"|siId:"+siId);
+			int offset = (appPageNo==null ||appPageNo<=0)?0:(appPageNo-1)*appPageSize;
+			appPageSize = appPageSize==null?20:appPageSize;
+			log.debug("@@@@ offset:"+offset+"|pagesize:"+appPageSize+"|siId:"+siId);
 			StringBuffer sql = new StringBuffer();
 			sql .append(" SELECT                        ")
 				.append("   qi.qi_id,order_no           ")
@@ -129,7 +129,7 @@ public class QuestionInfoServiceImpl extends BaseServiceImpl<QuestionInfo, Long>
 				.append(" WHERE qi.si_id = ?             ")
 				.append(" ORDER BY qi.ask_time DESC      ");
 			
-			return dao.findBySqlPage(sql.toString(),offset,pageSize, siId);
+			return dao.findBySqlPage(sql.toString(),offset,appPageSize, siId);
 		} catch (Exception e) {
 			
 			e.printStackTrace();

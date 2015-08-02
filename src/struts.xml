@@ -72,6 +72,14 @@
 			<interceptor-ref name="app-basic-stack"></interceptor-ref>
 		</action>
 		
+		<action name="coursewareInfoApp" class="coursewareInfoAppAction">
+			<interceptor-ref name="app-basic-stack"></interceptor-ref>
+		</action>
+		
+		<action name="complainSolveApp" class="complainSolveAppAction">
+			<interceptor-ref name="app-basic-stack"></interceptor-ref>
+		</action>
+		
 		<action name="pay" class="payAction">
 			<interceptor-ref name="app-basic-stack"></interceptor-ref>
 		</action>

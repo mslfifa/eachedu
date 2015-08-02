@@ -228,7 +228,7 @@ public class VisitAppAction extends BaseAction {
 	public void findCoursewarePage(){
 		Map<String,Object> result = new HashMap<String,Object>();
 		try {
-			PagerVO page = coursewareInfoService.findCoursewarePage(appPageNo, appPageSize, courseTitle, course, grade, orderField, orderDirect);
+			PagerVO page = coursewareInfoService.findCoursewarePage(appPageNo, appPageSize, null, courseTitle, course, grade, orderField, orderDirect);
 			result.put("data", page);
 			result.put("http_status", true);
 			result.put("http_msg", "查询分页成功!");

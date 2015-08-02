@@ -30,34 +30,75 @@ public class CoursewareInfoServiceImpl extends BaseServiceImpl<CoursewareInfo,Lo
 	}
 
 	@Override
-	public PagerVO findCoursewarePage(Integer pageNo, Integer pageSize, String courseTitle, String course, String grade, String orderField, String orderDirect) throws ServiceException {
+	public PagerVO findCoursewarePage(Integer appPageNo, Integer appPageSize, Long userId, String courseTitle, String course, String grade, String orderField, String orderDirect) throws ServiceException {
 		try {
 			
-			log.debug("$$$$ pageNo:"+pageNo+"|course:"+course+"|grade:"+grade+"|orderField:"+orderField+"|orderDirect:"+orderDirect);
+			log.debug("$$$$ pageNo:"+appPageNo+"|course:"+course+"|grade:"+grade+"|orderField:"+orderField+"|orderDirect:"+orderDirect);
 			StringBuffer sql = new StringBuffer(400);
 			List param = new ArrayList();
 			
-			pageNo = pageNo==null?0:pageNo;
-			pageSize = pageSize==null?10:pageSize;
-			int offset = pageNo==0?0:(pageNo-1)*pageSize;
+			appPageNo = appPageNo==null?0:appPageNo;
+			appPageSize = appPageSize==null?10:appPageSize;
+			int offset = appPageNo<=0?0:(appPageNo-1)*appPageSize;
 			
-			
-			sql .append(" SELECT                             ")  
-				.append("   ci.ci_id,file_id,prise           ")  
-				.append("   ,introduce,courseware_title      ")  
-				.append("   ,t_d.down_num                    ")  
-				.append(" FROM courseware_info ci            ")  
-				.append("   JOIN grade_course_info gci       ")  
-				.append("     ON gci.gci_id=ci.gci_id        ")  
-				.append("   LEFT JOIN                        ")  
-				.append("   (                                ")  
-				.append("     SELECT cd.ci_id                ")  
-				.append("       ,COUNT(cd.ci_id) AS down_num ")  
-				.append("     FROM  courseware_down cd       ")  
-				.append("     GROUP BY cd.ci_id              ")  
-				.append("   ) t_d                            ")  
-				.append("     ON ci.ci_id=t_d.ci_id          ")  
-				.append(" WHERE 1=1                          ");
+			//访问模式 不返回资源
+			if(userId==null){
+				sql .append(" SELECT                        ")
+					.append("   ci.ci_id,file_id,ci.prise   ")
+					.append("   ,courseware_title,introduce ")
+					.append("   ,gci.grade,gci.course       ")
+					.append("   ,ri.resource_size           ")
+					.append("   ,down_num                   ")
+					.append(" FROM courseware_info ci       ")
+					.append("   JOIN grade_course_info gci  ")
+					.append("     ON ci.gci_id=gci.gci_id   ")
+					.append("   JOIN resource_info ri       ")
+					.append("     ON ri.ri_id=ci.file_id    ")
+					.append("   LEFT JOIN                   ")
+					.append("   (                           ")
+					.append("      SELECT                   ")
+					.append("        ci_id,COUNT(ci_id) AS down_num ")
+					.append("      FROM `courseware_down` cd ")
+					.append("      GROUP BY cd.ci_id         ")
+					.append("    ) c_d                       ")
+					.append("      ON ci.ci_id=c_d.ci_id     ")
+					.append(" WHERE 1=1  ");
+				
+			//用户登录模式 有资源ID返回	
+			}else{
+				
+				sql .append(" SELECT                         ")
+					.append("   ci.ci_id,file_id,ci.prise    ")
+					.append("   ,courseware_title,introduce  ")
+					.append("   ,gci.grade,gci.course        ")
+					.append("   ,ri.resource_size            ")
+					.append("   ,down_num                    ")
+					.append("   ,(                           ")
+					.append("     SELECT ri.ri_id            ")
+					.append("     FROM `order_info` oi       ")
+					.append("     WHERE oi.order_type='DOWNLOAD_PAY'     ")
+					.append("       AND oi.`account_type`='STUDENT_TYPE' ")
+					.append("       AND oi.bus_id=ci.ci_id ")
+					.append("       AND oi.buyer_id=?      ")
+					.append("   ) AS ri_id                 ")
+					.append(" FROM courseware_info ci      ")
+					.append("   JOIN grade_course_info gci ")
+					.append("     ON ci.gci_id=gci.gci_id  ")
+					.append("   JOIN resource_info ri      ")
+					.append("     ON ri.ri_id=ci.file_id   ")
+					.append("   LEFT JOIN                  ")
+					.append("   (                          ")
+					.append("      SELECT                  ")
+					.append("        ci_id,COUNT(ci_id) AS down_num ")
+					.append("      FROM `courseware_down` cd ")
+					.append("      GROUP BY cd.ci_id         ")
+					.append("    ) c_d                       ")
+					.append("      ON ci.ci_id=c_d.ci_id     ")
+					.append(" WHERE 1=1  ");
+					
+				param.add(userId);
+			}
+			 
 			
 			
 			if(StringUtils.isNotEmpty(courseTitle)){
@@ -75,13 +116,13 @@ public class CoursewareInfoServiceImpl extends BaseServiceImpl<CoursewareInfo,Lo
 			}
 			
 			if("down_num".equals(orderField)){
-				sql.append(" ORDER BY t_d.down_num ");
+				sql.append(" ORDER BY down_num ");
 			}else if ("grade".equals(orderField)) {
-				sql.append(" ORDER BY gci.grade ");
+				sql.append(" ORDER BY grade ");
 			}else if ("prise".equals(orderField)) {
-				sql.append(" ORDER BY ci.prise ");
+				sql.append(" ORDER BY prise ");
 			}else{
-				sql.append(" ORDER BY ci.prise ");
+				sql.append(" ORDER BY prise ");
 			}
 			
 			if("asc".equals(orderDirect)){
@@ -92,7 +133,7 @@ public class CoursewareInfoServiceImpl extends BaseServiceImpl<CoursewareInfo,Lo
 				sql.append(" DESC ");
 			}
 			
-			return dao.findBySqlPage(sql.toString(), offset, pageSize, param.toArray(new Object[0]));
+			return dao.findBySqlPage(sql.toString(), offset, appPageSize, param.toArray(new Object[0]));
 		} catch (Exception e) {
 			throw new ServiceException(e.getMessage(),e.getCause());
 		}

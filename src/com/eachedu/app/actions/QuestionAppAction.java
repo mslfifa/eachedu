@@ -32,8 +32,8 @@ public class QuestionAppAction extends BaseAction {
 	private String status;
 	private int topNum=1;
 	
-	private Integer pageNo;
-	private Integer pageSize;
+	private Integer appPageNo;
+	private Integer appPageSize;
 	
 	//订单号 查询使用，要新增时不能传入，按规则生成
 	private String orderNo;
@@ -80,21 +80,21 @@ public class QuestionAppAction extends BaseAction {
 	public void setTopNum(int topNum) {
 		this.topNum = topNum;
 	}
-
-	public Integer getPageNo() {
-		return pageNo;
+	
+	public Integer getAppPageNo() {
+		return appPageNo;
 	}
 
-	public void setPageNo(Integer pageNo) {
-		this.pageNo = pageNo;
+	public void setAppPageNo(Integer appPageNo) {
+		this.appPageNo = appPageNo;
 	}
 
-	public Integer getPageSize() {
-		return pageSize;
+	public Integer getAppPageSize() {
+		return appPageSize;
 	}
 
-	public void setPageSize(Integer pageSize) {
-		this.pageSize = pageSize;
+	public void setAppPageSize(Integer appPageSize) {
+		this.appPageSize = appPageSize;
 	}
 
 	public String getOrderNo() {
@@ -222,7 +222,7 @@ public class QuestionAppAction extends BaseAction {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		try {
-			PagerVO page = questionInfoService.findQuestionPageByStudent(siId, pageNo, pageSize);
+			PagerVO page = questionInfoService.findQuestionPageByStudent(siId, appPageNo, appPageSize);
 			result.put("data", page.getDatas());
 			result.put("http_status", true);
 			result.put("http_msg", "查找成功!");

@@ -240,7 +240,7 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 			
 			appPageNo = appPageNo==null?1:appPageNo;
 			appPageSize = appPageSize==null?10:appPageSize;
-			int pageoff = appPageNo<1?0:(appPageNo-1)*appPageSize;
+			int pageoff = appPageNo<=0?0:(appPageNo-1)*appPageSize;
 			
 			StringBuffer sql = new StringBuffer(400);
 			List param = new ArrayList();

@@ -20,12 +20,12 @@ public interface QuestionInfoService extends BaseService<QuestionInfo, Long> {
 	/**
 	 * 分页查找学生所提过的问题集合，如果有回答的，将回答老师信息附带上
 	 * @param siId TODO 学生ID
-	 * @param pageNo TODO 页序号
-	 * @param pageSize TODO 页大小
+	 * @param appPageNo TODO 页序号
+	 * @param appPageSize TODO 页大小
 	 * @return
 	 * @throws ServiceException
 	 */
-	public PagerVO findQuestionPageByStudent(Long siId, Integer pageNo, Integer pageSize) throws ServiceException;
+	public PagerVO findQuestionPageByStudent(Long siId, Integer appPageNo, Integer appPageSize) throws ServiceException;
 	
 	/**
 	 * 查找根据订单流水号查找问题详细

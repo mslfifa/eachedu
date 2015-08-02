@@ -201,7 +201,6 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 			
 			StringBuffer userSql = new StringBuffer(300);
 			userSql .append(" SELECT si_id,nickname       ")
-					.append("   ,head_short_id            ")
 					.append("   ,sex,grade,mobile         ")
 					.append("   ,ri.ri_id,ri.remote_url   ")
 					.append(" FROM student_info si        ")
@@ -243,7 +242,7 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 	public PagerVO findBuyCourseware(Long siId, Integer appPageNo, Integer appPageSize) throws ServiceException {
 		try {
 			appPageSize = appPageSize==null?10:appPageSize;
-			int appOffset = (appPageNo==null||appPageNo==0)?0:(appPageNo-1*appPageSize);
+			int appOffset = (appPageNo==null||appPageNo<=0)?0:(appPageNo-1)*appPageSize;
 			
 			if(siId==null){
 				throw new Exception("学生ID不能为空");
@@ -263,6 +262,7 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 				.append("      WHERE cd.ci_id=ci.ci_id           ")
 				.append("      GROUP BY cd.ci_id                 ")
 				.append("    ) AS down_num                       ")
+				.append("    ,oi.order_no,oi.create_time         ")
 				.append(" FROM courseware_info ci                ")
 				.append("   JOIN order_info oi                   ")
 				.append("     ON oi.bus_id=ci.ci_id              ")
