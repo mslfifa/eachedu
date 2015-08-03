@@ -73,7 +73,7 @@ public interface StudentInfoService extends BaseService<StudentInfo, Long> {
 	 * @return
 	 * @throws ServiceException TODO
 	 */
-	boolean updateStudent(Long siId, File headShortPic, String headShortPicFileName, String headShortPicContentType,
+	Map<String, Object> updateStudent(Long siId, File headShortPic, String headShortPicFileName, String headShortPicContentType,
 			String headShortPicCaption, String nickname, String sex, String grade, String qq, String weixin,
 			String weibo, Boolean qqEmpty, Boolean weixinEmpty, Boolean weiboEmpty) throws ServiceException;
 	

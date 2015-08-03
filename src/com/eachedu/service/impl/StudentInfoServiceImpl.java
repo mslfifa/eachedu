@@ -316,7 +316,7 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 	}
 
 	@Override
-	public boolean updateStudent(Long siId, File headShortPic, String headShortPicFileName,
+	public Map<String, Object> updateStudent(Long siId, File headShortPic, String headShortPicFileName,
 			String headShortPicContentType, String headShortPicCaption, String nickname, String sex, String grade,
 			String qq, String weixin, String weibo, Boolean qqEmpty, Boolean weixinEmpty, Boolean weiboEmpty) throws ServiceException {
 		try {
@@ -325,6 +325,7 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 					+"|headShortPicCaption:"+headShortPicCaption+"|nickname:"+nickname+"|sex:"+sex+"|grade:"+grade+"|qq:"+qq+"|weixin:"+weixin+"|qqEmpty:"+qqEmpty
 					+"|weixinEmpty:"+weixinEmpty+"|weiboEmpty:"+weiboEmpty);
 			
+			Map<String,Object> map = new HashMap<String,Object>();
 			if(siId==null){
 				throw new Exception("学生ID不能为空!");
 			}
@@ -369,12 +370,11 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 				//保存资源信息 
 				resourceInfoDao.save(r);
 				
+				map.put("ri_id", r.getRiId());
+				
 				newRiId = r.getRiId();
 				log.debug("$$$$ 保存资源对象成功");
 			}
-			
-			
-			
 			
 			StudentInfo student = dao.get(siId);
 			//如果保存资源成功后
@@ -415,7 +415,8 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 			dao.update(student);
 			log.info("#### 修改学生成功!");
 			
-			return true;
+			map.put("updated", true);
+			return map;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage(),e.getCause());

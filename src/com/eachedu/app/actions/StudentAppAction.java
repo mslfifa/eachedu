@@ -265,10 +265,10 @@ public class StudentAppAction extends BaseAction {
 			
 			UserVO currentUser = (UserVO)ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.USER_LOGIN);
 			
-			boolean flag = studentInfoService.updateStudent(currentUser.getId(), headShortPic, headShortPicFileName,headShortPicContentType,
+			Map<String,Object> data = studentInfoService.updateStudent(currentUser.getId(), headShortPic, headShortPicFileName,headShortPicContentType,
 					 headShortPicCaption, nickname,sex,grade,qq,weixin,weibo,qqEmpty,weixinEmpty,weiboEmpty);
 			
-			result.put("update_flag",flag);
+			result.put("update_flag",data);
 			result.put("http_status", true);
 			result.put("http_msg", "查找成功!");
 		} catch (ServiceException e) {
