@@ -83,6 +83,10 @@
 		<action name="pay" class="payAction">
 			<interceptor-ref name="app-basic-stack"></interceptor-ref>
 		</action>
+		
+		<action name="payNotice" class="payNoticeAction">
+			<interceptor-ref name="app-basic-stack"></interceptor-ref>
+		</action>
 	
 	</package>
 </struts>
