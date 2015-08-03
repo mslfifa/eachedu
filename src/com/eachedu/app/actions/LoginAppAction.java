@@ -169,7 +169,7 @@ public class LoginAppAction extends BaseAction {
 				user = new UserVO();
 				user.setId(Long.parseLong(s.get("si_id").toString()) );
 				user.setAccount((String) s.get("account"));
-				user.setAccountType((String) s.get("account_type"));
+				user.setAccountType(AccountType.STUDENT_TYPE.name());
 				user.setMobile((String) s.get("mobile"));
 				user.setName((String) s.get("name"));
 				user.setQq((String) s.get("qq"));
@@ -187,7 +187,7 @@ public class LoginAppAction extends BaseAction {
 				user = new UserVO();
 				user.setId(Long.parseLong(t.get("ti_id").toString()));
 				user.setAccount((String) t.get("account"));
-				user.setAccountType((String) t.get("account_type"));
+				user.setAccountType(AccountType.TEACHER_TYPE.name());
 				user.setMobile((String) t.get("mobile"));
 				user.setName((String) t.get("name"));
 				user.setQq((String) t.get("qq"));
@@ -364,6 +364,7 @@ public class LoginAppAction extends BaseAction {
 					studentInfoService.save(s);
 					
 					data.put("id", s.getSiId());
+					data.put("account_type", AccountType.STUDENT_TYPE.name());
 					data.put("nickname", s.getNickname());
 					data.put("sex", s.getSex());
 					data.put("qq", s.getQq());
@@ -384,6 +385,7 @@ public class LoginAppAction extends BaseAction {
 					
 					
 					data.put("id", t.getTiId());
+					data.put("account_type", AccountType.TEACHER_TYPE.name());
 					data.put("nickname", t.getNickname());
 					data.put("sex", t.getSex());
 					data.put("qq", t.getQq());
@@ -416,7 +418,7 @@ public class LoginAppAction extends BaseAction {
 			}
 			
 			userVO.setId(Long.parseLong(idStr));
-			userVO.setAccountType(accountType);
+			userVO.setAccountType((String) data.get("account_type"));
 			userVO.setNickname((String) data.get("nickname"));
 			userVO.setSex((String) data.get("sex"));
 			userVO.setQq((String) data.get("qq"));
@@ -456,8 +458,6 @@ public class LoginAppAction extends BaseAction {
 			if(StringUtils.isEmpty(mobile)){
 				throw new Exception("手机号不能为空!");
 			}
-			
-			
 			
 			//取出上次生成的验证码
 			String oldVerifyCode = (String) ServletActionContext.getRequest().getSession().getAttribute(ConstUtils.LOGIN_VERIFY_CODE);

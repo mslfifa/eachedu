@@ -64,6 +64,12 @@
 			<interceptor-ref name="app-login-stack"></interceptor-ref>
 		</action>
 		
+		<action name="resourcePubApp" class="resourcePubAppAction">
+			<interceptor-ref name="app-login-stack"></interceptor-ref>
+		</action>
+		<action name="resourcePriApp" class="resourcePriAppAction">
+			<interceptor-ref name="app-basic-stack"></interceptor-ref>
+		</action>
 		<action name="answerCommentApp" class="answerCommentAppAction">
 			<interceptor-ref name="app-basic-stack"></interceptor-ref>
 		</action>
@@ -81,6 +87,10 @@
 		</action>
 		
 		<action name="pay" class="payAction">
+			<interceptor-ref name="app-basic-stack"></interceptor-ref>
+		</action>
+		
+		<action name="payNotice" class="payNoticeAction">
 			<interceptor-ref name="app-basic-stack"></interceptor-ref>
 		</action>
 	

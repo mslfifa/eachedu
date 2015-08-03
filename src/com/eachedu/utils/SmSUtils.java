@@ -6,7 +6,7 @@ import java.util.Set;
 import com.cloopen.rest.sdk.CCPRestSDK;
 
 public class SmSUtils {
-	
+	//public final static String msgTemplate = "【个个答】验证码{1}，请于{2}分钟内正确输入。";
 	/**
 	 * 
 	 * @param sendToNumber   测试阶段只能使用  13148856443

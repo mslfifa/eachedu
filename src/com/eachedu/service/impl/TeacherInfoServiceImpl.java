@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.eachedu.dao.BaseDao;
 import com.eachedu.dao.pojo.StudentInfo;
 import com.eachedu.dao.pojo.TeacherInfo;
+import com.eachedu.dict.AccountType;
 import com.eachedu.exception.DaoException;
 import com.eachedu.exception.ServiceException;
 import com.eachedu.service.TeacherInfoService;
@@ -85,6 +86,7 @@ public class TeacherInfoServiceImpl extends BaseServiceImpl<TeacherInfo, Long>im
 			StringBuffer sql = new StringBuffer(300);
 			List param = new ArrayList();
 			sql .append(" SELECT ti_id,nickname,sex       ")
+				.append("   ,'").append(AccountType.TEACHER_TYPE.name()).append("' AS account_type ")
 				.append("   ,weibo,qq,weixin              ")
 				.append("   ,ri.remote_url,ri.ri_id       ")
 				.append(" FROM teacher_info ti            ")

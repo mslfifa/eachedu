@@ -21,6 +21,7 @@ import com.eachedu.dao.BaseDao;
 import com.eachedu.dao.ResourceInfoDao;
 import com.eachedu.dao.pojo.ResourceInfo;
 import com.eachedu.dao.pojo.StudentInfo;
+import com.eachedu.dict.AccountType;
 import com.eachedu.dict.ResourceType;
 import com.eachedu.exception.ServiceException;
 import com.eachedu.service.StudentInfoService;
@@ -140,7 +141,7 @@ public class StudentInfoServiceImpl extends BaseServiceImpl<StudentInfo, Long>im
 
 			List param = new ArrayList();
 			sql .append(" SELECT si_id,account,nickname,sex ")
-				.append("   ,'STUDENT_TYPE' AS account_type ")
+			.append("   ,'").append(AccountType.STUDENT_TYPE.name()).append("' AS account_type ")
 				.append("   ,weibo,qq,weixin,grade          ")
 				.append("   ,ri.remote_url,mobile,ri.ri_id  ")
 				.append(" FROM student_info si              ")
