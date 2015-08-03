@@ -53,7 +53,7 @@ public class PayAction extends BaseAction{
 				//客户端ip
 				String spbill_create_ip = this.getRequest().getRemoteAddr();
 				//回调地址
-				String notifyUrl = "http://wxpay.omsapp.cn/notice";
+				String notifyUrl = "http://222.216.28.49:8080/eachedu/app/payNotice!WXNotice.action";
 				WXPrepay prePay = new WXPrepay();
 				prePay.setAppid("wx0dfc013c4b75605a");
 				prePay.setBody("来自个个答的微信支付测试2");

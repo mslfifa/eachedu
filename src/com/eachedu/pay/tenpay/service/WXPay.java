@@ -42,7 +42,8 @@ public class WXPay {
 		nativeObj.put("nonceStr", MD5Util.MD5Encode(randomStr, "utf-8").toLowerCase());
 		//时间戳
 		nativeObj.put("timeStamp", OrderUtil.GetTimestamp());
-		nativeObj.put("package", "Sign=" + createSign(nativeObj, partnerKey));
+		nativeObj.put("package", "Sign=WXPay");
+		nativeObj.put("sign", createSign(nativeObj, partnerKey));
 		return nativeObj;
 	}
 
