@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.eachedu.pay.model.PayRecord" table="pay_record">
+		<id name="payId" column="pay_id">
+			<generator class="native"/>
+		</id>
+		<property name="orderNo" column="order_no"/>
+		<property name="payType" column="pay_type"/>
+		<property name="payMoney" column="pay_money"/>
+		<property name="payTime" column="pay_time"/>
+		<property name="payStatus" column="pay_status"/>
+		<property name="resultReasons" column="result_reasons"/>
+		<property name="buyerAccount" column="buyer_account"/>
+		<property name="receiveTime" column="receive_time"/>
+		<property name="transactionId" column="transaction_id"/>
+	</class>
+</hibernate-mapping>
