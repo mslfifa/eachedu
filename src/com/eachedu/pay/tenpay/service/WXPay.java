@@ -63,6 +63,7 @@ public class WXPay {
 			}
 		}
 		sb.append("key=" + AppKey);
+		System.out.println("返回签名:"+sb.toString());
 		String sign = MD5Util.MD5Encode(sb.toString(), "UTF-8").toUpperCase();
 		return sign;
 	}
